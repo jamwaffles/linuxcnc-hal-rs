@@ -1,6 +1,6 @@
 [package]
 name = "linuxcnc-hal-sys"
-version = "0.1.2"
+version = "0.1.3"
 authors = ["James Waples <james@wapl.es>"]
 edition = "2018"
 documentation = "https://docs.rs/linuxcnc-hal-sys"
@@ -16,6 +16,7 @@ include = [
     "wrapper.h",
     "linuxcnc-src/include/*.h",
     "linuxcnc-src/lib/liblinuxcnchal.so.0",
+    "linuxcnc-src/lib/liblinuxcnchal.so",
     "README.md",
 ]
 

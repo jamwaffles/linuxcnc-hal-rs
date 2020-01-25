@@ -8,17 +8,13 @@ fn main() {
 
     let root = env!("CARGO_MANIFEST_DIR");
 
-    let lcnc_lib_path = format!("{}/{}", root, lcnc_relative_path);
-
-    let lcnc_lib_path = Path::new(&lcnc_lib_path)
+    let lcnc_lib_path = Path::new(&root)
+        .join(lcnc_relative_path)
         .canonicalize()
         .expect("Failed to canonicalize LinuxCNC search path");
 
     // Link to compiled LinuxCNC `liblinuxcnc.hal.so` library
-    println!(
-        "cargo:rustc-link-search={}",
-        lcnc_lib_path.to_str().unwrap()
-    );
+    println!("cargo:rustc-link-search={}", lcnc_lib_path.display());
     println!("cargo:rustc-link-lib=linuxcnchal");
 
     // Tell cargo to invalidate the built crate whenever the wrapper changes

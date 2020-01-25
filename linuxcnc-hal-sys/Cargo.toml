@@ -1,0 +1,26 @@
+[package]
+name = "linuxcnc-hal-sys"
+version = "0.1.0"
+authors = ["James Waples <james@wapl.es>"]
+edition = "2018"
+documentation = "https://docs.rs/linuxcnc-hal-sys"
+description = "Generated, unsafe Rust bindings to the LinuxCNC HAL submodule"
+readme = "./README.md"
+license = "MIT OR Apache-2.0"
+keywords = [ "cnc", "linuxcnc", "bindgen", "ffi" ]
+categories = [ "external-ffi-bindings", "science::robotics" ]
+include = [
+    "**/*.rs",
+    "Cargo.toml",
+    "wrapper.h",
+    "linuxcnc-src/include/*.h",
+    "linuxcnc-src/lib/liblinuxcncini.so.0",
+    "README.md",
+]
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+
+[build-dependencies]
+bindgen = "0.52.0"

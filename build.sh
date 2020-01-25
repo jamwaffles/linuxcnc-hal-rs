@@ -13,7 +13,7 @@ cargo doc --all-features
 linkchecker target/doc/linuxcnc_hal_sys/index.html
 linkchecker target/doc/linuxcnc_hal/index.html
 
-# Check that packaged crate builds (doesn't push to crates.io)
+# Check that sys package builds into something pushable to crates.io
 pushd linuxcnc-hal-sys
 cargo package
 popd

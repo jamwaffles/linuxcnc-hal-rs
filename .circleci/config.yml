@@ -9,11 +9,11 @@ jobs:
       - run: git submodule update --init
       - restore_cache:
           key: v1-linuxcnc-hal-rs-{{ .Environment.RUST_VERSION }}-{{ .Environment.CIRCLE_JOB }}-{{ checksum "linuxcnc-hal-sys/Cargo.toml" }}-{{ checksum "linuxcnc-hal/Cargo.toml" }}
-      - run: sudo apt install -qq python-pip
+      - run: sudo apt install -qq --no-install-suggests python-pip libclang-dev llvm-dev libclang-dev clang
       - run: sudo pip install linkchecker
       - run: rustup default ${RUST_VERSION:-stable}
       - run: rustup component add rustfmt
-      - run: ./setup.sh
+      # - run: ./setup.sh
       - run: ./build.sh
       - save_cache:
           key: v1-linuxcnc-hal-rs-{{ .Environment.RUST_VERSION }}-{{ .Environment.CIRCLE_JOB }}-{{ checksum "linuxcnc-hal-sys/Cargo.toml" }}-{{ checksum "linuxcnc-hal/Cargo.toml" }}

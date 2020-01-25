@@ -1,11 +1,15 @@
 extern crate bindgen;
 
 use std::env;
+// use std::fs;
 use std::path::PathBuf;
 
 fn main() {
-    // Tell cargo to invalidate the built crate whenever the wrapper changes
     println!("cargo:rerun-if-changed=wrapper.h");
+    println!("cargo:rerun-if-changed=patch/config.h");
+
+    // fs::copy("patch/config.h", "linuxcnc-src/src/config.h")
+    //     .expect("Failed to copy config patch file");
 
     // The bindgen::Builder is the main entry point
     // to bindgen, and lets you build up options for
@@ -39,6 +43,7 @@ fn main() {
             "linuxcnc-src/src/rtapi/uspace_ulapi.c",
         ])
         .define("ULAPI", None)
+        .include("patch")
         .include("linuxcnc-src/src/hal")
         .include("linuxcnc-src/src/rtapi")
         .include("linuxcnc-src/src")

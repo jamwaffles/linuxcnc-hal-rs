@@ -5,6 +5,8 @@ set -xe
 cargo clean --doc
 
 cargo fmt --all -- --check
+cargo build
+cargo build --examples
 cargo test --release
 cargo test --release --all-features
 cargo bench --no-run

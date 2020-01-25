@@ -12,6 +12,7 @@ categories = [ "external-ffi-bindings", "science::robotics" ]
 repository = "https://github.com/jamwaffles/linuxcnc-hal-rs"
 include = [
     "**/*.rs",
+    "patch/**/*",
     "Cargo.toml",
     "wrapper.h",
     "linuxcnc-src/src",

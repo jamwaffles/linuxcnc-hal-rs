@@ -14,8 +14,7 @@ include = [
     "**/*.rs",
     "Cargo.toml",
     "wrapper.h",
-    "linuxcnc-src/src/hal/**/*.h",
-    "linuxcnc-src/src/rtapi/**/*.h",
+    "linuxcnc-src/src",
     "README.md",
 ]
 

@@ -9,6 +9,7 @@ readme = "./README.md"
 license = "MIT OR Apache-2.0"
 keywords = [ "cnc", "linuxcnc", "bindgen", "ffi" ]
 categories = [ "external-ffi-bindings", "science::robotics" ]
+repository = "https://github.com/jamwaffles/linuxcnc-hal-rs"
 include = [
     "**/*.rs",
     "Cargo.toml",
@@ -17,6 +18,9 @@ include = [
     "linuxcnc-src/lib/liblinuxcncini.so.0",
     "README.md",
 ]
+
+[badges]
+circle-ci = { repository = "jamwaffles/linuxcnc-hal-rs", branch = "master" }
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 

@@ -4,9 +4,15 @@ use std::env;
 use std::path::{Path, PathBuf};
 
 fn main() {
-    let lcnc_lib_path = Path::new("linuxcnc-src/lib")
+    let lcnc_relative_path = "./linuxcnc-src/lib";
+
+    let root = env!("CARGO_MANIFEST_DIR");
+
+    let lcnc_lib_path = format!("{}/{}", root, lcnc_relative_path);
+
+    let lcnc_lib_path = Path::new(&lcnc_lib_path)
         .canonicalize()
-        .expect("Path to LCNC lib folder is not valid");
+        .expect("Failed to canonicalize LinuxCNC search path");
 
     // Link to compiled LinuxCNC `liblinuxcnc.hal.so` library
     println!(

@@ -1,6 +1,6 @@
 [package]
 name = "linuxcnc-hal-sys"
-version = "0.1.4"
+version = "0.1.5"
 authors = ["James Waples <james@wapl.es>"]
 edition = "2018"
 documentation = "https://docs.rs/linuxcnc-hal-sys"
@@ -16,10 +16,8 @@ include = [
     "wrapper.h",
     "linuxcnc-src/src/hal/**/*.h",
     "linuxcnc-src/src/rtapi/**/*.h",
-    "linuxcnc-src/lib/liblinuxcnchal.so.0",
     "README.md",
 ]
-links = "linuxcnchal"
 
 [badges]
 circle-ci = { repository = "jamwaffles/linuxcnc-hal-rs", branch = "master" }
@@ -30,3 +28,4 @@ circle-ci = { repository = "jamwaffles/linuxcnc-hal-rs", branch = "master" }
 
 [build-dependencies]
 bindgen = "0.52.0"
+cc = "1.0.50"

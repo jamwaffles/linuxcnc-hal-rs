@@ -1,8 +1,7 @@
 extern crate bindgen;
 
 use std::env;
-use std::path::{Path, PathBuf};
-use std::process::Command;
+use std::path::PathBuf;
 
 fn main() {
     // Tell cargo to invalidate the built crate whenever the wrapper changes
@@ -34,26 +33,15 @@ fn main() {
         .write_to_file(out_path.join("bindings.rs"))
         .expect("Couldn't write bindings!");
 
-    let lcnc_relative_path = "./linuxcnc-src/lib";
-
-    let root = env!("CARGO_MANIFEST_DIR");
-
-    let lcnc_lib_path = Path::new(&root)
-        .join(lcnc_relative_path)
-        .canonicalize()
-        .expect("Failed to canonicalize LinuxCNC search path");
-
-    // Convert shared lib to static lib
-    Command::new("ar")
-        .args(&[
-            "crs",
-            &format!("{}/liblinuxcnchal.a", out_path.display()),
-            &format!("{}/liblinuxcnchal.so.0", lcnc_lib_path.display()),
+    cc::Build::new()
+        .files(&[
+            "linuxcnc-src/src/hal/hal_lib.c",
+            "linuxcnc-src/src/rtapi/uspace_ulapi.c",
         ])
-        .status()
-        .unwrap();
-
-    // Link to static compiled LinuxCNC `liblinuxcnchal.a` library
-    println!("cargo:rustc-link-search=native={}", out_path.display());
-    println!("cargo:rustc-link-lib=static=linuxcnchal");
+        .define("ULAPI", None)
+        .include("linuxcnc-src/src/hal")
+        .include("linuxcnc-src/src/rtapi")
+        .include("linuxcnc-src/src")
+        .warnings(false)
+        .compile("linuxcnchal");
 }

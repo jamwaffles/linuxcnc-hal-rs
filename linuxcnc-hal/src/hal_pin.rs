@@ -1,6 +1,7 @@
 use crate::ComponentError;
 use linuxcnc_hal_sys::{
-    hal_malloc, hal_pin_dir_t_HAL_IN as HAL_IN, hal_pin_dir_t_HAL_OUT as HAL_OUT, hal_pin_float_new,
+    hal_malloc, hal_pin_dir_t_HAL_IN as HAL_IN, hal_pin_dir_t_HAL_OUT as HAL_OUT,
+    hal_pin_float_new, EINVAL, ENOMEM, EPERM, HAL_NAME_LEN,
 };
 use std::convert::TryInto;
 use std::error::Error;
@@ -51,6 +52,9 @@ pub trait HalPin {
 
     /// Get the pin's name
     fn name(&self) -> &str;
+
+    /// Get pointer to underlying shared memory storing this pin's value
+    fn storage(&self) -> Result<&mut Self::Storage, ComponentError>;
 }
 
 #[derive(Debug, PartialEq)]
@@ -65,6 +69,16 @@ impl HalPin for HalPinF64 {
     fn name(&self) -> &str {
         &self.name
     }
+
+    fn storage(&self) -> Result<&mut Self::Storage, ComponentError> {
+        if self.storage.is_null() {
+            Err(ComponentError::Unknown("Value pointer is null"))
+        } else {
+            let value = unsafe { &mut **self.storage };
+
+            Ok(value)
+        }
+    }
 }
 
 impl HalPinF64 {
@@ -74,6 +88,10 @@ impl HalPinF64 {
         direction: PinDirection,
         component_id: i32,
     ) -> Result<Self, ComponentError> {
+        if pin_name.len() > HAL_NAME_LEN as usize {
+            return Err(ComponentError::Unknown("Pin name is too long"));
+        }
+
         let storage_ptr = Self::allocate_storage().map_err(|_| {
             ComponentError::Unknown("Failed to allocate storage in HAL shared memory")
         })?;
@@ -92,40 +110,34 @@ impl HalPinF64 {
             )
         };
 
-        if ret != 0 {
-            // TODO: Handle return values
-            // -EINVAL;
-            // -EPERM;
-            // -ENOMEM;
-            Err(ComponentError::Unknown("Failed to create pin"))
-        } else {
-            println!("Make pin {} returned {}", pin_name, ret);
+        match ret {
+            x if x == -(EINVAL as i32) => Err(ComponentError::Unknown("Failed to create pin")),
+            x if x == -(EPERM as i32) => Err(ComponentError::Unknown("HAL is locked")),
+            x if x == -(ENOMEM as i32) => {
+                Err(ComponentError::Unknown("Insufficient memory for pin"))
+            }
+            0 => {
+                println!("Make pin {} returned {}", pin_name, ret);
 
-            Ok(Self {
-                name: pin_name,
-                storage: storage_ptr,
-            })
+                Ok(Self {
+                    name: pin_name,
+                    storage: storage_ptr,
+                })
+            }
+            code => unreachable!("Hit unreachable error code {}", code),
         }
     }
 
     /// Set the pin's output value
     pub fn set_value(&mut self, value: f64) -> Result<(), ComponentError> {
-        if self.storage.is_null() {
-            Err(ComponentError::Unknown("Value pointer is null"))
-        } else {
-            unsafe { **self.storage = value };
+        *self.storage()? = value;
 
-            Ok(())
-        }
+        Ok(())
     }
 
     /// Get this pin's value
     pub fn value(&self) -> Result<f64, ComponentError> {
-        if self.storage.is_null() {
-            Err(ComponentError::Unknown("Value pointer is null"))
-        } else {
-            Ok(unsafe { **self.storage })
-        }
+        self.storage().map(|v| *v)
     }
 }
 

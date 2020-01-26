@@ -1,7 +1,7 @@
 pub mod hal_pin;
 
 use crate::hal_pin::{HalPinF64, PinDirection, PinType};
-use linuxcnc_hal_sys::{hal_exit, hal_init, hal_ready, EINVAL, HAL_NAME_LEN};
+use linuxcnc_hal_sys::{hal_exit, hal_init, hal_ready, EINVAL, ENOMEM, HAL_NAME_LEN};
 use signal_hook::iterator::Signals;
 use std::collections::HashMap;
 
@@ -63,28 +63,30 @@ impl HalComponent {
 
         let id = unsafe { hal_init(name_c.as_ptr() as *const i8) };
 
-        if id < 0 {
-            println!("Create comp error code {}", id);
+        match id {
+            x if x == -(EINVAL as i32) => {
+                Err(ComponentError::Unknown("Failed to initialise component"))
+            }
+            x if x == -(ENOMEM as i32) => Err(ComponentError::Unknown(
+                "Insufficient memory to create component",
+            )),
+            id if id > 0 => {
+                println!("Init component {} with ID {}", name, id);
 
-            // TODO handle errors better
-            // -EINVAL
-            // -ENOMEM
-            Err(ComponentError::Unknown("Failed to initialise component"))
-        } else {
-            println!("Init component {} with ID {}", name, id);
+                // Register signals so component closes cleanly. These are also required for the component to
+                // pass initialisation in LinuxCNC. If LinuxCNC hangs during starting waiting for the component
+                // to become ready, signal handlers might not be registered.
+                let signals = Signals::new(&[signal_hook::SIGTERM, signal_hook::SIGINT])
+                    .map_err(|_| ComponentError::Unknown("Failed to register signals"))?;
 
-            // Register signals so component closes cleanly. These are also required for the component to
-            // pass initialisation in LinuxCNC. If LinuxCNC hangs during starting waiting for the component
-            // to become ready, signal handlers might not be registered.
-            let signals = Signals::new(&[signal_hook::SIGTERM, signal_hook::SIGINT])
-                .map_err(|_| ComponentError::Unknown("Failed to register signals"))?;
-
-            Ok(Self {
-                name,
-                id,
-                pins: HashMap::new(),
-                signals,
-            })
+                Ok(Self {
+                    name,
+                    id,
+                    pins: HashMap::new(),
+                    signals,
+                })
+            }
+            code => unreachable!("Hit unreachable error code {}", code),
         }
     }
 
@@ -95,17 +97,17 @@ impl HalComponent {
     pub fn ready(&self) -> Result<(), ComponentError> {
         let ret = unsafe { hal_ready(self.id) };
 
-        if ret == 0 {
-            println!("Component is ready");
-
-            Ok(())
-        } else if ret == -(EINVAL as i32) {
-            Err(ComponentError::Unknown(
+        match ret {
+            x if x == -(EINVAL as i32) => Err(ComponentError::Unknown(
                 "HAL component was not found or is already ready",
-            ))
-        } else {
-            // At time of writing, the body of hal_ready() can only return `0` or `-EINVAL`
-            unreachable!("Error status {} returned from hal_ready()", ret)
+            )),
+
+            0 => {
+                println!("Component is ready");
+
+                Ok(())
+            }
+            ret => unreachable!("Unknown error status {} returned from hal_ready()", ret),
         }
     }
 

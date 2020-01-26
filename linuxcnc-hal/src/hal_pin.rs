@@ -110,16 +110,22 @@ impl HalPinF64 {
 
     /// Set the pin's output value
     pub fn set_value(&mut self, value: f64) -> Result<(), ComponentError> {
-        println!("Set value {:?}", value);
+        if self.storage.is_null() {
+            Err(ComponentError::Unknown("Value pointer is null"))
+        } else {
+            unsafe { **self.storage = value };
 
-        unsafe { **self.storage = value };
-
-        Ok(())
+            Ok(())
+        }
     }
 
     /// Get this pin's value
-    pub fn value(&self) -> f64 {
-        unsafe { **self.storage }
+    pub fn value(&self) -> Result<f64, ComponentError> {
+        if self.storage.is_null() {
+            Err(ComponentError::Unknown("Value pointer is null"))
+        } else {
+            Ok(unsafe { **self.storage })
+        }
     }
 }
 

@@ -1,9 +1,6 @@
 //! Create a component that adds some pin types
 
-use linuxcnc_hal::{
-    hal_pin::{PinDirection, PinType},
-    HalComponent,
-};
+use linuxcnc_hal::{hal_pin::HalPinF64, HalComponent};
 use std::error::Error;
 use std::thread;
 use std::time::{Duration, Instant};
@@ -12,30 +9,29 @@ fn main() -> Result<(), Box<dyn Error>> {
     // Create a new HAL component called `empty` and register signal handlers
     let mut comp = HalComponent::new("pins")?;
 
-    comp.register_pin("input_1", PinType::F64, PinDirection::In)?;
+    let input_1 = comp.register_input_pin::<HalPinF64>("input_1")?;
 
-    comp.register_pin("output_1", PinType::F64, PinDirection::Out)?;
+    let output_1 = comp.register_output_pin::<HalPinF64>("output_1")?;
 
-    // All pins added, component is now ready. This must be called otherwise LinuxCNC will hang.
+    // All pins added, component is now ready. This must be called after pins are registered.
+    // LinuxCNC will hang if this method is not called.
     comp.ready()?;
 
     let start = Instant::now();
 
+    // Main control loop
     while !comp.should_exit() {
-        // Main control loop code goes here. This example prints `Poll` every 1000ms. This code can
-        // block - LinuxCNC handles component threading.
+        let time = start.elapsed().as_secs() as i32;
 
-        let time = start.elapsed().as_secs() as u32;
-
-        let pins = comp.pins();
-
-        pins.get_mut("pins.output_1")
-            .unwrap()
-            .set_value(time as f64)?;
+        // Set output pin to elapsed seconds since component started
+        output_1.set_value(time.into())?;
 
         // TODO: Deref trait?
-        println!("Input: {:?}", pins.get("pins.input_1").unwrap().value());
+        // Print the current value of the input pin
+        println!("Input: {:?}", input_1.value());
 
+        // Sleep for 1000ms. This should be a lower time if the component needs to update more
+        // frequently.
         thread::sleep(Duration::from_millis(1000));
     }
 

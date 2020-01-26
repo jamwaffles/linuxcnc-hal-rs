@@ -1,10 +1,9 @@
 pub mod hal_pin;
 
-use crate::hal_pin::{HalPinF64, PinDirection, PinType};
+use crate::hal_pin::{HalPin, InputPin, OutputPin};
 use linuxcnc_hal_sys::{hal_exit, hal_init, hal_ready, EINVAL, ENOMEM, HAL_NAME_LEN};
 use signal_hook::iterator::Signals;
-use std::collections::HashMap;
-
+// use std::collections::HashMap;
 use std::error::Error;
 use std::ffi::CString;
 use std::fmt;
@@ -22,7 +21,7 @@ pub struct HalComponent {
     id: i32,
 
     /// Pin resources registered by this component
-    pins: HashMap<String, HalPinF64>,
+    // pins: HashMap<String, Box<dyn DirectionalHalPin>>,
 
     /// Handles to Unix exit signals
     signals: Signals,
@@ -82,7 +81,7 @@ impl HalComponent {
                 Ok(Self {
                     name,
                     id,
-                    pins: HashMap::new(),
+                    // pins: HashMap::new(),
                     signals,
                 })
             }
@@ -111,22 +110,38 @@ impl HalComponent {
         }
     }
 
-    /// Register a pin with this component
+    /// Register an input pin with this component
     ///
     /// The pin name will be prefixed with the component name
-    pub fn register_pin(
+    pub fn register_input_pin<P>(
         &mut self,
         pin_name: &'static str,
-        _pin_type: PinType,
-        direction: PinDirection,
-    ) -> Result<(), ComponentError> {
+    ) -> Result<InputPin<P>, ComponentError>
+    where
+        P: HalPin + 'static,
+    {
         let full_name = format!("{}.{}", self.name, pin_name);
 
-        let pin = HalPinF64::new(full_name.clone(), _pin_type, direction, self.id)?;
+        let pin = InputPin::<P>::new(full_name.clone(), self.id)?;
 
-        self.pins.insert(full_name.clone(), pin);
+        Ok(pin)
+    }
 
-        Ok(())
+    /// Register an output pin with this component
+    ///
+    /// The pin name will be prefixed with the component name
+    pub fn register_output_pin<P>(
+        &mut self,
+        pin_name: &'static str,
+    ) -> Result<OutputPin<P>, ComponentError>
+    where
+        P: HalPin + 'static,
+    {
+        let full_name = format!("{}.{}", self.name, pin_name);
+
+        let pin = OutputPin::<P>::new(full_name.clone(), self.id)?;
+
+        Ok(pin)
     }
 
     /// Check whether the component was signalled to shut down
@@ -135,10 +150,6 @@ impl HalComponent {
             signal_hook::SIGTERM | signal_hook::SIGINT | signal_hook::SIGKILL => true,
             _ => false,
         })
-    }
-
-    pub fn pins(&mut self) -> &mut HashMap<String, HalPinF64> {
-        &mut self.pins
     }
 }
 

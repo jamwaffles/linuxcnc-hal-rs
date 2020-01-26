@@ -3,8 +3,9 @@
 [![CircleCI](https://circleci.com/gh/jamwaffles/linuxcnc-hal-rs.svg?style=shield)](https://circleci.com/gh/jamwaffles/linuxcnc-hal-rs)
 [![Crates.io](https://img.shields.io/crates/v/linuxcnc-hal-sys.svg)](https://crates.io/crates/linuxcnc-hal-sys)
 [![Docs.rs](https://docs.rs/linuxcnc-hal-sys/badge.svg)](https://docs.rs/linuxcnc-hal-sys)
+[![Liberapay](https://img.shields.io/liberapay/patrons/jamwaffles.svg?logo=liberapay)](https://liberapay.com/jamwaffles)
 
-Provides **non-realtime** Rust bindings for the LinuxCNC `hal` module. Useful for writing drivers for external hardware.
+Provides unsafe, **non-realtime** Rust bindings for the LinuxCNC `hal` module. Useful for writing drivers for external hardware.
 
 > Note: This only works on Linux (64 bit) currently
 

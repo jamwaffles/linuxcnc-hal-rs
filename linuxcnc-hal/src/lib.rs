@@ -3,7 +3,6 @@ pub mod hal_pin;
 use crate::hal_pin::{HalPin, InputPin, OutputPin};
 use linuxcnc_hal_sys::{hal_exit, hal_init, hal_ready, EINVAL, ENOMEM, HAL_NAME_LEN};
 use signal_hook::iterator::Signals;
-// use std::collections::HashMap;
 use std::error::Error;
 use std::ffi::CString;
 use std::fmt;
@@ -19,9 +18,6 @@ pub struct HalComponent {
 
     /// Component ID
     id: i32,
-
-    /// Pin resources registered by this component
-    // pins: HashMap<String, Box<dyn DirectionalHalPin>>,
 
     /// Handles to Unix exit signals
     signals: Signals,
@@ -46,7 +42,7 @@ impl HalComponent {
     /// Create a new HAL component and begin initialisation
     ///
     /// This calls [`hal_init`] under the hood. Do any init work between calling this function and
-    /// [`ready()`]. The component name must be unique, and be no longer than [`HAL_NAME_LEN`].
+    /// [`HalComponent::ready`]. The component name must be unique, and be no longer than [`HAL_NAME_LEN`].
     pub fn new(name: &'static str) -> Result<Self, ComponentError> {
         if name.len() > HAL_NAME_LEN as usize {
             println!(
@@ -78,12 +74,7 @@ impl HalComponent {
                 let signals = Signals::new(&[signal_hook::SIGTERM, signal_hook::SIGINT])
                     .map_err(|_| ComponentError::Unknown("Failed to register signals"))?;
 
-                Ok(Self {
-                    name,
-                    id,
-                    // pins: HashMap::new(),
-                    signals,
-                })
+                Ok(Self { name, id, signals })
             }
             code => unreachable!("Hit unreachable error code {}", code),
         }

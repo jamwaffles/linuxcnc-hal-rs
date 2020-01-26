@@ -1,10 +1,11 @@
 use crate::ComponentError;
 use linuxcnc_hal_sys::{
-    hal_malloc, hal_pin_dir_t_HAL_IN as HAL_IN, hal_pin_dir_t_HAL_OUT as HAL_OUT, hal_pin_u32_new,
+    hal_malloc, hal_pin_dir_t_HAL_IN as HAL_IN, hal_pin_dir_t_HAL_OUT as HAL_OUT, hal_pin_float_new,
 };
 use std::convert::TryInto;
-use std::ffi::c_void;
+use std::error::Error;
 use std::ffi::CString;
+use std::fmt;
 use std::mem;
 
 /// Pin direction
@@ -20,38 +21,73 @@ pub enum PinDirection {
 /// Pin type to use
 #[derive(Copy, Clone, Debug)]
 pub enum PinType {
-    /// `u32` value
-    U32,
+    /// `f64` value
+    F64,
 }
 
-pub struct HalPin {
+pub trait HalPin {
+    type Storage: fmt::Debug + Default;
+
+    /// Allocate memory using [`hal_malloc()`] for storing pin value in
+    fn allocate_storage() -> Result<*mut *mut Self::Storage, Box<dyn Error>> {
+        let storage_ptr = unsafe {
+            let size = mem::size_of::<Self::Storage>().try_into().unwrap();
+
+            println!("Allocating {} bytes", size);
+
+            let ptr = hal_malloc(size) as *mut *mut Self::Storage;
+
+            if ptr.is_null() {
+                panic!("Pointer is null");
+            }
+
+            println!("Allocated at {:?}, value {:?}", ptr, *ptr);
+
+            ptr
+        };
+
+        Ok(storage_ptr)
+    }
+
+    /// Get the pin's name
+    fn name(&self) -> &str;
+}
+
+#[derive(Debug, PartialEq)]
+pub struct HalPinF64 {
     name: String,
-    storage: *mut c_void,
+    storage: *mut *mut f64,
 }
 
-impl HalPin {
+impl HalPin for HalPinF64 {
+    type Storage = f64;
+
+    fn name(&self) -> &str {
+        &self.name
+    }
+}
+
+impl HalPinF64 {
     pub fn new(
         pin_name: String,
         _pin_type: PinType,
         direction: PinDirection,
         component_id: i32,
     ) -> Result<Self, ComponentError> {
-        // let mut storage_ptr: *mut c_uint = ptr::null_mut();
-        // let mut storage: u32 = 0;
+        let storage_ptr = Self::allocate_storage().map_err(|_| {
+            ComponentError::Unknown("Failed to allocate storage in HAL shared memory")
+        })?;
 
-        // let storage_ptr: *mut u32 = &mut storage;
-
-        // Allocate some HAL shared memory
-        let storage_ptr = unsafe { hal_malloc(mem::size_of::<u32>().try_into().unwrap()) };
+        println!("PTR for {}: {:?}", pin_name, storage_ptr);
 
         let full_name = CString::new(pin_name.clone())
             .map_err(|_| ComponentError::Unknown("Failed to convert pin name to CString"))?;
 
         let ret = unsafe {
-            hal_pin_u32_new(
+            hal_pin_float_new(
                 full_name.as_ptr() as *const i8,
                 direction as i32,
-                storage_ptr as *mut *mut u32,
+                storage_ptr,
                 component_id,
             )
         };
@@ -70,5 +106,25 @@ impl HalPin {
                 storage: storage_ptr,
             })
         }
+    }
+
+    /// Set the pin's output value
+    pub fn set_value(&mut self, value: f64) -> Result<(), ComponentError> {
+        println!("Set value {:?}", value);
+
+        unsafe { **self.storage = value };
+
+        Ok(())
+    }
+
+    /// Get this pin's value
+    pub fn value(&self) -> f64 {
+        unsafe { **self.storage }
+    }
+}
+
+impl Drop for HalPinF64 {
+    fn drop(&mut self) {
+        println!("Drop HalPinF64 {}", self.name);
     }
 }

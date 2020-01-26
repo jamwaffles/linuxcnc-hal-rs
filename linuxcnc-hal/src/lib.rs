@@ -1,9 +1,10 @@
 pub mod hal_pin;
 
-use crate::hal_pin::{HalPin, PinDirection, PinType};
+use crate::hal_pin::{HalPinF64, PinDirection, PinType};
 use linuxcnc_hal_sys::{hal_exit, hal_init, hal_ready, EINVAL, HAL_NAME_LEN};
 use signal_hook::iterator::Signals;
 use std::collections::HashMap;
+
 use std::error::Error;
 use std::ffi::CString;
 use std::fmt;
@@ -21,7 +22,7 @@ pub struct HalComponent {
     id: i32,
 
     /// Pin resources registered by this component
-    pins: HashMap<&'static str, HalPin>,
+    pins: HashMap<String, HalPinF64>,
 
     /// Handles to Unix exit signals
     signals: Signals,
@@ -91,7 +92,7 @@ impl HalComponent {
     ///
     /// This method must be called after any pins or signals are set up. The HAL does not allow
     /// adding any more resources after this method is called.
-    pub fn ready(&mut self) -> Result<(), ComponentError> {
+    pub fn ready(&self) -> Result<(), ComponentError> {
         let ret = unsafe { hal_ready(self.id) };
 
         if ret == 0 {
@@ -108,30 +109,34 @@ impl HalComponent {
         }
     }
 
-    /// Adds a pin to the component
+    /// Register a pin with this component
     ///
     /// The pin name will be prefixed with the component name
-    pub fn add_pin(
+    pub fn register_pin(
         &mut self,
         pin_name: &'static str,
-        pin_type: PinType,
+        _pin_type: PinType,
         direction: PinDirection,
-    ) -> Result<&mut Self, ComponentError> {
+    ) -> Result<(), ComponentError> {
         let full_name = format!("{}.{}", self.name, pin_name);
 
-        let pin = HalPin::new(full_name, pin_type, direction, self.id)?;
+        let pin = HalPinF64::new(full_name.clone(), _pin_type, direction, self.id)?;
 
-        self.pins.insert(pin_name, pin);
+        self.pins.insert(full_name.clone(), pin);
 
-        Ok(self)
+        Ok(())
     }
 
     /// Check whether the component was signalled to shut down
     pub fn should_exit(&self) -> bool {
         self.signals.pending().any(|signal| match signal {
-            signal_hook::SIGTERM | signal_hook::SIGINT => true,
+            signal_hook::SIGTERM | signal_hook::SIGINT | signal_hook::SIGKILL => true,
             _ => false,
         })
+    }
+
+    pub fn pins(&mut self) -> &mut HashMap<String, HalPinF64> {
+        &mut self.pins
     }
 }
 

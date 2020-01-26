@@ -7,7 +7,7 @@ use std::time::Duration;
 
 fn main() -> Result<(), Box<dyn Error>> {
     // Create a new HAL component called `empty` and register signal handlers
-    let mut comp = HalComponent::new("empty")?;
+    let comp = HalComponent::new("empty")?;
 
     // All pins added, component is now ready. This must be called otherwise LinuxCNC will hang.
     comp.ready()?;

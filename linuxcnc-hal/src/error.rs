@@ -42,7 +42,7 @@ pub enum PinRegisterError {
 }
 
 /// HAL component initialisation error
-#[derive(thiserror::Error, Debug)]
+#[derive(thiserror::Error, Debug, PartialEq)]
 pub enum ComponentInitError {
     /// Component name is too long
     ///
@@ -71,19 +71,19 @@ pub enum ComponentInitError {
     #[error("not enough free memory to allocate storage")]
     Memory,
 
-    /// Unable to register signal handlers
-    #[error("failed to register signal handlers: {0}")]
-    Signals(std::io::Error),
-
     /// An error occurred when initialising the component with [`hal_init`]
     #[error("failed to initialise component")]
     Init,
 }
 
 /// Error's returned when calling [`HalComponent::ready`] (calls [`hal_ready`] internally)
-#[derive(thiserror::Error, Debug, PartialEq)]
+#[derive(thiserror::Error, Debug)]
 pub enum ComponentReadyError {
     /// An error occurred when readying the component
     #[error("hal_ready returned invalid (EINVAL) status code")]
     Invalid,
+
+    /// Unable to register signal handlers
+    #[error("failed to register signal handlers: {0}")]
+    Signals(std::io::Error),
 }

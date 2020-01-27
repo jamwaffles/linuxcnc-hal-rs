@@ -1,14 +1,14 @@
 //! Create a component that does nothing except init and exit
 
-use linuxcnc_hal::HalComponent;
+use linuxcnc_hal::HalComponentBuilder;
 use std::{error::Error, thread, time::Duration};
 
 fn main() -> Result<(), Box<dyn Error>> {
-    // Create a new HAL component called `empty` and register signal handlers
-    let comp = HalComponent::new("empty")?;
+    // Create a new HAL component builder
+    let builder = HalComponentBuilder::new("empty")?;
 
-    // All pins added, component is now ready. This must be called otherwise LinuxCNC will hang.
-    comp.ready()?;
+    // All pins added, component is now ready. Consumer the builder into an actual HAL component
+    let comp = builder.ready()?;
 
     while !comp.should_exit() {
         // Main control loop code goes here. This example prints `Poll` every 1000ms. This code can

@@ -17,12 +17,12 @@ pub trait HalPin: Sized {
     ///
     /// # Errors
     ///
-    /// This method will return an `Err` if [`hal_alloc`] returns a null pointer.
+    /// This method will return an `Err` if [`hal_malloc()`] returns a null pointer.
     ///
     /// # Safety
     ///
-    /// This method attempts to allocate memory in LinuxCNC's shared memory space with the unsafe method
-    /// [`hal_alloc`].
+    /// This method attempts to allocate memory in LinuxCNC's shared memory space with the unsafe
+    /// method [`hal_malloc()`].
     fn allocate_storage() -> Result<*mut *mut Self::Storage, StorageError> {
         let storage_ptr = unsafe {
             let size = mem::size_of::<Self::Storage>();

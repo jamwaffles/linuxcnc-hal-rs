@@ -15,7 +15,7 @@ where
     /// Register a new input pin with the HAL
     ///
     /// Requires the full pin name including component like `vfd.speed-in` or `jog-pendant.enabled`.
-    /// The component ID should be fetched from [`HalComponent::id`].
+    /// The component ID should be fetched from [`HalComponent.id`].
     pub fn new(name: String, component_id: i32) -> Result<Self, PinRegisterError> {
         let pin = P::register_pin(&name, PinDirection::In, component_id)?;
 

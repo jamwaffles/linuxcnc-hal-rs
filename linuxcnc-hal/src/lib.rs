@@ -2,12 +2,20 @@
 //!
 //! # Examples
 //!
+//! These examples can be loaded into LinuxCNC using a HAL file similar to this:
+//!
+//! ```text
+//! loadusr -W /path/to/your/component/target/debug/comp_bin_name
+//! net input-1 spindle.0.speed-out pins.input_1
+//! net output-1 pins.output_1
+//! ```
+//!
 //! ## Create a component with input and output
 //!
-//! This example creates a component called `"pins"` with a single input (`"input_1"`) and output pin
-//! (`"output_1"`). It enters an infinite loop until asked to exit by the LinuxCNC parent process which
-//! polls `input_1` and updates the value of `output_1` every second.
-//!
+//! This example creates a component called `"pins"` with a single input (`"input_1"`) and output
+//! pin (`"output_1"`). It enters an infinite loop updates the value of `output_1` every second.
+//! Signals are registered when `builder.ready()` is called which allow LinuxCNC to close the
+//! component gracefully.
 //!
 //! ```rust,no_run
 //! use linuxcnc_hal::{hal_pin::HalPinF64, HalComponentBuilder};
@@ -46,14 +54,15 @@
 //!         thread::sleep(Duration::from_millis(1000));
 //!     }
 //!
-//!     // The custom implementation of `Drop` for `HalComponent` ensures that `hal_exit()` is called
-//!     // at this point. Registered signal handlers are also deregistered.
+//!     // The custom implementation of `Drop` for `HalComponent` ensures that `hal_exit()` is
+//!     // called at this point. Registered signal handlers are also deregistered.
 //!
 //!     Ok(())
 //! }
 //! ```
 
 #![deny(missing_docs)]
+#![deny(intra_doc_link_resolution_failure)]
 
 mod builder;
 mod check_readme;
@@ -66,7 +75,9 @@ use signal_hook::iterator::Signals;
 
 /// HAL component
 ///
-/// Use [`HalComponentInit::new`] to create a new component builder. Once all pins are registered,
+/// An initialised HAL component ready for use in the main component loop.
+///
+/// Use [`HalComponentBuilder::new`] to create a new component builder. Once all pins are registered,
 /// calling `.ready()` on the builder will convert it to a `HalComponent` ready for use in the main
 /// loop.
 #[derive(Debug)]

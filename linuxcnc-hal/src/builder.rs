@@ -11,7 +11,10 @@ use std::ffi::CString;
 
 /// HAL component builder
 ///
-/// Create a new HAL component with [`HalComponentInit::new`]
+/// Create a new HAL component with [`HalComponentBuilder::new`]. Use the builder to register a
+/// component with LinuxCNC. Once created, pins can be registered to the component. Finally, call
+/// `builder.ready()` to consume the builder and create a [`HalComponent`] ready for use in the
+/// component main loop.
 #[derive(Debug, PartialEq)]
 pub struct HalComponentBuilder {
     /// Component name

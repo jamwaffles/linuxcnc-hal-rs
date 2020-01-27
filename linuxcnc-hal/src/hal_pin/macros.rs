@@ -8,7 +8,7 @@ macro_rules! impl_pin {
         #[doc = $hal_fn_str]
         #[doc = "`] HAL function, backed internally by a [`"]
         #[doc = $storage_str]
-        #[doc = "`]"]
+        #[doc = "`]."]
         #[derive(Debug, PartialEq)]
         pub struct $type {
             name: String,

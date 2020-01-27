@@ -18,11 +18,20 @@
 //! 1. Enter an infinite loop to continuously update input/output pin values and perform component
 //! logic
 //!
+//! These examples can be loaded into LinuxCNC using a HAL file similar to this:
+//!
+//! ```text
+//! loadusr -W /path/to/your/component/target/debug/comp_bin_name
+//! net input-1 spindle.0.speed-out pins.input_1
+//! ```
+//!
 //! ## Create an input pin
 //!
-//! This example registers a pin that accepts a floating point value using [`hal_pin_float_new`].
-//! Each HAL pin requires some memory allocated to store its value which is performed with
-//! [`hal_malloc`].
+//! This example creates a component called `pins` and registers an input pin to it that accepts a
+//! floating point value using [`hal_pin_float_new`]. Each HAL pin requires some memory allocated to
+//! store its value which is performed with [`hal_malloc`].
+//!
+//! The example can be loaded into LinuxCNC using a HAL file similar to this:
 //!
 //! **Note that there is no error handling in this example for brevity.**
 //!
@@ -148,8 +157,11 @@
 //! [`bindgen`]: https://docs.rs/bindgen
 //! [`signal_hook`]: https://docs.rs/signal_hook
 
+#![deny(intra_doc_link_resolution_failure)]
 #![allow(non_upper_case_globals)]
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
+
+mod check_readme;
 
 include!(concat!(env!("OUT_DIR"), "/bindings.rs"));

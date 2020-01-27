@@ -5,6 +5,20 @@
 [![Docs.rs](https://docs.rs/linuxcnc-hal/badge.svg)](https://docs.rs/linuxcnc-hal)
 [![Liberapay](https://img.shields.io/liberapay/patrons/jamwaffles.svg?logo=liberapay)](https://liberapay.com/jamwaffles)
 
+A safe, high-level interface to LinuxCNC's HAL (Hardware Abstraction Layer) module.
+
+For lower level, unsafe use, see the [`linuxcnc-hal-sys`](https://crates.io/crates/linuxcnc-hal-sys) crate.
+
+```bash
+cargo add linuxcnc-hal
+```
+
+# [Documentation](https://docs.rs/linuxcnc-hal)
+
+# Examples
+
+Examples can be found in the [`examples` folder](./examples).
+
 ```rust,no_run
 use linuxcnc_hal::{hal_pin::HalPinF64, HalComponentBuilder};
 use std::{
@@ -48,3 +62,50 @@ fn main() -> Result<(), Box<dyn Error>> {
     Ok(())
 }
 ```
+
+# Development
+
+## Setup
+
+[`bindgen`](https://github.com/rust-lang/rust-bindgen) must be set up correctly for `linuxcnc-hal-sys` to work correctly. Follow the [requirements section of its docs](https://rust-lang.github.io/rust-bindgen/requirements.html).
+
+To run and debug any HAL components, the LinuxCNC simulator can be set up. There's a guide [here](https://wapl.es/cnc/2020/01/25/linuxcnc-simulator-build-linux-mint.html) for Linux Mint (and other Debian derivatives).
+
+## Build
+
+```bash
+cargo build
+```
+
+You can also run `./build.sh` to run all the commands that would normally be run in CI.
+
+## Test
+
+```bash
+cargo test
+```
+
+## Build docs
+
+The docs make heavy use of [intra-rustdoc-links](https://rust-lang.github.io/rfcs/1946-intra-rustdoc-links.html). To get the links to render correctly, run with nightly:
+
+```bash
+rustup toolchain add nightly
+cargo +nightly doc
+```
+
+## License
+
+Licensed under either of
+
+- Apache License, Version 2.0 ([LICENSE-APACHE](LICENSE-APACHE) or
+  http://www.apache.org/licenses/LICENSE-2.0)
+- MIT license ([LICENSE-MIT](LICENSE-MIT) or http://opensource.org/licenses/MIT)
+
+at your option.
+
+## Contribution
+
+Unless you explicitly state otherwise, any contribution intentionally submitted for inclusion in the
+work by you, as defined in the Apache-2.0 license, shall be dual licensed as above, without any
+additional terms or conditions.

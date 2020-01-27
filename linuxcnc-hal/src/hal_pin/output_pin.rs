@@ -15,7 +15,8 @@ where
     /// Register a new output pin with the HAL
     ///
     /// Requires the full pin name including component like `vfd.spindle-speed-out` or
-    /// `jog-pendant.is-estopped`. The component ID should be fetched from [`HalComponent::id`].
+    /// `jog-pendant.is-estopped`. The component ID should be fetched from
+    /// [`HalComponentBuilder.id`].
     pub fn new(name: String, component_id: i32) -> Result<Self, PinRegisterError> {
         let pin = P::register_pin(&name, PinDirection::Out, component_id)?;
 

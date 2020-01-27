@@ -11,10 +11,7 @@
 
 use linuxcnc_hal_sys::*;
 use signal_hook::iterator::Signals;
-use std::ffi::CString;
-use std::mem;
-use std::thread;
-use std::time::Duration;
+use std::{ffi::CString, mem, thread, time::Duration};
 
 fn main() {
     unsafe {

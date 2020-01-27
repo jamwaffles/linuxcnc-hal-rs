@@ -19,3 +19,8 @@ linkchecker target/doc/linuxcnc_hal/index.html
 pushd linuxcnc-hal-sys
 cargo package
 popd
+
+# Check that higher level package builds correctly
+pushd linuxcnc-hal
+cargo package
+popd

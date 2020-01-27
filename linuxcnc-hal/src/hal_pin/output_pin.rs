@@ -1,6 +1,6 @@
 use crate::{
+    error::{PinRegisterError, StorageError},
     hal_pin::{HalPin, PinDirection},
-    ComponentError,
 };
 
 /// Wrapping struct to specialise a HAL pin to an output
@@ -16,14 +16,14 @@ where
     ///
     /// Requires the full pin name including component like `vfd.spindle-speed-out` or
     /// `jog-pendant.is-estopped`. The component ID should be fetched from [`HalComponent::id`].
-    pub fn new(name: String, component_id: i32) -> Result<Self, ComponentError> {
+    pub fn new(name: String, component_id: i32) -> Result<Self, PinRegisterError> {
         let pin = P::register_pin(&name, PinDirection::Out, component_id)?;
 
         Ok(Self { pin })
     }
 
     /// Set the pin's value
-    pub fn set_value(&self, value: P::Storage) -> Result<(), ComponentError> {
+    pub fn set_value(&self, value: P::Storage) -> Result<(), StorageError> {
         Ok(*self.pin.storage()? = value)
     }
 }

@@ -1,5 +1,6 @@
-use crate::error::PointerError;
-use crate::{hal_pin::PinDirection, ComponentError};
+use crate::error::PinRegisterError;
+use crate::error::StorageError;
+use crate::hal_pin::PinDirection;
 use linuxcnc_hal_sys::hal_malloc;
 use std::{convert::TryInto, mem};
 
@@ -22,7 +23,7 @@ pub trait HalPin: Sized {
     ///
     /// This method attempts to allocate memory in LinuxCNC's shared memory space with the unsafe method
     /// [`hal_alloc`].
-    fn allocate_storage() -> Result<*mut *mut Self::Storage, PointerError> {
+    fn allocate_storage() -> Result<*mut *mut Self::Storage, StorageError> {
         let storage_ptr = unsafe {
             let size = mem::size_of::<Self::Storage>();
 
@@ -31,7 +32,7 @@ pub trait HalPin: Sized {
             let ptr = hal_malloc(size.try_into().unwrap()) as *mut *mut Self::Storage;
 
             if ptr.is_null() {
-                return Err(PointerError::Null);
+                return Err(StorageError::Null);
             }
 
             println!("Allocated at {:?}, value {:?}", ptr, *ptr);
@@ -46,7 +47,7 @@ pub trait HalPin: Sized {
     fn name(&self) -> &str;
 
     /// Get pointer to underlying shared memory storing this pin's value
-    fn storage(&self) -> Result<&mut Self::Storage, ComponentError>;
+    fn storage(&self) -> Result<&mut Self::Storage, StorageError>;
 
     /// Register the pin with the LinuxCNC HAL
     ///
@@ -55,5 +56,5 @@ pub trait HalPin: Sized {
         full_pin_name: &str,
         direction: PinDirection,
         component_id: i32,
-    ) -> Result<Self, ComponentError>;
+    ) -> Result<Self, PinRegisterError>;
 }

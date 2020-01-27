@@ -21,3 +21,4 @@ linuxcnc-hal-sys = "0.1.5"
 # linuxcnc-hal-sys = { path = "../linuxcnc-hal-sys" }
 signal-hook = "0.1.13"
 libc = "0.2.66"
+thiserror = "1.0.9"

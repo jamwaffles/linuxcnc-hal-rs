@@ -45,7 +45,7 @@ unsafe {
         panic!("Failed to allocate storage");
     }
 
-    let pin_name = CString::new("pins.input_1").unwrap();
+    let pin_name = CString::new("pins.input-1").unwrap();
 
     let ret = hal_pin_float_new(
         pin_name.as_ptr() as *const i8,

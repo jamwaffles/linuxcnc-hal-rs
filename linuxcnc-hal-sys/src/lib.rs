@@ -22,7 +22,7 @@
 //!
 //! ```text
 //! loadusr -W /path/to/your/component/target/debug/comp_bin_name
-//! net input-1 spindle.0.speed-out pins.input_1
+//! net input-1 spindle.0.speed-out pins.input-1
 //! ```
 //!
 //! ## Create an input pin
@@ -54,7 +54,7 @@
 //!
 //!     println!("Storage {:?}", storage);
 //!
-//!     let pin_name = CString::new("pins.input_1").unwrap();
+//!     let pin_name = CString::new("pins.input-1").unwrap();
 //!
 //!     let ret = hal_pin_float_new(
 //!         pin_name.as_ptr() as *const i8,
@@ -114,7 +114,7 @@
 //!         panic!("Failed to allocate storage");
 //!     }
 //!
-//!     let pin_name = CString::new("pins.input_1").unwrap();
+//!     let pin_name = CString::new("pins.input-1").unwrap();
 //!
 //!     let ret = hal_pin_float_new(
 //!         pin_name.as_ptr() as *const i8,

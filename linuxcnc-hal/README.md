@@ -31,9 +31,9 @@ fn main() -> Result<(), Box<dyn Error>> {
     // Create a new HAL component called `empty`
     let mut builder = HalComponentBuilder::new("pins")?;
 
-    let input_1 = builder.register_input_pin::<HalPinF64>("input_1")?;
+    let input_1 = builder.register_input_pin::<HalPinF64>("input-1")?;
 
-    let output_1 = builder.register_output_pin::<HalPinF64>("output_1")?;
+    let output_1 = builder.register_output_pin::<HalPinF64>("output-1")?;
 
     // All pins added, component is now ready. This consumes the builder and registers signal
     // handlers.

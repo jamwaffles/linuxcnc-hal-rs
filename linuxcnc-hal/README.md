@@ -13,6 +13,8 @@ For lower level, unsafe use, see the [`linuxcnc-hal-sys`](https://crates.io/crat
 cargo add linuxcnc-hal
 ```
 
+Please consider [becoming a sponsor](https://github.com/sponsors/jamwaffles/) so I may continue to maintain this crate in my spare time!
+
 # [Documentation](https://docs.rs/linuxcnc-hal)
 
 # Examples

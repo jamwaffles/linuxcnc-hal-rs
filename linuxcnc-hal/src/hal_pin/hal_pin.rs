@@ -1,9 +1,6 @@
-use crate::hal_pin::PinDirection;
-use crate::ComponentError;
+use crate::{hal_pin::PinDirection, ComponentError};
 use linuxcnc_hal_sys::hal_malloc;
-use std::convert::TryInto;
-use std::error::Error;
-use std::mem;
+use std::{convert::TryInto, error::Error, mem};
 
 pub trait HalPin: Sized {
     type Storage: Copy;

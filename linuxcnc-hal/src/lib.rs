@@ -3,9 +3,7 @@ pub mod hal_pin;
 use crate::hal_pin::{HalPin, InputPin, OutputPin};
 use linuxcnc_hal_sys::{hal_exit, hal_init, hal_ready, EINVAL, ENOMEM, HAL_NAME_LEN};
 use signal_hook::iterator::Signals;
-use std::error::Error;
-use std::ffi::CString;
-use std::fmt;
+use std::{error::Error, ffi::CString, fmt};
 
 pub struct HalComponent {
     /// Component name

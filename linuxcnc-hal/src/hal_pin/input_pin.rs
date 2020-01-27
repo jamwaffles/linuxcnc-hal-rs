@@ -1,6 +1,7 @@
-use crate::hal_pin::HalPin;
-use crate::hal_pin::PinDirection;
-use crate::ComponentError;
+use crate::{
+    hal_pin::{HalPin, PinDirection},
+    ComponentError,
+};
 
 /// Wrapping struct to specialise a HAL pin to an input
 pub struct InputPin<P> {

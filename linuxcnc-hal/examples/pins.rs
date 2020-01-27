@@ -1,9 +1,11 @@
 //! Create a component that adds some pin types
 
 use linuxcnc_hal::{hal_pin::HalPinF64, HalComponent};
-use std::error::Error;
-use std::thread;
-use std::time::{Duration, Instant};
+use std::{
+    error::Error,
+    thread,
+    time::{Duration, Instant},
+};
 
 fn main() -> Result<(), Box<dyn Error>> {
     // Create a new HAL component called `empty` and register signal handlers

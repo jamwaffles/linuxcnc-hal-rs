@@ -1,9 +1,7 @@
 //! Create a component that does nothing except init and exit
 
 use linuxcnc_hal::HalComponent;
-use std::error::Error;
-use std::thread;
-use std::time::Duration;
+use std::{error::Error, thread, time::Duration};
 
 fn main() -> Result<(), Box<dyn Error>> {
     // Create a new HAL component called `empty` and register signal handlers

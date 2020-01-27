@@ -18,7 +18,7 @@ pub trait HalPin: Sized {
     /// The underlying storage type for the given pin
     ///
     /// This will usually be a scalar value such as `u32` or `bool`
-    type Storage;
+    type Storage: std::fmt::Debug;
 
     /// Allocate memory using [`hal_malloc()`] for storing pin value in
     ///
@@ -36,7 +36,7 @@ pub trait HalPin: Sized {
 
             println!("Allocating {} bytes", size);
 
-            let ptr = hal_malloc(size.try_into().unwrap()) as *mut *mut Self::Storage;
+            let ptr = hal_malloc(size.try_into().unwrap()) as *mut Self::Storage;
 
             if ptr.is_null() {
                 return Err(StorageError::Null);
@@ -46,9 +46,10 @@ pub trait HalPin: Sized {
                 return Err(StorageError::Alignment);
             }
 
-            println!("Allocated at {:?}, value {:?}", ptr, *ptr);
+            println!("Allocated value {:?} at {:?}", *ptr, ptr);
 
-            ptr
+            // TODO: Figure out why this needs to be a double pointer
+            ptr as *mut *mut Self::Storage
         };
 
         Ok(storage_ptr)

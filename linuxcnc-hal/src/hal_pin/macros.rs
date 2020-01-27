@@ -44,7 +44,7 @@ macro_rules! impl_pin {
                     $hal_fn(
                         full_pin_name.as_ptr() as *const i8,
                         direction as i32,
-                        storage,
+                        storage as *mut *mut $storage,
                         component_id,
                     )
                 };

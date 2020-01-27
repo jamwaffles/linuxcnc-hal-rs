@@ -17,8 +17,10 @@ where
         Ok(Self { pin })
     }
 
-    /// Get this pin's value
-    pub fn value(&self) -> Result<P::Storage, ComponentError> {
-        self.pin.storage().map(|v| *v)
+    /// Get this pin's value as a reference
+    pub fn value(&self) -> Result<&P::Storage, ComponentError> {
+        let v = self.pin.storage()?;
+
+        Ok(v)
     }
 }

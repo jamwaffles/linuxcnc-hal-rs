@@ -26,7 +26,6 @@ fn main() -> Result<(), Box<dyn Error>> {
         // Set output pin to elapsed seconds since component started
         output_1.set_value(time.into())?;
 
-        // TODO: Deref trait?
         // Print the current value of the input pin
         println!("Input: {:?}", input_1.value());
 

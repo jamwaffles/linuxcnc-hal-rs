@@ -43,7 +43,7 @@ impl HalComponentBuilder {
     /// ID.
     pub fn new(name: &'static str) -> Result<Self, ComponentInitError> {
         if name.len() > HAL_NAME_LEN as usize {
-            println!(
+            error!(
                 "Component name must be no longer than {} bytes",
                 HAL_NAME_LEN
             );
@@ -58,7 +58,7 @@ impl HalComponentBuilder {
                 x if x == -(EINVAL as i32) => Err(ComponentInitError::Init),
                 x if x == -(ENOMEM as i32) => Err(ComponentInitError::Memory),
                 id if id > 0 => {
-                    println!("Init component {} with ID {}", name, id);
+                    debug!("Init component {} with ID {}", name, id);
 
                     Ok(Self { name, id })
                 }
@@ -121,7 +121,7 @@ impl HalComponentBuilder {
                 let signals = Signals::new(&[signal_hook::SIGTERM, signal_hook::SIGINT])
                     .map_err(ComponentReadyError::Signals)?;
 
-                println!("Signals registered, component is ready");
+                debug!("Signals registered, component is ready");
 
                 let HalComponentBuilder { name, id, .. } = self;
 

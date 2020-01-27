@@ -34,7 +34,7 @@ pub trait HalPin: Sized {
         let storage_ptr = unsafe {
             let size = mem::size_of::<Self::Storage>();
 
-            println!("Allocating {} bytes", size);
+            debug!("Allocating {} bytes", size);
 
             let ptr = hal_malloc(size.try_into().unwrap()) as *mut Self::Storage;
 
@@ -46,7 +46,7 @@ pub trait HalPin: Sized {
                 return Err(StorageError::Alignment);
             }
 
-            println!("Allocated value {:?} at {:?}", *ptr, ptr);
+            debug!("Allocated value {:?} at {:?}", *ptr, ptr);
 
             // TODO: Figure out why this needs to be a double pointer
             ptr as *mut *mut Self::Storage

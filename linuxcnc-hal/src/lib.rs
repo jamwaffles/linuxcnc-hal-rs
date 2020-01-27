@@ -64,6 +64,9 @@
 #![deny(missing_docs)]
 #![deny(intra_doc_link_resolution_failure)]
 
+#[macro_use]
+extern crate log;
+
 mod builder;
 mod check_readme;
 mod error;
@@ -119,7 +122,7 @@ impl Drop for HalComponent {
     ///
     /// Also deregisters signal handlers
     fn drop(&mut self) {
-        println!("Closing component ID {}, name {}", self.id, self.name);
+        debug!("Closing component ID {}, name {}", self.id, self.name);
 
         self.signals.close();
 

@@ -58,7 +58,7 @@ macro_rules! impl_pin {
                         Err($crate::error::PinRegisterError::Memory)
                     }
                     0 => {
-                        println!("Make pin {} returned {}", full_pin_name, ret);
+                        debug!("Make pin {} returned {}", full_pin_name, ret);
 
                         Ok(Self {
                             name: full_pin_name.to_string(),
@@ -72,7 +72,7 @@ macro_rules! impl_pin {
 
         impl Drop for $type {
             fn drop(&mut self) {
-                println!("Drop HalPinF64 {}", self.name);
+                debug!("Drop HalPinF64 {}", self.name);
             }
         }
     };

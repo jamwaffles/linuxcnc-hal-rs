@@ -1,6 +1,5 @@
 macro_rules! impl_pin {
     ($type:ident, $type_str:expr, $hal_fn:expr, $hal_fn_str:expr, $storage:ty, $storage_str:expr) => {
-
         #[doc = $type_str]
         #[doc = "HAL pin."]
         #[doc = ""]

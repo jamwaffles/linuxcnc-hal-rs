@@ -8,6 +8,10 @@ pub enum StorageError {
     /// Pointer is null
     #[error("pointer is null")]
     Null,
+
+    /// Pointer is not aligned
+    #[error("pointer is not aligned")]
+    Alignment,
 }
 
 /// Pin registration error

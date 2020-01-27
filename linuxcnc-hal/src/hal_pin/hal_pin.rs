@@ -4,6 +4,13 @@ use crate::hal_pin::PinDirection;
 use linuxcnc_hal_sys::hal_malloc;
 use std::{convert::TryInto, mem};
 
+fn is_aligned_to<T: ?Sized>(ptr: *const T, align: usize) -> bool {
+    assert!(align.is_power_of_two());
+    let ptr = ptr as *const u8 as usize;
+    let mask = align.wrapping_sub(1);
+    (ptr & mask) == 0
+}
+
 /// HAL pin trait
 ///
 /// Implemented for any HAL pin. Handles allocation of backing storage in LinuxCNC's memory space.
@@ -33,6 +40,10 @@ pub trait HalPin: Sized {
 
             if ptr.is_null() {
                 return Err(StorageError::Null);
+            }
+
+            if !is_aligned_to(ptr, size) {
+                return Err(StorageError::Alignment);
             }
 
             println!("Allocated at {:?}, value {:?}", ptr, *ptr);

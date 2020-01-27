@@ -17,9 +17,9 @@ Please consider [becoming a sponsor](https://github.com/sponsors/jamwaffles/) so
 
 # [Documentation](https://docs.rs/linuxcnc-hal-sys)
 
-# Examples
+# Example
 
-Examples can be found in the [`examples` folder](./examples).
+More examples can be found in the `examples/` folder.
 
 ```rust,no_run
 use linuxcnc_hal_sys::*;

@@ -1,3 +1,8 @@
+//! Safe wrappers for LinuxCNC's HAL (Hardware Abstraction Layer)
+
+#![deny(missing_docs)]
+
+mod error;
 pub mod hal_pin;
 
 use crate::hal_pin::{HalPin, InputPin, OutputPin};
@@ -5,6 +10,9 @@ use linuxcnc_hal_sys::{hal_exit, hal_init, hal_ready, EINVAL, ENOMEM, HAL_NAME_L
 use signal_hook::iterator::Signals;
 use std::{error::Error, ffi::CString, fmt};
 
+/// HAL component wrapper
+///
+/// Create a new HAL component with [`HalComponent::new`]
 pub struct HalComponent {
     /// Component name
     ///
@@ -21,8 +29,12 @@ pub struct HalComponent {
     signals: Signals,
 }
 
+/// Component error
+///
+/// Any error occurring in a component
 #[derive(Debug, Copy, Clone)]
 pub enum ComponentError {
+    /// Unknown error occurred
     Unknown(&'static str),
 }
 
@@ -140,6 +152,11 @@ impl HalComponent {
             _ => false,
         })
     }
+
+    /// Get the HAL-assigned ID for this component
+    pub fn id(&self) -> i32 {
+        self.id
+    }
 }
 
 impl Drop for HalComponent {
@@ -156,13 +173,5 @@ impl Drop for HalComponent {
         unsafe {
             hal_exit(self.id);
         }
-    }
-}
-
-#[cfg(test)]
-mod tests {
-    #[test]
-    fn it_works() {
-        assert_eq!(2 + 2, 4);
     }
 }

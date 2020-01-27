@@ -1,3 +1,5 @@
+//! HAL pins
+
 #[macro_use]
 mod macros;
 

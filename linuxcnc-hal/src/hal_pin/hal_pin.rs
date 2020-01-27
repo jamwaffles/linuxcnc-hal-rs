@@ -1,21 +1,37 @@
+use crate::error::PointerError;
 use crate::{hal_pin::PinDirection, ComponentError};
 use linuxcnc_hal_sys::hal_malloc;
-use std::{convert::TryInto, error::Error, mem};
+use std::{convert::TryInto, mem};
 
+/// HAL pin trait
+///
+/// Implemented for any HAL pin. Handles allocation of backing storage in LinuxCNC's memory space.
 pub trait HalPin: Sized {
-    type Storage: Copy;
+    /// The underlying storage type for the given pin
+    ///
+    /// This will usually be a scalar value such as `u32` or `bool`
+    type Storage;
 
     /// Allocate memory using [`hal_malloc()`] for storing pin value in
-    fn allocate_storage() -> Result<*mut *mut Self::Storage, Box<dyn Error>> {
+    ///
+    /// # Errors
+    ///
+    /// This method will return an `Err` if [`hal_alloc`] returns a null pointer.
+    ///
+    /// # Safety
+    ///
+    /// This method attempts to allocate memory in LinuxCNC's shared memory space with the unsafe method
+    /// [`hal_alloc`].
+    fn allocate_storage() -> Result<*mut *mut Self::Storage, PointerError> {
         let storage_ptr = unsafe {
-            let size = mem::size_of::<Self::Storage>().try_into().unwrap();
+            let size = mem::size_of::<Self::Storage>();
 
             println!("Allocating {} bytes", size);
 
-            let ptr = hal_malloc(size) as *mut *mut Self::Storage;
+            let ptr = hal_malloc(size.try_into().unwrap()) as *mut *mut Self::Storage;
 
             if ptr.is_null() {
-                panic!("Pointer is null");
+                return Err(PointerError::Null);
             }
 
             println!("Allocated at {:?}, value {:?}", ptr, *ptr);

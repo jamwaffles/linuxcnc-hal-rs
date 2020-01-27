@@ -6,14 +6,14 @@
 //!
 //! ```text
 //! loadusr -W /path/to/your/component/target/debug/comp_bin_name
-//! net input-1 spindle.0.speed-out pins.input_1
-//! net output-1 pins.output_1
+//! net input-1 spindle.0.speed-out pins.input-1
+//! net output-1 pins.output-1
 //! ```
 //!
 //! ## Create a component with input and output
 //!
-//! This example creates a component called `"pins"` with a single input (`"input_1"`) and output
-//! pin (`"output_1"`). It enters an infinite loop updates the value of `output_1` every second.
+//! This example creates a component called `"pins"` with a single input (`"input-1"`) and output
+//! pin (`"output-1"`). It enters an infinite loop updates the value of `output-1` every second.
 //! Signals are registered when `builder.ready()` is called which allow LinuxCNC to close the
 //! component gracefully.
 //!
@@ -29,9 +29,9 @@
 //!     // Create a new HAL component called `empty`
 //!     let mut builder = HalComponentBuilder::new("pins")?;
 //!
-//!     let input_1 = builder.register_input_pin::<HalPinF64>("input_1")?;
+//!     let input_1 = builder.register_input_pin::<HalPinF64>("input-1")?;
 //!
-//!     let output_1 = builder.register_output_pin::<HalPinF64>("output_1")?;
+//!     let output_1 = builder.register_output_pin::<HalPinF64>("output-1")?;
 //!
 //!     // All pins added, component is now ready. This consumes the builder and registers signal
 //!     // handlers.

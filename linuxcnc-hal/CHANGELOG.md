@@ -32,5 +32,7 @@ A safe abstraction used to create LinuxCNC HAL components in Rust.
 
 Initial release
 
+<!-- next-url -->
+
 [unreleased]: https://github.com/jamwaffles/linuxcnc-hal-rs/compare/linuxcnc-hal-v0.1.1...HEAD
 [0.1.1]: https://github.com/jamwaffles/linuxcnc-hal-rs/compare/linuxcnc-hal-v0.1.0...linuxcnc-hal-v0.1.1

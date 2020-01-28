@@ -21,17 +21,6 @@ include = [
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
-[package.metadata.release]
-no-dev-version = true
-pre-release-replacements = [
-  {file="CHANGELOG.md", search="Unreleased", replace="{{version}}"},
-  {file="CHANGELOG.md", search="unreleased", replace="{{version}}"},
-  {file="CHANGELOG.md", search="\\.\\.\\.HEAD", replace="...{{tag_name}}"},
-  {file="CHANGELOG.md", search="ReleaseDate", replace="{{date}}"},
-  {file="CHANGELOG.md", search="<!-- next-header -->", replace="<!-- next-header -->\n\n## [Unreleased] - ReleaseDate"},
-  {file="CHANGELOG.md", search="<!-- next-url -->", replace="<!-- next-url -->\n[unreleased]: https://github.com/jamwaffles/linuxcnc-hal-rs/compare/{{tag_name}}...HEAD"},
-]
-
 [badges]
 circle-ci = { repository = "jamwaffles/linuxcnc-hal-rs", branch = "master" }
 

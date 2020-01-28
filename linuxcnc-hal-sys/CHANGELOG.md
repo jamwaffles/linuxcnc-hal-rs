@@ -20,6 +20,6 @@ Unsafe Rust bindings to LinuxCNC's HAL module.
 - Initial release with `bindgen`-generated items
 
 <!-- next-url -->
-[unreleased]: https://github.com/jamwaffles/linuxcnc-hal-rs/compare/{{tag_name}}...HEAD
 
-[0.1.6]: https://github.com/jamwaffles/linuxcnc-hal-rs/compare/linuxcnc-hal-v0.1.5...{{tag_name}}
+[unreleased]: https://github.com/jamwaffles/linuxcnc-hal-rs/compare/linuxcnc-hal-v0.1.6...HEAD
+[0.1.6]: https://github.com/jamwaffles/linuxcnc-hal-rs/compare/linuxcnc-hal-v0.1.5...linuxcnc-hal-v0.1.6

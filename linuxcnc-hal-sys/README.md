@@ -47,7 +47,7 @@ unsafe {
 
     let signals = Signals::new(&[signal_hook::SIGTERM, signal_hook::SIGINT]).unwrap();
 
-    let storage = hal_malloc(mem::size_of::<f64>() as i64) as *mut *mut f64;
+    let storage = hal_malloc(mem::size_of::<*mut f64>() as i64) as *mut *mut f64;
 
     if storage.is_null() {
         panic!("Failed to allocate storage");

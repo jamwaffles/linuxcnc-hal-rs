@@ -2,7 +2,9 @@
 
 A safe abstraction used to create LinuxCNC HAL components in Rust.
 
-## Unreleased
+<!-- next-header -->
+
+## [Unreleased] - ReleaseDate
 
 ### Added
 
@@ -16,7 +18,7 @@ A safe abstraction used to create LinuxCNC HAL components in Rust.
 
 - None
 
-## 0.1.1
+## [0.1.1] - 2020-01-27
 
 ### Added
 
@@ -26,6 +28,9 @@ A safe abstraction used to create LinuxCNC HAL components in Rust.
 
 - Move `println!()`s to `log` crate for less noise
 
-## 0.1.0
+## 0.1.0 - 2020-01-27
 
 Initial release
+
+[unreleased]: https://github.com/jamwaffles/linuxcnc-hal-rs/compare/linuxcnc-hal-v0.1.1...HEAD
+[0.1.1]: https://github.com/jamwaffles/linuxcnc-hal-rs/compare/linuxcnc-hal-v0.1.0...linuxcnc-hal-v0.1.1

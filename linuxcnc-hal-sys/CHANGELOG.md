@@ -6,17 +6,10 @@ Unsafe Rust bindings to LinuxCNC's HAL module.
 
 ## [Unreleased] - ReleaseDate
 
-### Added
-
-- None
-
 ### Changed
 
-- None
-
-### Fixed
-
-- None
+- Pin LinuxCNC source code to version 2.7.15
+- Add examples to `examples/` folder and docs header
 
 ## 0.1.5 - 2020-01-27
 

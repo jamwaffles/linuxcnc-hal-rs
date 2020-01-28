@@ -1,6 +1,6 @@
 [package]
 name = "linuxcnc-hal-sys"
-version = "0.1.5"
+version = "0.1.6"
 authors = ["James Waples <james@wapl.es>"]
 edition = "2018"
 documentation = "https://docs.rs/linuxcnc-hal-sys"
@@ -19,9 +19,6 @@ include = [
     "README.md",
 ]
 
-[badges]
-circle-ci = { repository = "jamwaffles/linuxcnc-hal-rs", branch = "master" }
-
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [package.metadata.release]
@@ -34,6 +31,9 @@ pre-release-replacements = [
   {file="CHANGELOG.md", search="<!-- next-header -->", replace="<!-- next-header -->\n\n## [Unreleased] - ReleaseDate"},
   {file="CHANGELOG.md", search="<!-- next-url -->", replace="<!-- next-url -->\n[unreleased]: https://github.com/jamwaffles/linuxcnc-hal-rs/compare/{{tag_name}}...HEAD"},
 ]
+
+[badges]
+circle-ci = { repository = "jamwaffles/linuxcnc-hal-rs", branch = "master" }
 
 [dependencies]
 

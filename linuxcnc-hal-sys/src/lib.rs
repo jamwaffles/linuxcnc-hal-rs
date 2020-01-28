@@ -2,6 +2,12 @@
 //!
 //! The high level, safe interface at [`linuxcnc-hal`] is recommended for user code.
 //!
+//! # Binding versions
+//!
+//! | This crate                                                | LinuxCNC version                                           |
+//! | --------------------------------------------------------- | ---------------------------------------------------------- |
+//! | [v0.1.6](https://crates.io/crates/linuxcnc-hal-sys/0.1.6) | [v2.7.15](http://linuxcnc.org/2020/01/03/LinuxCNC-2.7.15/) |
+//!
 //! # Examples
 //!
 //! All functions exported from this crate are `unsafe`, hence each example is wrapped in a big

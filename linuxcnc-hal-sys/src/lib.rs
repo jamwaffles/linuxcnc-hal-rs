@@ -6,6 +6,7 @@
 //!
 //! | This crate                                                | LinuxCNC version                                           |
 //! | --------------------------------------------------------- | ---------------------------------------------------------- |
+//! | [v0.1.7](https://crates.io/crates/linuxcnc-hal-sys/0.1.7) | [v2.7.15](http://linuxcnc.org/2020/01/03/LinuxCNC-2.7.15/) |
 //! | [v0.1.6](https://crates.io/crates/linuxcnc-hal-sys/0.1.6) | [v2.7.15](http://linuxcnc.org/2020/01/03/LinuxCNC-2.7.15/) |
 //!
 //! # Examples

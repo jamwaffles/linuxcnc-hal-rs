@@ -6,6 +6,10 @@ Unsafe Rust bindings to LinuxCNC's HAL module.
 
 ## [Unreleased] - ReleaseDate
 
+### Added
+
+- Added a `struct.rs` example showing how to allocate memory for a struct of pins
+
 ## [0.1.6] - 2020-01-28
 
 ### Changed

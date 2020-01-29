@@ -6,6 +6,10 @@ A safe abstraction used to create LinuxCNC HAL components in Rust.
 
 ## [Unreleased] - ReleaseDate
 
+### Fixed
+
+- Fixed usage of `hal_malloc()` to correctly allocate memory for pins. Many thanks to the users in [this thread](https://users.rust-lang.org/t/convert-mut-mut-f64-to-box-f64/37521) for the guidance.
+
 ## [0.1.2] - 2020-01-28
 
 ### Added

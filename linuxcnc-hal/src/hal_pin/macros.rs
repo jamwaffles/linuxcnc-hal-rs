@@ -42,7 +42,7 @@ macro_rules! impl_pin {
 
                 let ret = unsafe {
                     $hal_fn(
-                        full_pin_name.as_ptr() as *const i8,
+                        full_pin_name.as_ptr().cast(),
                         direction as i32,
                         storage,
                         component_id,

@@ -6,7 +6,7 @@ use std::{ffi::CString, mem, thread, time::Duration};
 
 fn main() {
     unsafe {
-        let ret = hal_init(CString::new("pins").unwrap().as_ptr() as *const i8);
+        let ret = hal_init(CString::new("pins").unwrap().as_ptr().cast());
 
         // Check that component was created successfully
         let component_id = match ret {
@@ -29,7 +29,7 @@ fn main() {
         let pin_name = CString::new("pins.input-1").unwrap();
 
         let ret = hal_pin_float_new(
-            pin_name.as_ptr() as *const i8,
+            pin_name.as_ptr().cast(),
             hal_pin_dir_t_HAL_IN,
             storage,
             component_id,

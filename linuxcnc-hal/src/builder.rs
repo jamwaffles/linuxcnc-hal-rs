@@ -52,7 +52,7 @@ impl HalComponentBuilder {
         } else {
             let name_c = CString::new(name).map_err(|_| ComponentInitError::InvalidName)?;
 
-            let id = unsafe { hal_init(name_c.as_ptr() as *const i8) };
+            let id = unsafe { hal_init(name_c.as_ptr().cast()) };
 
             match id {
                 x if x == -(EINVAL as i32) => Err(ComponentInitError::Init),

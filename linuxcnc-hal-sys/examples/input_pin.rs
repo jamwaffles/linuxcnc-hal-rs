@@ -11,6 +11,7 @@
 
 use linuxcnc_hal_sys::*;
 use signal_hook::iterator::Signals;
+use std::convert::TryInto;
 use std::{ffi::CString, mem, thread, time::Duration};
 
 fn main() {
@@ -21,7 +22,7 @@ fn main() {
 
         let signals = Signals::new(&[signal_hook::SIGTERM, signal_hook::SIGINT]).unwrap();
 
-        let storage = hal_malloc(mem::size_of::<*mut f64>() as i64) as *mut *mut f64;
+        let storage = hal_malloc(mem::size_of::<*mut f64>().try_into().unwrap()) as *mut *mut f64;
 
         println!("Storage {:?}", storage);
 

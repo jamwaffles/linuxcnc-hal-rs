@@ -25,6 +25,6 @@ where
 
     /// Set the pin's value
     pub fn set_value(&self, value: P::Storage) -> Result<(), StorageError> {
-        Ok(*self.pin.storage()? = value)
+        Ok(*self.pin.storage_mut()? = value)
     }
 }

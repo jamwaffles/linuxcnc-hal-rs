@@ -21,11 +21,19 @@ macro_rules! impl_pin {
                 &self.name
             }
 
-            fn storage(&self) -> Result<&mut Self::Storage, $crate::error::StorageError> {
+            fn storage_mut(&self) -> Result<&mut Self::Storage, $crate::error::StorageError> {
                 if self.storage.is_null() {
                     Err($crate::error::StorageError::Null)
                 } else {
                     Ok(unsafe { &mut **self.storage })
+                }
+            }
+
+            fn storage(&self) -> Result<&Self::Storage, $crate::error::StorageError> {
+                if self.storage.is_null() {
+                    Err($crate::error::StorageError::Null)
+                } else {
+                    Ok(unsafe { &**self.storage })
                 }
             }
 

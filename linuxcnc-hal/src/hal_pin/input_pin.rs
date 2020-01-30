@@ -24,8 +24,6 @@ where
 
     /// Get a reference to this pin's value
     pub fn value(&self) -> Result<&P::Storage, StorageError> {
-        let v = self.pin.storage()?;
-
-        Ok(v)
+        self.pin.storage()
     }
 }

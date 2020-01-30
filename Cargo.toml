@@ -1,2 +1,2 @@
 [workspace]
-members = [ "linuxcnc-hal-sys", "linuxcnc-hal" ]
+members = [ "linuxcnc-hal-sys", "linuxcnc-hal", "linuxcnc-derive" ]

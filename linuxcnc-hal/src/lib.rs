@@ -70,9 +70,11 @@ extern crate log;
 mod builder;
 mod check_readme;
 mod error;
+mod hal_data;
 pub mod hal_pin;
 
 pub use crate::builder::HalComponentBuilder;
+pub use hal_data::HalData;
 use linuxcnc_hal_sys::hal_exit;
 use signal_hook::iterator::Signals;
 

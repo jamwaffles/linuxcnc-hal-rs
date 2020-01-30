@@ -1,0 +1,25 @@
+[package]
+name = "linuxcnc-derive"
+version = "0.1.0"
+authors = ["James Waples <james@wapl.es>"]
+edition = "2018"
+documentation = "https://docs.rs/linuxcnc-derive"
+description = "Proc macro derives for LinuxCNC HAL components"
+readme = "./README.md"
+license = "MIT OR Apache-2.0"
+keywords = [ "cnc", "linuxcnc", "proc-macro", "derive" ]
+categories = [ "data-structures", "science::robotics" ]
+repository = "https://github.com/jamwaffles/linuxcnc-hal-rs"
+
+[lib]
+proc-macro = true
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+quote = "1.0.2"
+proc-macro2 = "1.0.8"
+syn = "1.0.14"
+
+[dev-dependencies]
+linuxcnc-derive = { path = "../linuxcnc-derive" }

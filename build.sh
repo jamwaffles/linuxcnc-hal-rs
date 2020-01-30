@@ -14,6 +14,7 @@ cargo bench --no-run
 cargo +nightly doc --all-features
 linkchecker target/doc/linuxcnc_hal_sys/index.html
 linkchecker target/doc/linuxcnc_hal/index.html
+linkchecker target/doc/linuxcnc_derive/index.html
 
 # Check that sys package builds into something pushable to crates.io
 pushd linuxcnc-hal-sys
@@ -22,5 +23,10 @@ popd
 
 # Check that higher level package builds correctly
 pushd linuxcnc-hal
+cargo package
+popd
+
+# Check that derive package builds correctly
+pushd linuxcnc-derive
 cargo package
 popd

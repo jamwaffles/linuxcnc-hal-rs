@@ -18,6 +18,7 @@ circle-ci = { repository = "jamwaffles/linuxcnc-hal-rs", branch = "master" }
 
 [dependencies]
 linuxcnc-hal-sys = "0.1.6"
+linuxcnc-derive = { path = "../linuxcnc-derive" }
 signal-hook = "0.1.13"
 libc = "0.2.66"
 thiserror = "1.0.10"

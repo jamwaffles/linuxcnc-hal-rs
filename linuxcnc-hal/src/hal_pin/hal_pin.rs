@@ -58,8 +58,11 @@ pub trait HalPin: Sized {
     /// Get the pin's name
     fn name(&self) -> &str;
 
-    /// Get pointer to underlying shared memory storing this pin's value
-    fn storage(&self) -> Result<&mut Self::Storage, StorageError>;
+    /// Get a mutable pointer to underlying shared memory storing this pin's value
+    fn storage_mut(&self) -> Result<&mut Self::Storage, StorageError>;
+
+    /// Get a reference to the underlying shared memory storing the pin's value
+    fn storage(&self) -> Result<&Self::Storage, StorageError>;
 
     /// Register the pin with the LinuxCNC HAL
     ///

@@ -2,7 +2,7 @@
 
 use crate::{
     error::{ComponentInitError, ComponentReadyError, PinRegisterError},
-    hal_pin::{HalPin, InputPin, OutputPin},
+    hal_pin::{BidirectionalPin, HalPin, InputPin, OutputPin},
     HalComponent,
 };
 use linuxcnc_hal_sys::{hal_init, hal_ready, EINVAL, ENOMEM, HAL_NAME_LEN};
@@ -97,6 +97,23 @@ impl HalComponentBuilder {
         let full_name = format!("{}.{}", self.name, pin_name);
 
         let pin = OutputPin::<P>::new(full_name.clone(), self.id)?;
+
+        Ok(pin)
+    }
+
+    /// Register a bidirectional pin with this component
+    ///
+    /// The pin name will be prefixed with the component name
+    pub fn register_bidirectional_pin<P>(
+        &mut self,
+        pin_name: &'static str,
+    ) -> Result<BidirectionalPin<P>, PinRegisterError>
+    where
+        P: HalPin + 'static,
+    {
+        let full_name = format!("{}.{}", self.name, pin_name);
+
+        let pin = BidirectionalPin::<P>::new(full_name.clone(), self.id)?;
 
         Ok(pin)
     }

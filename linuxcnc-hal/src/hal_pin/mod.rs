@@ -3,13 +3,17 @@
 #[macro_use]
 mod macros;
 
+mod bidirectional_pin;
 mod hal_pin;
 mod input_pin;
 mod output_pin;
 mod pin_direction;
 
 use self::pin_direction::PinDirection;
-pub use self::{hal_pin::HalPin, input_pin::InputPin, output_pin::OutputPin};
+pub use self::{
+    bidirectional_pin::BidirectionalPin, hal_pin::HalPin, input_pin::InputPin,
+    output_pin::OutputPin,
+};
 use linuxcnc_hal_sys::{hal_pin_bit_new, hal_pin_float_new, hal_pin_s32_new, hal_pin_u32_new};
 
 impl_pin!(

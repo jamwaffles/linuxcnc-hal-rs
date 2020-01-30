@@ -6,6 +6,10 @@ A safe abstraction used to create LinuxCNC HAL components in Rust.
 
 ## [Unreleased] - ReleaseDate
 
+### Added
+
+- #6 Added `BidirectionalPin` to allow an I/O pin to be registered on a component
+
 ## [0.1.3] - 2020-01-29
 
 ### Fixed
@@ -41,8 +45,8 @@ A safe abstraction used to create LinuxCNC HAL components in Rust.
 Initial release
 
 <!-- next-url -->
-[unreleased]: https://github.com/jamwaffles/linuxcnc-hal-rs/compare/linuxcnc-hal-v0.1.3...HEAD
 
+[unreleased]: https://github.com/jamwaffles/linuxcnc-hal-rs/compare/linuxcnc-hal-v0.1.3...HEAD
 [0.1.3]: https://github.com/jamwaffles/linuxcnc-hal-rs/compare/linuxcnc-hal-v0.1.2...linuxcnc-hal-v0.1.3
 [0.1.2]: https://github.com/jamwaffles/linuxcnc-hal-rs/compare/linuxcnc-hal-v0.1.1...linuxcnc-hal-v0.1.2
 [0.1.1]: https://github.com/jamwaffles/linuxcnc-hal-rs/compare/linuxcnc-hal-v0.1.0...linuxcnc-hal-v0.1.1

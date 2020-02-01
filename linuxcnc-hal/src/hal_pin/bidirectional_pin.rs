@@ -1,12 +1,50 @@
-use crate::hal_pin::pin_direction::PinDirection;
-use crate::hal_pin::PinRead;
-use crate::hal_pin::PinWrite;
-use linuxcnc_hal_sys::hal_pin_bit_new;
-use linuxcnc_hal_sys::hal_pin_float_new;
-use linuxcnc_hal_sys::hal_pin_s32_new;
-use linuxcnc_hal_sys::hal_pin_u32_new;
+use crate::hal_pin::{pin_direction::PinDirection, PinRead, PinWrite};
+use linuxcnc_hal_sys::{hal_pin_bit_new, hal_pin_float_new, hal_pin_s32_new, hal_pin_u32_new};
 
 /// A pin that can be both read from and written to
+///
+/// Supported pin types are as follows
+///
+/// | Type                     | Storage | Equivalent `linuxcnc_hal_sys` function |
+/// | ------------------------ | ------- | -------------------------------------- |
+/// | `BidirectionalPin<f64>`  | `f64`   | [`hal_pin_float_new`]                  |
+/// | `BidirectionalPin<u32>`  | `u32`   | [`hal_pin_u32_new`]                    |
+/// | `BidirectionalPin<i32>`  | `i32`   | [`hal_pin_s32_new`]                    |
+/// | `BidirectionalPin<bool>` | `bool`  | [`hal_pin_bit_new`]                    |
+///
+/// # Examples
+///
+/// ## Create a pin
+///
+/// This example creates a `BidirectionalPin` under `demo-component.named-pin`.
+///
+/// ```rust,no_run
+/// use linuxcnc_hal::{
+///     hal_pin::BidirectionalPin,
+///     prelude::*,
+///     HalComponentBuilder,
+/// };
+/// use std::{thread, time::Duration, error::Error};
+///
+/// fn main() -> Result<(), Box<dyn Error>> {
+///     let mut builder = HalComponentBuilder::new("demo-component")?;
+///
+///     let pin = builder.register_pin::<BidirectionalPin<f64>>("named-pin")?;
+///
+///     let comp = builder.ready()?;
+///
+///     // Main control loop
+///     while !comp.should_exit() {
+///         println!("Input: {:?}", pin.value());
+///
+///         pin.set_value(123.45f64);
+///
+///         thread::sleep(Duration::from_millis(1000));
+///     }
+///
+///     Ok(())
+/// }
+/// ```
 pub struct BidirectionalPin<S> {
     pub(crate) name: String,
     pub(crate) storage: *mut *mut S,

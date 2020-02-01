@@ -1,6 +1,9 @@
 //! Create a component that adds some pin types
 
-use linuxcnc_hal::{hal_pin::HalPinF64, HalComponentBuilder};
+use linuxcnc_hal::hal_pin::InputPin;
+use linuxcnc_hal::hal_pin::OutputPin;
+use linuxcnc_hal::prelude::*;
+use linuxcnc_hal::HalComponentBuilder;
 use std::{
     error::Error,
     thread,
@@ -11,9 +14,9 @@ fn main() -> Result<(), Box<dyn Error>> {
     // Create a new HAL component called `pins`
     let mut builder = HalComponentBuilder::new("pins")?;
 
-    let input_1 = builder.register_input_pin::<HalPinF64>("input-1")?;
+    let input_1 = builder.register_pin::<InputPin<f64>>("input-1")?;
 
-    let output_1 = builder.register_output_pin::<HalPinF64>("output-1")?;
+    let output_1 = builder.register_pin::<OutputPin<f64>>("output-1")?;
 
     // All pins added, component is now ready. This consumes the builder and registers signal
     // handlers.

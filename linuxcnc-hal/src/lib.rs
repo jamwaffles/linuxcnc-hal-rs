@@ -18,7 +18,7 @@
 //! component gracefully.
 //!
 //! ```rust,no_run
-//! use linuxcnc_hal::{hal_pin::HalPinF64, HalComponentBuilder};
+//! use linuxcnc_hal::{hal_pin::{InputPin, OutputPin}, prelude::*, HalComponentBuilder};
 //! use std::{
 //!     error::Error,
 //!     thread,
@@ -29,9 +29,9 @@
 //!     // Create a new HAL component called `empty`
 //!     let mut builder = HalComponentBuilder::new("pins")?;
 //!
-//!     let input_1 = builder.register_input_pin::<HalPinF64>("input-1")?;
+//!     let input_1 = builder.register_pin::<InputPin<f64>>("input-1")?;
 //!
-//!     let output_1 = builder.register_output_pin::<HalPinF64>("output-1")?;
+//!     let output_1 = builder.register_pin::<OutputPin<f64>>("output-1")?;
 //!
 //!     // All pins added, component is now ready. This consumes the builder and registers signal
 //!     // handlers.
@@ -71,6 +71,7 @@ mod builder;
 mod check_readme;
 mod error;
 pub mod hal_pin;
+pub mod prelude;
 
 pub use crate::builder::HalComponentBuilder;
 use linuxcnc_hal_sys::hal_exit;

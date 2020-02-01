@@ -1,20 +1,6 @@
 macro_rules! impl_pin {
-    ($type:ident, $type_str:expr, $hal_fn:expr, $hal_fn_str:expr, $storage:ty, $storage_str:expr) => {
-        #[doc = $type_str]
-        #[doc = "HAL pin."]
-        #[doc = ""]
-        #[doc = "Equivalent to the [`"]
-        #[doc = $hal_fn_str]
-        #[doc = "`] HAL function, backed internally by a [`"]
-        #[doc = $storage_str]
-        #[doc = "`]."]
-        #[derive(Debug, PartialEq)]
-        pub struct $type {
-            name: String,
-            storage: *mut *mut $storage,
-        }
-
-        impl $crate::hal_pin::HalPin for $type {
+    ($type:ident, $storage:ty, $hal_fn:expr, $direction:expr) => {
+        impl $crate::hal_pin::HalPin for $type<$storage> {
             type Storage = $storage;
 
             fn name(&self) -> &str {
@@ -37,21 +23,22 @@ macro_rules! impl_pin {
                 }
             }
 
-            fn register_pin(
+            fn register(
                 full_pin_name: &str,
-                direction: $crate::hal_pin::PinDirection,
+                // direction: $crate::hal_pin::PinDirection,
                 component_id: i32,
             ) -> Result<Self, $crate::error::PinRegisterError> {
                 if full_pin_name.len() > linuxcnc_hal_sys::HAL_NAME_LEN as usize {
                     return Err($crate::error::PinRegisterError::NameLength);
                 }
 
-                let storage = Self::allocate_storage().map_err($crate::error::PinRegisterError::Storage)?;
+                let storage =
+                    Self::allocate_storage().map_err($crate::error::PinRegisterError::Storage)?;
 
                 let ret = unsafe {
                     $hal_fn(
                         full_pin_name.as_ptr().cast(),
-                        direction as i32,
+                        $direction as i32,
                         storage,
                         component_id,
                     )
@@ -61,7 +48,9 @@ macro_rules! impl_pin {
                     x if x == -(linuxcnc_hal_sys::EINVAL as i32) => {
                         Err($crate::error::PinRegisterError::Invalid)
                     }
-                    x if x == -(linuxcnc_hal_sys::EPERM as i32) => Err($crate::error::PinRegisterError::LockedHal),
+                    x if x == -(linuxcnc_hal_sys::EPERM as i32) => {
+                        Err($crate::error::PinRegisterError::LockedHal)
+                    }
                     x if x == -(linuxcnc_hal_sys::ENOMEM as i32) => {
                         Err($crate::error::PinRegisterError::Memory)
                     }
@@ -75,12 +64,6 @@ macro_rules! impl_pin {
                     }
                     code => unreachable!("Hit unreachable error code {}", code),
                 }
-            }
-        }
-
-        impl Drop for $type {
-            fn drop(&mut self) {
-                debug!("Drop HalPinF64 {}", self.name);
             }
         }
     };

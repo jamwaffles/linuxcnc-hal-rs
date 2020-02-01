@@ -9,6 +9,7 @@ A safe abstraction used to create LinuxCNC HAL components in Rust.
 ### Added
 
 - #6 Added `BidirectionalPin` to allow an I/O pin to be registered on a component
+- Added basic `struct.rs` example showing storage of pins in a struct
 
 ## [0.1.3] - 2020-01-29
 

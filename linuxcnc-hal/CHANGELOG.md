@@ -10,6 +10,10 @@ A safe abstraction used to create LinuxCNC HAL components in Rust.
 
 - #6 Added `BidirectionalPin` to allow an I/O pin to be registered on a component
 
+### Changed
+
+- **(breaking)** `InputPin::new` and `OutputPin::new` are no longer exposed outside the crate. Use `HalComponentBuilder::register_input_pin` and `HalComponentBuilder::register_output_pin` respectively instead.
+
 ## [0.1.3] - 2020-01-29
 
 ### Fixed

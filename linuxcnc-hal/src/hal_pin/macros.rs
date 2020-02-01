@@ -25,7 +25,6 @@ macro_rules! impl_pin {
 
             fn register(
                 full_pin_name: &str,
-                // direction: $crate::hal_pin::PinDirection,
                 component_id: i32,
             ) -> Result<Self, $crate::error::PinRegisterError> {
                 if full_pin_name.len() > linuxcnc_hal_sys::HAL_NAME_LEN as usize {

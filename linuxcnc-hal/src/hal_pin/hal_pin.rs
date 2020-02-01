@@ -1,6 +1,4 @@
-use crate::error::PinRegisterError;
-use crate::error::StorageError;
-use crate::hal_pin::PinDirection;
+use crate::error::{PinRegisterError, StorageError};
 use linuxcnc_hal_sys::hal_malloc;
 use std::{convert::TryInto, mem};
 
@@ -67,9 +65,5 @@ pub trait HalPin: Sized + Drop {
     /// Register the pin with the LinuxCNC HAL
     ///
     /// Returns a raw pointer to the underling HAL shared memory for the pin
-    fn register(
-        full_pin_name: &str,
-        // direction: PinDirection,
-        component_id: i32,
-    ) -> Result<Self, PinRegisterError>;
+    fn register(full_pin_name: &str, component_id: i32) -> Result<Self, PinRegisterError>;
 }

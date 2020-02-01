@@ -1,9 +1,12 @@
-use crate::{
-    error::{PinRegisterError, StorageError},
-    hal_pin::{HalPin, PinDirection},
-};
+use crate::hal_pin::pin_direction::PinDirection;
+use crate::hal_pin::PinRead;
+use crate::hal_pin::PinWrite;
+use linuxcnc_hal_sys::hal_pin_bit_new;
+use linuxcnc_hal_sys::hal_pin_float_new;
+use linuxcnc_hal_sys::hal_pin_s32_new;
+use linuxcnc_hal_sys::hal_pin_u32_new;
 
-/// Wrapping struct to specialise a HAL pin to a bidirectional IO
+/// A pin that can be both read from and written to
 pub struct BidirectionalPin<S> {
     pub(crate) name: String,
     pub(crate) storage: *mut *mut S,
@@ -15,32 +18,37 @@ impl<S> Drop for BidirectionalPin<S> {
     }
 }
 
-// pub struct BidirectionalPin<P> {
-//     pin: P,
-// }
+impl_pin!(
+    BidirectionalPin,
+    f64,
+    hal_pin_float_new,
+    PinDirection::Bidirectional
+);
+impl_pin!(
+    BidirectionalPin,
+    u32,
+    hal_pin_u32_new,
+    PinDirection::Bidirectional
+);
+impl_pin!(
+    BidirectionalPin,
+    i32,
+    hal_pin_s32_new,
+    PinDirection::Bidirectional
+);
+impl_pin!(
+    BidirectionalPin,
+    bool,
+    hal_pin_bit_new,
+    PinDirection::Bidirectional
+);
 
-// impl<P> BidirectionalPin<P>
-// where
-//     P: HalPin,
-// {
-//     /// Register a new bidirectional pin with the HAL
-//     ///
-//     /// Requires the full pin name including component like `vfd.spindle-speed-out` or
-//     /// `jog-pendant.is-estopped`. The component ID should be fetched from
-//     /// [`HalComponentBuilder.id`].
-//     pub fn new(name: String, component_id: i32) -> Result<Self, PinRegisterError> {
-//         let pin = P::register(&name, PinDirection::Bidirectional, component_id)?;
+impl PinWrite for BidirectionalPin<f64> {}
+impl PinWrite for BidirectionalPin<u32> {}
+impl PinWrite for BidirectionalPin<i32> {}
+impl PinWrite for BidirectionalPin<bool> {}
 
-//         Ok(Self { pin })
-//     }
-
-//     /// Get the pin's value
-//     pub fn value(&self) -> Result<&P::Storage, StorageError> {
-//         self.pin.storage()
-//     }
-
-//     /// Set the pin's value
-//     pub fn set_value(&self, value: P::Storage) -> Result<(), StorageError> {
-//         Ok(*self.pin.storage_mut()? = value)
-//     }
-// }
+impl PinRead for BidirectionalPin<f64> {}
+impl PinRead for BidirectionalPin<u32> {}
+impl PinRead for BidirectionalPin<i32> {}
+impl PinRead for BidirectionalPin<bool> {}

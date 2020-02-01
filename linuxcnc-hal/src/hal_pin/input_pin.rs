@@ -1,9 +1,11 @@
-use crate::{
-    error::{PinRegisterError, StorageError},
-    hal_pin::{HalPin, PinDirection},
-};
+use crate::hal_pin::pin_direction::PinDirection;
+use crate::hal_pin::PinRead;
+use linuxcnc_hal_sys::hal_pin_bit_new;
+use linuxcnc_hal_sys::hal_pin_float_new;
+use linuxcnc_hal_sys::hal_pin_s32_new;
+use linuxcnc_hal_sys::hal_pin_u32_new;
 
-/// Wrapping struct to specialise a HAL pin to an input
+/// An input pin readable by the component
 pub struct InputPin<S> {
     pub(crate) name: String,
     pub(crate) storage: *mut *mut S,
@@ -15,26 +17,12 @@ impl<S> Drop for InputPin<S> {
     }
 }
 
-// pub struct InputPin<P> {
-//     pin: P,
-// }
+impl_pin!(InputPin, f64, hal_pin_float_new, PinDirection::In);
+impl_pin!(InputPin, u32, hal_pin_u32_new, PinDirection::In);
+impl_pin!(InputPin, i32, hal_pin_s32_new, PinDirection::In);
+impl_pin!(InputPin, bool, hal_pin_bit_new, PinDirection::In);
 
-// impl<P> InputPin<P>
-// where
-//     P: HalPin,
-// {
-//     /// Register a new input pin with the HAL
-//     ///
-//     /// Requires the full pin name including component like `vfd.speed-in` or `jog-pendant.enabled`.
-//     /// The component ID should be fetched from [`HalComponent.id`].
-//     pub fn new(name: String, component_id: i32) -> Result<Self, PinRegisterError> {
-//         let pin = P::register_pin(&name, PinDirection::In, component_id)?;
-
-//         Ok(Self { pin })
-//     }
-
-//     /// Get a reference to this pin's value
-//     pub fn value(&self) -> Result<&P::Storage, StorageError> {
-//         self.pin.storage()
-//     }
-// }
+impl PinRead for InputPin<f64> {}
+impl PinRead for InputPin<u32> {}
+impl PinRead for InputPin<i32> {}
+impl PinRead for InputPin<bool> {}

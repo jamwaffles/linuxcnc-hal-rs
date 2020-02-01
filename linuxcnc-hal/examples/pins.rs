@@ -1,9 +1,10 @@
 //! Create a component that adds some pin types
 
-use linuxcnc_hal::hal_pin::InputPin;
-use linuxcnc_hal::hal_pin::OutputPin;
-use linuxcnc_hal::prelude::*;
-use linuxcnc_hal::HalComponentBuilder;
+use linuxcnc_hal::{
+    hal_pin::{InputPin, OutputPin},
+    prelude::*,
+    HalComponentBuilder,
+};
 use std::{
     error::Error,
     thread,

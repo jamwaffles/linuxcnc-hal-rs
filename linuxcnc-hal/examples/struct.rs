@@ -1,8 +1,8 @@
 //! Store pin resources on a struct
 
 use linuxcnc_hal::{
-    hal_pin::HalPinF64,
     hal_pin::{InputPin, OutputPin},
+    prelude::*,
     HalComponentBuilder,
 };
 use std::{
@@ -12,8 +12,8 @@ use std::{
 };
 
 struct Pins {
-    input_1: InputPin<HalPinF64>,
-    output_1: OutputPin<HalPinF64>,
+    input_1: InputPin<f64>,
+    output_1: OutputPin<f64>,
 }
 
 fn main() -> Result<(), Box<dyn Error>> {
@@ -21,8 +21,8 @@ fn main() -> Result<(), Box<dyn Error>> {
     let mut builder = HalComponentBuilder::new("pins")?;
 
     let pins = Pins {
-        input_1: builder.register_input_pin::<HalPinF64>("input-1")?,
-        output_1: builder.register_output_pin::<HalPinF64>("output-1")?,
+        input_1: builder.register_pin::<InputPin<f64>>("input-1")?,
+        output_1: builder.register_pin::<OutputPin<f64>>("output-1")?,
     };
 
     // All pins added, component is now ready. This consumes the builder and registers signal

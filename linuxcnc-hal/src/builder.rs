@@ -2,7 +2,7 @@
 
 use crate::{
     error::{ComponentInitError, ComponentReadyError, PinRegisterError},
-    hal_pin::{BidirectionalPin, HalPin, InputPin, OutputPin},
+    hal_pin::HalPin,
     HalComponent,
 };
 use linuxcnc_hal_sys::{hal_init, hal_ready, EINVAL, ENOMEM, HAL_NAME_LEN};
@@ -67,57 +67,19 @@ impl HalComponentBuilder {
         }
     }
 
-    /// Register an input pin with this component
+    /// Register a pin with this component
     ///
     /// The pin name will be prefixed with the component name
-    pub fn register_input_pin<P>(
-        &mut self,
-        pin_name: &'static str,
-    ) -> Result<InputPin<P>, PinRegisterError>
+    pub fn register_pin<P>(&mut self, pin_name: &'static str) -> Result<P, PinRegisterError>
     where
-        P: HalPin + 'static,
+        P: HalPin,
     {
         let full_name = format!("{}.{}", self.name, pin_name);
 
-        let pin = InputPin::<P>::new(full_name.clone(), self.id)?;
+        let pin = P::register(&full_name, self.id)?;
 
         Ok(pin)
     }
-
-    /// Register an output pin with this component
-    ///
-    /// The pin name will be prefixed with the component name
-    pub fn register_output_pin<P>(
-        &mut self,
-        pin_name: &'static str,
-    ) -> Result<OutputPin<P>, PinRegisterError>
-    where
-        P: HalPin + 'static,
-    {
-        let full_name = format!("{}.{}", self.name, pin_name);
-
-        let pin = OutputPin::<P>::new(full_name.clone(), self.id)?;
-
-        Ok(pin)
-    }
-
-    /// Register a bidirectional pin with this component
-    ///
-    /// The pin name will be prefixed with the component name
-    pub fn register_bidirectional_pin<P>(
-        &mut self,
-        pin_name: &'static str,
-    ) -> Result<BidirectionalPin<P>, PinRegisterError>
-    where
-        P: HalPin + 'static,
-    {
-        let full_name = format!("{}.{}", self.name, pin_name);
-
-        let pin = BidirectionalPin::<P>::new(full_name.clone(), self.id)?;
-
-        Ok(pin)
-    }
-
     /// Consume the builder and signal that the component is ready
     ///
     /// This method is called after any pins are registered and consumes the builder into a

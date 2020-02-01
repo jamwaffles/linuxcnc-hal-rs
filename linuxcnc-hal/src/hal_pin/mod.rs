@@ -9,45 +9,28 @@ mod input_pin;
 mod output_pin;
 mod pin_direction;
 
-use self::pin_direction::PinDirection;
 pub use self::{
     bidirectional_pin::BidirectionalPin, hal_pin::HalPin, input_pin::InputPin,
     output_pin::OutputPin,
 };
-use linuxcnc_hal_sys::{hal_pin_bit_new, hal_pin_float_new, hal_pin_s32_new, hal_pin_u32_new};
+use crate::error::StorageError;
 
-impl_pin!(
-    HalPinF64,
-    "HalPinF64",
-    hal_pin_float_new,
-    "hal_pin_float_new",
-    f64,
-    "f64"
-);
+/// Readable pin trait
+///
+/// Implemented for any pin that can only be read by a component
+pub trait PinRead: HalPin {
+    /// Get the value of the pin
+    fn value(&self) -> Result<&<Self as HalPin>::Storage, StorageError> {
+        self.storage()
+    }
+}
 
-impl_pin!(
-    HalPinI32,
-    "HalPinI32",
-    hal_pin_s32_new,
-    "hal_pin_s32_new",
-    i32,
-    "i32"
-);
-
-impl_pin!(
-    HalPinU32,
-    "HalPinU32",
-    hal_pin_u32_new,
-    "hal_pin_u32_new",
-    u32,
-    "u32"
-);
-
-impl_pin!(
-    HalPinBool,
-    "HalPinBool",
-    hal_pin_bit_new,
-    "hal_pin_bit_new",
-    bool,
-    "bool"
-);
+/// Writable pin trait
+///
+/// Implemented for any pin that can be only written to by a component
+pub trait PinWrite: HalPin {
+    /// Set the value of the pin
+    fn set_value(&self, value: <Self as HalPin>::Storage) -> Result<(), StorageError> {
+        Ok(*self.storage_mut()? = value)
+    }
+}

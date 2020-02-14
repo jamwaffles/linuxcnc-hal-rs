@@ -1,3 +1,5 @@
+//! Error types
+
 use linuxcnc_hal_sys::HAL_NAME_LEN;
 
 /// Errors returned by LinuxCNC bindgen functions
@@ -75,9 +77,21 @@ pub enum ComponentInitError {
     #[error("not enough free memory to allocate storage")]
     Memory,
 
+    /// Failed to register signal handlers
+    #[error("failed to register signal handlers")]
+    Signals,
+
+    /// Resource (pin, signal, etc) registration failed
+    #[error("failed to register resources with component")]
+    ResourceRegistration(PinRegisterError),
+
     /// An error occurred when initialising the component with [`hal_init`]
     #[error("failed to initialise component")]
     Init,
+
+    /// An error occurred when calling [`hal_ready`] on the component
+    #[error("failed to ready component")]
+    Ready,
 }
 
 /// Error's returned when calling [`HalComponent::ready`] (calls [`hal_ready`] internally)

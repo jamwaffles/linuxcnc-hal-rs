@@ -1,9 +1,10 @@
 //! Store pin resources on a struct
 
 use linuxcnc_hal::{
+    error::PinRegisterError,
     hal_pin::{InputPin, OutputPin},
     prelude::*,
-    HalComponentBuilder,
+    HalComponent, RegisterResources, Resources,
 };
 use std::{
     error::Error,
@@ -16,18 +17,26 @@ struct Pins {
     output_1: OutputPin<f64>,
 }
 
-fn main() -> Result<(), Box<dyn Error>> {
-    // Create a new HAL component called `pins`
-    let mut builder = HalComponentBuilder::new("pins")?;
+impl Resources for Pins {
+    fn register_resources(comp: &RegisterResources) -> Result<Self, PinRegisterError> {
+        Ok(Pins {
+            input_1: comp.register_pin::<InputPin<f64>>("input-1")?,
+            output_1: comp.register_pin::<OutputPin<f64>>("output-1")?,
+        })
+    }
+}
 
-    let pins = Pins {
-        input_1: builder.register_pin::<InputPin<f64>>("input-1")?,
-        output_1: builder.register_pin::<OutputPin<f64>>("output-1")?,
-    };
+fn main() -> Result<(), Box<dyn Error>> {
+    pretty_env_logger::init();
+
+    // Create a new HAL component called `rust-comp`
+    let comp: HalComponent<Pins> = HalComponent::new("rust-comp")?;
+
+    let pins = comp.resources();
 
     // All pins added, component is now ready. This consumes the builder and registers signal
     // handlers.
-    let comp = builder.ready()?;
+    // let comp = builder.ready()?;
 
     let start = Instant::now();
 
@@ -36,7 +45,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         let time = start.elapsed().as_secs() as i32;
 
         // Set output pin to elapsed seconds since component started
-        pins.output_1.set_value(time.into())?;
+        (*pins).output_1.set_value(time.into())?;
 
         // Print the current value of the input pin
         println!("Input: {:?}", pins.input_1.value());

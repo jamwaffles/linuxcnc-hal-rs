@@ -174,7 +174,7 @@ where
     /// handlers not being registered.
     fn register_signals() -> Result<Signals, ComponentInitError> {
         let signals = Signals::new(&[signal_hook::SIGTERM, signal_hook::SIGINT])
-            .map_err(|_| ComponentInitError::Signals)?;
+            .map_err(ComponentInitError::Signals)?;
 
         debug!("Signals registered");
 
@@ -279,6 +279,7 @@ mod tests {
     use crate::error::PinRegisterError;
     use crate::RegisterResources;
 
+    #[derive(Debug)]
     struct EmptyResources {}
     impl Resources for EmptyResources {
         fn register_resources(_comp: &RegisterResources) -> Result<Self, PinRegisterError> {
@@ -287,11 +288,17 @@ mod tests {
     }
 
     #[test]
-    fn name_too_long() {
+    fn name_too_long() -> Result<(), ComponentInitError> {
         let comp = HalComponent::<EmptyResources>::new(
             "name-thats-way-too-long-for-linuxcnc-to-handle-wow-this-is-ridiculous",
         );
 
-        assert_eq!(comp.err(), Some(ComponentInitError::NameLength));
+        println!("{:?}", comp);
+
+        match comp {
+            Err(ComponentInitError::NameLength) => Ok(()),
+            Err(e) => Err(e),
+            Ok(_) => Err(ComponentInitError::Init),
+        }
     }
 }

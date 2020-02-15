@@ -48,7 +48,7 @@ where
         let id = Self::create_component(name)?;
 
         let resources = R::register_resources(&RegisterResources { id, name })
-            .map_err(ComponentInitError::ResourceRegistration)?;
+            .map_err(|e| ComponentInitError::ResourceRegistration(e.into()))?;
 
         let signals = Self::register_signals()?;
 
@@ -177,7 +177,9 @@ mod tests {
     #[derive(Debug)]
     struct EmptyResources {}
     impl Resources for EmptyResources {
-        fn register_resources(_comp: &RegisterResources) -> Result<Self, PinRegisterError> {
+        type Error = PinRegisterError;
+
+        fn register_resources(_comp: &RegisterResources) -> Result<Self, Self::Error> {
             Ok(Self {})
         }
     }

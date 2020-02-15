@@ -31,7 +31,9 @@ struct Pins {
 }
 
 impl Resources for Pins {
-    fn register_resources(comp: &RegisterResources) -> Result<Self, PinRegisterError> {
+    type RegisterError = PinRegisterError;
+
+    fn register_resources(comp: &RegisterResources) -> Result<Self, Self::RegisterError> {
         Ok(Pins {
             input_1: comp.register_pin::<InputPin<f64>>("input-1")?,
             output_1: comp.register_pin::<OutputPin<f64>>("output-1")?,
@@ -45,11 +47,8 @@ fn main() -> Result<(), Box<dyn Error>> {
     // Create a new HAL component called `rust-comp`
     let comp: HalComponent<Pins> = HalComponent::new("rust-comp")?;
 
+    // Get a reference to the `Pins` struct
     let pins = comp.resources();
-
-    // All pins added, component is now ready. This consumes the builder and registers signal
-    // handlers.
-    // let comp = builder.ready()?;
 
     let start = Instant::now();
 

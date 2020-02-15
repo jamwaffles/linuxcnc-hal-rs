@@ -73,7 +73,7 @@ pub enum ComponentInitError {
 
     /// Resource (pin, signal, etc) registration failed
     #[error("failed to register resources with component")]
-    ResourceRegistration(PinRegisterError),
+    ResourceRegistration(ResourcesError),
 
     /// An error occurred when initialising the component with [`hal_init`]
     #[error("failed to initialise component")]
@@ -82,4 +82,18 @@ pub enum ComponentInitError {
     /// An error occurred when calling [`hal_ready`] on the component
     #[error("failed to ready component")]
     Ready,
+}
+
+/// Resources registration error
+#[derive(thiserror::Error, Debug)]
+pub enum ResourcesError {
+    /// Failed to register a [`Pin`] with the HAL
+    #[error("pin registration failed")]
+    Pin(PinRegisterError),
+}
+
+impl From<PinRegisterError> for ResourcesError {
+    fn from(e: PinRegisterError) -> Self {
+        Self::Pin(e)
+    }
 }

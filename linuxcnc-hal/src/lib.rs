@@ -77,13 +77,18 @@ pub mod prelude;
 
 pub use crate::component::HalComponent;
 
-use crate::error::PinRegisterError;
+use crate::error::{PinRegisterError, ResourcesError};
 use crate::hal_pin::HalPin;
 
 /// Resources for a component
 pub trait Resources: Sized {
+    /// The type of error to return if a resource registration failed
+    ///
+    /// This must be convertable into a [`ResourcesError`].
+    type RegisterError: Into<ResourcesError>;
+
     /// Register resources against a component
-    fn register_resources(comp: &RegisterResources) -> Result<Self, PinRegisterError>;
+    fn register_resources(comp: &RegisterResources) -> Result<Self, Self::RegisterError>;
 }
 
 /// Component metadata used when registering resources

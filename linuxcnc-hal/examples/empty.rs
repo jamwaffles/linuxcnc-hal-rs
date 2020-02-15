@@ -2,7 +2,7 @@
 //!
 //! This component doesn't register any pins or other resources.
 
-use linuxcnc_hal::error::PinRegisterError;
+use linuxcnc_hal::error::ResourcesError;
 use linuxcnc_hal::HalComponent;
 use linuxcnc_hal::RegisterResources;
 use linuxcnc_hal::Resources;
@@ -13,7 +13,9 @@ use std::{error::Error, thread, time::Duration};
 struct EmptyResources {}
 
 impl Resources for EmptyResources {
-    fn register_resources(_comp: &RegisterResources) -> Result<Self, PinRegisterError> {
+    type RegisterError = ResourcesError;
+
+    fn register_resources(_comp: &RegisterResources) -> Result<Self, Self::RegisterError> {
         Ok(Self {})
     }
 }

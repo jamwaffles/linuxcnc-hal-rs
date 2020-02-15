@@ -13,9 +13,11 @@
 //! ## Create a component with input and output
 //!
 //! This example creates a component called `"pins"` with a single input (`"input-1"`) and output
-//! pin (`"output-1"`). It enters an infinite loop updates the value of `output-1` every second.
-//! Signals are registered when `builder.ready()` is called which allow LinuxCNC to close the
-//! component gracefully.
+//! pin (`"output-1"`). It enters an infinite loop which updates the value of `output-1` every second.
+//!
+//! Pins and other resources are registered using the [`Resources`] trait. This example creates a
+//! `Pins` struct which holds the two pins. `HalComponent::new` handles component creation,
+//! resources (pin, signal, etc) initialisation and UNIX signal handler registration.
 //!
 //! ```rust,no_run
 //! use linuxcnc_hal::{hal_pin::{InputPin, OutputPin}, prelude::*, HalComponentBuilder};

@@ -67,7 +67,6 @@
 #[macro_use]
 extern crate log;
 
-// mod builder;
 mod check_readme;
 pub mod error;
 pub mod hal_pin;

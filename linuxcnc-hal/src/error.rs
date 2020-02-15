@@ -31,15 +31,16 @@ pub enum PinRegisterError {
 
     /// An error occurred in the LinuxCNC HAL functions
     ///
-    /// This variant is often returned when a HAL function returns [`EINVAL`]. This error code is
-    /// returned for various different reasons. Check the LinuxCNC logs for error messages.
+    /// This variant is often returned when a HAL function returns
+    /// [`EINVAL`](linuxcnc_hal_sys::EINVAL). This error code is returned for various different
+    /// reasons. Check the LinuxCNC logs for error messages.
     #[error("HAL method returned invalid (EINVAL) status code")]
     Invalid,
 
     /// The HAL is locked
     ///
-    /// Ensure that pins are registered **before** calling [`HalComponent::ready`].
-    #[error("HAL is locked. Pins must be registered before call to HallComponent::ready")]
+    /// Resources cannot be registered after a component is created
+    #[error("HAL is locked")]
     LockedHal,
 
     /// There is not enough free memory available to allocate storage for this pin
@@ -75,11 +76,12 @@ pub enum ComponentInitError {
     #[error("failed to register resources with component")]
     ResourceRegistration(ResourcesError),
 
-    /// An error occurred when initialising the component with [`hal_init`]
+    /// An error occurred when initialising the component with
+    /// [`hal_init`](linuxcnc_hal_sys::hal_init)
     #[error("failed to initialise component")]
     Init,
 
-    /// An error occurred when calling [`hal_ready`] on the component
+    /// An error occurred when calling [`hal_ready`](linuxcnc_hal_sys::hal_ready) on the component
     #[error("failed to ready component")]
     Ready,
 }
@@ -87,7 +89,7 @@ pub enum ComponentInitError {
 /// Resources registration error
 #[derive(thiserror::Error, Debug)]
 pub enum ResourcesError {
-    /// Failed to register a [`Pin`] with the HAL
+    /// Failed to register a pin with the HAL
     #[error("pin registration failed")]
     Pin(PinRegisterError),
 }

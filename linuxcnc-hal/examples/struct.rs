@@ -1,4 +1,17 @@
-//! Store pin resources on a struct
+//! Create a component called `rust-comp` that has one input and one output pin.
+//!
+//! Pin names:
+//!
+//! * Output `rust-comp.output-1`
+//! * Input `rust-comp.input-1`
+//!
+//! The component can be loaded and connected using something like the following `.hal` file:
+//!
+//! ```ini
+//! loadusr -Wn rust-comp /path/to/hal/component
+//! net output-1 rust-comp.output-1
+//! net input-1 motion.spindle-speed-out rust-comp.input-1
+//! ```
 
 use linuxcnc_hal::{
     error::PinRegisterError,
@@ -45,7 +58,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         let time = start.elapsed().as_secs() as i32;
 
         // Set output pin to elapsed seconds since component started
-        (*pins).output_1.set_value(time.into())?;
+        pins.output_1.set_value(time.into())?;
 
         // Print the current value of the input pin
         println!("Input: {:?}", pins.input_1.value());

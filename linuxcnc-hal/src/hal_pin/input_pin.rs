@@ -20,26 +20,46 @@ use linuxcnc_hal_sys::{hal_pin_bit_new, hal_pin_float_new, hal_pin_s32_new, hal_
 ///
 /// ```rust,no_run
 /// use linuxcnc_hal::{
-///     hal_pin::InputPin,
-///     prelude::*,
-///     HalComponentBuilder,
+///    error::PinRegisterError,
+///    hal_pin::{InputPin},
+///    prelude::*,
+///    HalComponent, RegisterResources, Resources,
 /// };
-/// use std::{thread, time::Duration, error::Error};
+/// use std::{
+///    error::Error,
+///    thread,
+///    time::{Duration, Instant},
+/// };
+///
+/// struct Pins {
+///    pin: InputPin<f64>,
+/// }
+///
+/// impl Resources for Pins {
+///    type RegisterError = PinRegisterError;
+///
+///    fn register_resources(comp: &RegisterResources) -> Result<Self, Self::RegisterError> {
+///        Ok(Pins {
+///            pin: comp.register_pin::<InputPin<f64>>("named-pin")?,
+///        })
+///    }
+/// }
 ///
 /// fn main() -> Result<(), Box<dyn Error>> {
-///     let mut builder = HalComponentBuilder::new("demo-component")?;
+///    let comp: HalComponent<Pins> = HalComponent::new("demo-component")?;
 ///
-///     let pin = builder.register_pin::<InputPin<f64>>("named-pin")?;
+///    let Pins { pin } = comp.resources();
 ///
-///     let comp = builder.ready()?;
+///    let start = Instant::now();
 ///
-///     // Main control loop
-///     while !comp.should_exit() {
-///         println!("Input: {:?}", pin.value());
-///         thread::sleep(Duration::from_millis(1000));
-///     }
+///         // Main control loop
+///         while !comp.should_exit() {
+///             println!("Input: {:?}", pin.value());
 ///
-///     Ok(())
+///             thread::sleep(Duration::from_millis(1000));
+///         }
+///
+///    Ok(())
 /// }
 /// ```
 pub struct InputPin<S> {

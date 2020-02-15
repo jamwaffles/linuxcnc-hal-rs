@@ -1,12 +1,5 @@
-use crate::error::ComponentInitError;
-use crate::RegisterResources;
-use crate::Resources;
-use linuxcnc_hal_sys::hal_exit;
-use linuxcnc_hal_sys::hal_init;
-use linuxcnc_hal_sys::hal_ready;
-use linuxcnc_hal_sys::EINVAL;
-use linuxcnc_hal_sys::ENOMEM;
-use linuxcnc_hal_sys::HAL_NAME_LEN;
+use crate::{error::ComponentInitError, RegisterResources, Resources};
+use linuxcnc_hal_sys::{hal_exit, hal_init, hal_ready, EINVAL, ENOMEM, HAL_NAME_LEN};
 use signal_hook::iterator::Signals;
 use std::ffi::CString;
 
@@ -170,16 +163,17 @@ impl<R> Drop for HalComponent<R> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::error::ComponentInitError;
-    use crate::error::PinRegisterError;
-    use crate::RegisterResources;
+    use crate::{
+        error::{ComponentInitError, PinRegisterError},
+        RegisterResources,
+    };
 
     #[derive(Debug)]
     struct EmptyResources {}
     impl Resources for EmptyResources {
-        type Error = PinRegisterError;
+        type RegisterError = PinRegisterError;
 
-        fn register_resources(_comp: &RegisterResources) -> Result<Self, Self::Error> {
+        fn register_resources(_comp: &RegisterResources) -> Result<Self, Self::RegisterError> {
             Ok(Self {})
         }
     }

@@ -2,10 +2,7 @@
 //!
 //! This component doesn't register any pins or other resources.
 
-use linuxcnc_hal::error::ResourcesError;
-use linuxcnc_hal::HalComponent;
-use linuxcnc_hal::RegisterResources;
-use linuxcnc_hal::Resources;
+use linuxcnc_hal::{error::ResourcesError, HalComponent, RegisterResources, Resources};
 use std::{error::Error, thread, time::Duration};
 
 /// An empty resources struct that doesn't register any resources

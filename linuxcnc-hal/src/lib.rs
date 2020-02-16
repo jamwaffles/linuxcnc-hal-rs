@@ -2,7 +2,13 @@
 //!
 //! # Examples
 //!
-//! These examples can be loaded into LinuxCNC using a HAL file similar to this:
+//! ## Create a component with input and output
+//!
+//! This example creates a component called `"pins"` with a single input (`"input-1"`) and output
+//! pin (`"output-1"`). It enters an infinite loop which updates the value of `output-1` every
+//! second. LinuxCNC convention dictates that component and pin names should be `dash-cased`.
+//!
+//! This example can be loaded into LinuxCNC with a `.hal` file that looks similar to this:
 //!
 //! ```text
 //! loadusr -W /path/to/your/component/target/debug/comp_bin_name
@@ -10,13 +16,8 @@
 //! net output-1 pins.output-1
 //! ```
 //!
-//! ## Create a component with input and output
-//!
-//! This example creates a component called `"pins"` with a single input (`"input-1"`) and output
-//! pin (`"output-1"`). It enters an infinite loop which updates the value of `output-1` every second.
-//!
 //! Pins and other resources are registered using the [`Resources`] trait. This example creates a
-//! `Pins` struct which holds the two pins. `HalComponent::new` handles component creation,
+//! `Pins` struct which holds the two pins. [`HalComponent::new()`] handles component creation,
 //! resources (pin, signal, etc) initialisation and UNIX signal handler registration.
 //!
 //! ```rust,no_run

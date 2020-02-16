@@ -7,6 +7,10 @@ use std::ffi::CString;
 ///
 /// The main HAL component interface. See the [crate documentation](./index.html) for examples.
 ///
+/// During registraton, all resource names are prefixed with the component name and a `.` full stop
+/// character. For example, a component named `rust-comp` with a pin named `input-1` will show up in
+/// LinuxCNC as a pin called `rust-comp.input-1`.
+///
 /// `HalComponent` has a custom `Drop` implementation which calls [`hal_exit`] (among other things)
 /// when the variable holding the component goes out of scope. Due to this, the component should be
 /// initialised in `main()` so it lives for the entire life of the program.

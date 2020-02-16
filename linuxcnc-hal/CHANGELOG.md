@@ -9,26 +9,42 @@ A safe abstraction used to create LinuxCNC HAL components in Rust.
 ### Added
 
 - #6 Added `BidirectionalPin` to allow an I/O pin to be registered on a component
-- Added basic `struct.rs` example showing storage of pins in a struct
 
 ### Changed
 
-- **(breaking)** Simplify pin creation, reducing number of custom types. Pins are now created like this:
+- **(breaking)** #10 The `HalComponentBuilder` is removed. Use `HalComponent::new()` directly instead.
+- **(breaking)** #10 Pins must now be grouped together in a struct that implements the `Resources`. For example:
 
   ```rust
-  use linuxcnc_hal::{
-      hal_pin::{InputPin, OutputPin},
-      prelude::*,
-      HalComponentBuilder,
-  };
+  struct Pins {
+      input_1: InputPin<f64>,
+      output_1: OutputPin<f64>,
+  }
 
-  let mut builder = HalComponentBuilder::new("pins")?;
+  impl Resources for Pins {
+      type RegisterError = PinRegisterError;
 
-  let input_1 = builder.register_pin::<InputPin<f64>>("input-1")?;
-  let output_1 = builder.register_pin::<OutputPin<f64>>("output-1")?;
+      fn register_resources(comp: &RegisterResources) -> Result<Self, Self::RegisterError> {
+          Ok(Pins {
+              input_1: comp.register_pin::<InputPin<f64>>("input-1")?,
+              output_1: comp.register_pin::<OutputPin<f64>>("output-1")?,
+          })
+      }
+  }
   ```
 
-  Note the usage of `register_pin` as opposed to `register_input_pin` or `register_output_pin`.
+- **(breaking)** #8 Change how `HalPin` types work. Instead of `InputPinF64`, `OutputPinBool`, etc, the `InputPin` and `OutputPin` structs are added. Usage is like this:
+
+  ```rust
+  struct Pins {
+      input_1: InputPin<f64>,
+      output_1: OutputPin<bool>,
+  }
+  ```
+
+### Fixed
+
+- #10 Fixed a soundness issue where pins were freed after the component exited
 
 ## [0.1.3] - 2020-01-29
 

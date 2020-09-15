@@ -61,6 +61,7 @@ use linuxcnc_hal_sys::{hal_pin_bit_new, hal_pin_float_new, hal_pin_s32_new, hal_
 ///    Ok(())
 /// }
 /// ```
+#[derive(Debug)]
 pub struct OutputPin<S> {
     pub(crate) name: String,
     pub(crate) storage: *mut *mut S,

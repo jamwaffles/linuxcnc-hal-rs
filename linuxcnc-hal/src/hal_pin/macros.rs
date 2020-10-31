@@ -31,12 +31,22 @@ macro_rules! impl_pin {
                     return Err($crate::error::PinRegisterError::NameLength);
                 }
 
+                let full_pin_name_ffi = std::ffi::CString::new(full_pin_name).map_err(|e| {
+                    log::error!("Failed to convert name to C string: {}", e);
+
+                    $crate::error::PinRegisterError::NameConversion
+                })?;
+
+                let full_pin_name_ffi = full_pin_name_ffi.as_c_str();
+
+                log::debug!("Full pin name {:?}", full_pin_name);
+
                 let storage =
                     Self::allocate_storage().map_err($crate::error::PinRegisterError::Storage)?;
 
                 let ret = unsafe {
                     $hal_fn(
-                        full_pin_name.as_ptr().cast(),
+                        full_pin_name_ffi.as_ptr() as *const std::os::raw::c_char,
                         $direction as i32,
                         storage,
                         component_id,

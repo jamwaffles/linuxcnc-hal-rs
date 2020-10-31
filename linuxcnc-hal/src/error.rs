@@ -25,6 +25,10 @@ pub enum PinRegisterError {
     #[error("pin name is too long. Must be no longer than {} bytes", HAL_NAME_LEN)]
     NameLength,
 
+    /// Pin name could not be converted to C string
+    #[error("pin name could not be converted to a valid C string")]
+    NameConversion,
+
     /// An error occurred allocating the HAL shared memory storage backing the pin
     #[error("failed to allocate shared memory storage for pin")]
     Storage(StorageError),

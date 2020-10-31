@@ -32,10 +32,11 @@ pub trait HalPin: Sized + Drop {
         let storage_ptr = unsafe {
             let size = mem::size_of::<Self::Storage>();
 
-            debug!("Allocating {} bytes", size);
+            let ptr_size = mem::size_of::<*mut Self::Storage>().try_into().unwrap();
 
-            let ptr = hal_malloc(mem::size_of::<*mut Self::Storage>().try_into().unwrap())
-                as *mut *mut Self::Storage;
+            debug!("Allocating {} bytes (ptr size {})", size, ptr_size);
+
+            let ptr = hal_malloc(ptr_size) as *mut *mut Self::Storage;
 
             if ptr.is_null() {
                 return Err(StorageError::Null);

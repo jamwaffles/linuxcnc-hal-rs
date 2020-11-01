@@ -1,4 +1,4 @@
-use crate::{hal_pin::pin_direction::PinDirection, hal_resource::ResourceWrite};
+use crate::hal_pin::{pin_direction::PinDirection, PinWrite};
 use linuxcnc_hal_sys::{hal_pin_bit_new, hal_pin_float_new, hal_pin_s32_new, hal_pin_u32_new};
 
 /// A pin that can be written to by the component
@@ -78,7 +78,7 @@ impl_pin!(OutputPin, u32, hal_pin_u32_new, PinDirection::Out);
 impl_pin!(OutputPin, i32, hal_pin_s32_new, PinDirection::Out);
 impl_pin!(OutputPin, bool, hal_pin_bit_new, PinDirection::Out);
 
-impl ResourceWrite for OutputPin<f64> {}
-impl ResourceWrite for OutputPin<u32> {}
-impl ResourceWrite for OutputPin<i32> {}
-impl ResourceWrite for OutputPin<bool> {}
+impl PinWrite for OutputPin<f64> {}
+impl PinWrite for OutputPin<u32> {}
+impl PinWrite for OutputPin<i32> {}
+impl PinWrite for OutputPin<bool> {}

@@ -16,23 +16,20 @@ pub enum StorageError {
     Alignment,
 }
 
-/// Resource registration error
+/// Pin registration error
 #[derive(thiserror::Error, Debug, PartialEq)]
-pub enum ResourceRegisterError {
-    /// Resource name is too long
+pub enum PinRegisterError {
+    /// Pin name is too long
     ///
     /// The maximum length is dictated by the [`HAL_NAME_LEN`] constant
-    #[error(
-        "resource name is too long. Must be no longer than {} bytes",
-        HAL_NAME_LEN
-    )]
+    #[error("pin name is too long. Must be no longer than {} bytes", HAL_NAME_LEN)]
     NameLength,
 
-    /// Resource name could not be converted to C string
-    #[error("resource name could not be converted to a valid C string")]
+    /// Pin name could not be converted to C string
+    #[error("pin name could not be converted to a valid C string")]
     NameConversion,
 
-    /// An error occurred allocating the HAL shared memory storage backing the Resource
+    /// An error occurred allocating the HAL shared memory storage backing the pin
     #[error("failed to allocate shared memory storage for pin")]
     Storage(StorageError),
 
@@ -98,11 +95,11 @@ pub enum ComponentInitError {
 pub enum ResourcesError {
     /// Failed to register a pin with the HAL
     #[error("pin registration failed")]
-    Pin(ResourceRegisterError),
+    Pin(PinRegisterError),
 }
 
-impl From<ResourceRegisterError> for ResourcesError {
-    fn from(e: ResourceRegisterError) -> Self {
+impl From<PinRegisterError> for ResourcesError {
+    fn from(e: PinRegisterError) -> Self {
         Self::Pin(e)
     }
 }

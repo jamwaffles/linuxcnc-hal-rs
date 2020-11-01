@@ -1,4 +1,7 @@
-use crate::hal_pin::{pin_direction::PinDirection, PinRead, PinWrite};
+use crate::{
+    hal_pin::pin_direction::PinDirection,
+    hal_resource::{ResourceRead, ResourceWrite},
+};
 use linuxcnc_hal_sys::{hal_pin_bit_new, hal_pin_float_new, hal_pin_s32_new, hal_pin_u32_new};
 
 /// A pin that can be both read from and written to
@@ -101,12 +104,12 @@ impl_pin!(
     PinDirection::Bidirectional
 );
 
-impl PinWrite for BidirectionalPin<f64> {}
-impl PinWrite for BidirectionalPin<u32> {}
-impl PinWrite for BidirectionalPin<i32> {}
-impl PinWrite for BidirectionalPin<bool> {}
+impl ResourceWrite for BidirectionalPin<f64> {}
+impl ResourceWrite for BidirectionalPin<u32> {}
+impl ResourceWrite for BidirectionalPin<i32> {}
+impl ResourceWrite for BidirectionalPin<bool> {}
 
-impl PinRead for BidirectionalPin<f64> {}
-impl PinRead for BidirectionalPin<u32> {}
-impl PinRead for BidirectionalPin<i32> {}
-impl PinRead for BidirectionalPin<bool> {}
+impl ResourceRead for BidirectionalPin<f64> {}
+impl ResourceRead for BidirectionalPin<u32> {}
+impl ResourceRead for BidirectionalPin<i32> {}
+impl ResourceRead for BidirectionalPin<bool> {}

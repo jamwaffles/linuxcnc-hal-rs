@@ -83,23 +83,27 @@
 //! ```
 
 #![deny(missing_docs)]
-#![deny(intra_doc_link_resolution_failure)]
+#![deny(broken_intra_doc_links)]
 
 #[macro_use]
 extern crate log;
 
+#[macro_use]
+mod macros;
 mod check_readme;
 mod component;
 pub mod error;
+pub mod hal_parameter;
 pub mod hal_pin;
+mod hal_resource;
 pub mod prelude;
 
 pub use crate::component::HalComponent;
-
 use crate::{
-    error::{PinRegisterError, ResourcesError},
+    error::{ResourceRegisterError, ResourcesError},
     hal_pin::HalPin,
 };
+use hal_parameter::HalParameter;
 
 /// Resources for a component
 pub trait Resources: Sized {
@@ -122,10 +126,10 @@ pub struct RegisterResources {
 }
 
 impl RegisterResources {
-    /// Register a pin with this component
+    /// Register a pin with this component.
     ///
-    /// The pin name will be prefixed with the component name
-    pub fn register_pin<P>(&self, pin_name: &'static str) -> Result<P, PinRegisterError>
+    /// The pin name will be prefixed with the component name.
+    pub fn register_pin<P>(&self, pin_name: &'static str) -> Result<P, ResourceRegisterError>
     where
         P: HalPin,
     {
@@ -134,5 +138,22 @@ impl RegisterResources {
         let pin = P::register(&full_name, self.id)?;
 
         Ok(pin)
+    }
+
+    /// Register a parameter with this component.
+    ///
+    /// The parameter name will be prefixed with the component name.
+    pub fn register_parameter<P>(
+        &self,
+        parameter_name: &'static str,
+    ) -> Result<P, ResourceRegisterError>
+    where
+        P: HalParameter,
+    {
+        let full_name = format!("{}.{}", self.name, parameter_name);
+
+        let parameter = P::register(&full_name, self.id)?;
+
+        Ok(parameter)
     }
 }

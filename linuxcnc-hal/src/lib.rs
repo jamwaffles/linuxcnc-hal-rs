@@ -83,7 +83,7 @@
 //! ```
 
 #![deny(missing_docs)]
-#![deny(intra_doc_link_resolution_failure)]
+#![deny(broken_intra_doc_links)]
 
 #[macro_use]
 extern crate log;
@@ -91,13 +91,17 @@ extern crate log;
 mod check_readme;
 mod component;
 pub mod error;
+mod hal_parameter;
 pub mod hal_pin;
 pub mod prelude;
 
-pub use crate::component::HalComponent;
+use hal_parameter::ParameterPermissions;
 
+pub use crate::component::HalComponent;
+pub use crate::hal_parameter::Parameter;
 use crate::{
-    error::{PinRegisterError, ResourcesError},
+    error::{ParameterRegisterError, PinRegisterError, ResourcesError},
+    hal_parameter::HalParameter,
     hal_pin::HalPin,
 };
 
@@ -122,7 +126,7 @@ pub struct RegisterResources {
 }
 
 impl RegisterResources {
-    /// Register a pin with this component
+    /// Register a pin with this component.
     ///
     /// The pin name will be prefixed with the component name
     pub fn register_pin<P>(&self, pin_name: &'static str) -> Result<P, PinRegisterError>
@@ -134,5 +138,41 @@ impl RegisterResources {
         let pin = P::register(&full_name, self.id)?;
 
         Ok(pin)
+    }
+
+    /// Register a read/write parameter with this component.
+    ///
+    /// The parameter name will be prefixed with the component name.
+    ///
+    /// To register a pin that LinuxCNC cannot write to, call [`register_readonly_parameter`].
+    pub fn register_parameter<P>(
+        &self,
+        parameter_name: &'static str,
+    ) -> Result<P, ParameterRegisterError>
+    where
+        P: HalParameter,
+    {
+        let full_name = format!("{}.{}", self.name, parameter_name);
+
+        let parameter = P::register(&full_name, self.id, ParameterPermissions::ReadWrite)?;
+
+        Ok(parameter)
+    }
+
+    /// Register a read only parameter with this component.
+    ///
+    /// The parameter name will be prefixed with the component name
+    pub fn register_readonly_parameter<P>(
+        &self,
+        parameter_name: &'static str,
+    ) -> Result<P, ParameterRegisterError>
+    where
+        P: HalParameter,
+    {
+        let full_name = format!("{}.{}", self.name, parameter_name,);
+
+        let parameter = P::register(&full_name, self.id, ParameterPermissions::ReadOnly)?;
+
+        Ok(parameter)
     }
 }

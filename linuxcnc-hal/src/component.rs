@@ -135,9 +135,11 @@ where
 
     /// Check whether the component was signalled to shut down
     pub fn should_exit(&self) -> bool {
-        self.signals.pending().any(|signal| match signal {
-            signal_hook::SIGTERM | signal_hook::SIGINT | signal_hook::SIGKILL => true,
-            _ => false,
+        self.signals.pending().any(|signal| {
+            matches!(
+                signal,
+                signal_hook::SIGTERM | signal_hook::SIGINT | signal_hook::SIGKILL
+            )
         })
     }
 

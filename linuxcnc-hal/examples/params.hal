@@ -1,0 +1,2 @@
+loadusr -W ../../target/debug/examples/params
+setp params.rw 321

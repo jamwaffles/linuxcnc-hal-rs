@@ -52,6 +52,45 @@ pub enum PinRegisterError {
     Memory,
 }
 
+/// Parameter registration error
+#[derive(thiserror::Error, Debug, PartialEq)]
+pub enum ParameterRegisterError {
+    /// Parameter name is too long
+    ///
+    /// The maximum length is dictated by the [`HAL_NAME_LEN`] constant
+    #[error(
+        "Parameter name is too long. Must be no longer than {} bytes",
+        HAL_NAME_LEN
+    )]
+    NameLength,
+
+    /// Parameter name could not be converted to C string
+    #[error("Parameter name could not be converted to a valid C string")]
+    NameConversion,
+
+    /// An error occurred allocating the HAL shared memory storage backing the parameter
+    #[error("failed to allocate shared memory storage for parameter")]
+    Storage(StorageError),
+
+    /// An error occurred in the LinuxCNC HAL functions
+    ///
+    /// This variant is often returned when a HAL function returns
+    /// [`EINVAL`](linuxcnc_hal_sys::EINVAL). This error code is returned for various different
+    /// reasons. Check the LinuxCNC logs for error messages.
+    #[error("HAL method returned invalid (EINVAL) status code")]
+    Invalid,
+
+    /// The HAL is locked
+    ///
+    /// Resources cannot be registered after a component is created
+    #[error("HAL is locked")]
+    LockedHal,
+
+    /// There is not enough free memory available to allocate storage for this parameter
+    #[error("not enough free memory to allocate storage")]
+    Memory,
+}
+
 /// HAL component initialisation error
 #[derive(thiserror::Error, Debug)]
 pub enum ComponentInitError {
@@ -96,10 +135,20 @@ pub enum ResourcesError {
     /// Failed to register a pin with the HAL
     #[error("pin registration failed")]
     Pin(PinRegisterError),
+
+    /// Failed to register a pin with the HAL
+    #[error("parameter registration failed")]
+    Parameter(ParameterRegisterError),
 }
 
 impl From<PinRegisterError> for ResourcesError {
     fn from(e: PinRegisterError) -> Self {
         Self::Pin(e)
+    }
+}
+
+impl From<ParameterRegisterError> for ResourcesError {
+    fn from(e: ParameterRegisterError) -> Self {
+        Self::Parameter(e)
     }
 }

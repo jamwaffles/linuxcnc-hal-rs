@@ -17,11 +17,14 @@ circle-ci = { repository = "jamwaffles/linuxcnc-hal-rs", branch = "master" }
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-linuxcnc-hal-sys = "0.1.6"
 signal-hook = "0.1.13"
 libc = "0.2.66"
 thiserror = "1.0.10"
 log = "0.4.8"
+
+[dependencies.linuxcnc-hal-sys]
+version = "0.1.6"
+path = "../linuxcnc-hal-sys"
 
 [dev-dependencies]
 pretty_env_logger = "0.4.0"

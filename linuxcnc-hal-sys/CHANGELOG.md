@@ -6,6 +6,8 @@ Unsafe Rust bindings to LinuxCNC's HAL module.
 
 ## [Unreleased] - ReleaseDate
 
+## [0.2.0] - 2021-01-06
+
 ### Changed
 
 - **(breaking)** The LinuxCNC source code must now be provided using the `LINUXCNC_SRC=path/to/linuxcnc/src/git` env var.
@@ -30,7 +32,8 @@ Unsafe Rust bindings to LinuxCNC's HAL module.
 - Initial release with `bindgen`-generated items
 
 <!-- next-url -->
+[unreleased]: https://github.com/jamwaffles/linuxcnc-hal-rs/compare/linuxcnc-hal-sys-v0.2.0...HEAD
 
-[unreleased]: https://github.com/jamwaffles/linuxcnc-hal-rs/compare/linuxcnc-hal-sys-v0.1.7...HEAD
+[0.2.0]: https://github.com/jamwaffles/linuxcnc-hal-rs/compare/linuxcnc-hal-sys-v0.1.7...linuxcnc-hal-sys-v0.2.0
 [0.1.7]: https://github.com/jamwaffles/linuxcnc-hal-rs/compare/linuxcnc-hal-v0.1.6...linuxcnc-hal-sys-v0.1.7
 [0.1.6]: https://github.com/jamwaffles/linuxcnc-hal-rs/compare/linuxcnc-hal-v0.1.5...linuxcnc-hal-v0.1.6

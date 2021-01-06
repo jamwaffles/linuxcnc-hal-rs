@@ -5,23 +5,65 @@
 [![Docs.rs](https://docs.rs/linuxcnc-hal/badge.svg)](https://docs.rs/linuxcnc-hal)
 [![Liberapay](https://img.shields.io/badge/donate-liberapay-yellow.svg)](https://liberapay.com/jamwaffles)
 
+Please consider [becoming a sponsor](https://github.com/sponsors/jamwaffles/) so I may continue to maintain this crate in my spare time!
+
+# [Documentation](https://docs.rs/linuxcnc-
+
 A safe, high-level interface to LinuxCNC's HAL (Hardware Abstraction Layer) module.
 
 For lower level, unsafe use, see the [`linuxcnc-hal-sys`](https://crates.io/crates/linuxcnc-hal-sys) crate.
 
+## Development setup
+
+[`bindgen`](https://github.com/rust-lang/rust-bindgen) must be set up correctly. Follow the [requirements section of its docs](https://rust-lang.github.io/rust-bindgen/requirements.html).
+
+To run and debug any HAL components, the LinuxCNC simulator can be set up. There's a guide [here](https://wapl.es/cnc/2020/01/25/linuxcnc-simulator-build-linux-mint.html) for Linux Mint (and other Debian derivatives).
+
+## Project setup
+
+This crate depends on the `linuxcnc-hal-sys` crate which requires the `LINUXCNC_SRC` environment variable toi be set to correctly generate the C bindings. The value must be the absolute path to the root of the LinuxCNC source code.
+
+**The version of the LinuxCNC sources must match the LinuxCNC version used in the machine control.**
+
 ```bash
+# Clone LinuxCNC source code into linuxcnc/
+git clone https://github.com/LinuxCNC/linuxcnc.git
+
+# Check out a specific version tag. This may also be a commit, but must match the version in use by the machine control.
+cd linuxcnc && git checkout v2.8.0 && cd ..
+
+# Create your component lib
+cargo new --lib my_comp
+
+cd my_comp
+
+# Add LinuxCNC HAL bindings as a Cargo dependency with cargo-edit
 cargo add linuxcnc-hal
+
+LINUXCNC_SRC=/path/to/linuxcnc/source/code cargo build
 ```
 
-Please consider [becoming a sponsor](https://github.com/sponsors/jamwaffles/) so I may continue to maintain this crate in my spare time!
+## Examples
 
-# [Documentation](https://docs.rs/linuxcnc-hal)
+### Create a component with input and output
 
-# Example
+This example creates a component called `"pins"` with a single input (`"input-1"`) and output
+pin (`"output-1"`). It enters an infinite loop which updates the value of `output-1` every
+second. LinuxCNC convention dictates that component and pin names should be `dash-cased`.
 
-More examples can be found in the `examples/` folder.
+This example can be loaded into LinuxCNC with a `.hal` file that looks similar to this:
 
-```rust,no_run
+```
+loadusr -W /path/to/your/component/target/debug/comp_bin_name
+net input-1 spindle.0.speed-out pins.input-1
+net output-1 pins.output-1
+```
+
+Pins and other resources are registered using the [`Resources`] trait. This example creates a
+`Pins` struct which holds the two pins. [`HalComponent::new()`] handles component creation,
+resources (pin, signal, etc) initialisation and UNIX signal handler registration.
+
+```rust
 use linuxcnc_hal::{
     error::PinRegisterError,
     hal_pin::{InputPin, OutputPin},
@@ -81,38 +123,6 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     Ok(())
 }
-
-```
-
-# Development
-
-## Setup
-
-[`bindgen`](https://github.com/rust-lang/rust-bindgen) must be set up correctly for `linuxcnc-hal-sys` to work correctly. Follow the [requirements section of its docs](https://rust-lang.github.io/rust-bindgen/requirements.html).
-
-To run and debug any HAL components, the LinuxCNC simulator can be set up. There's a guide [here](https://wapl.es/cnc/2020/01/25/linuxcnc-simulator-build-linux-mint.html) for Linux Mint (and other Debian derivatives).
-
-## Build
-
-```bash
-cargo build
-```
-
-You can also run `./build.sh` to run all the commands that would normally be run in CI.
-
-## Test
-
-```bash
-cargo test
-```
-
-## Build docs
-
-The docs make heavy use of [intra-rustdoc-links](https://rust-lang.github.io/rfcs/1946-intra-rustdoc-links.html). To get the links to render correctly, run with nightly:
-
-```bash
-rustup toolchain add nightly
-cargo +nightly doc
 ```
 
 ## License

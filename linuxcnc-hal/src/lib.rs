@@ -1,4 +1,36 @@
-//! Safe wrappers for LinuxCNC's HAL (Hardware Abstraction Layer)
+//! A safe, high-level interface to LinuxCNC's HAL (Hardware Abstraction Layer) module.
+//!
+//! For lower level, unsafe use, see the [`linuxcnc-hal-sys`](https://crates.io/crates/linuxcnc-hal-sys) crate.
+//!
+//! # Development setup
+//!
+//! [`bindgen`](https://github.com/rust-lang/rust-bindgen) must be set up correctly. Follow the [requirements section of its docs](https://rust-lang.github.io/rust-bindgen/requirements.html).
+//!
+//! To run and debug any HAL components, the LinuxCNC simulator can be set up. There's a guide [here](https://wapl.es/cnc/2020/01/25/linuxcnc-simulator-build-linux-mint.html) for Linux Mint (and other Debian derivatives).
+//!
+//! # Project setup
+//!
+//! This crate depends on the `linuxcnc-hal-sys` crate which requires the `LINUXCNC_SRC` environment variable toi be set to correctly generate the C bindings. The value must be the absolute path to the root of the LinuxCNC source code.
+//!
+//! **The version of the LinuxCNC sources must match the LinuxCNC version used in the machine control.**
+//!
+//! ```bash
+//! # Clone LinuxCNC source code into linuxcnc/
+//! git clone https://github.com/LinuxCNC/linuxcnc.git
+//!
+//! # Check out a specific version tag. This may also be a commit, but must match the version in use by the machine control.
+//! cd linuxcnc && git checkout v2.8.0 && cd ..
+//!
+//! # Create your component lib
+//! cargo new --lib my_comp
+//!
+//! cd my_comp
+//!
+//! # Add LinuxCNC HAL bindings as a Cargo dependency with cargo-edit
+//! cargo add linuxcnc-hal
+//!
+//! LINUXCNC_SRC=/path/to/linuxcnc/source/code cargo build
+//! ```
 //!
 //! # Examples
 //!
@@ -144,7 +176,7 @@ impl RegisterResources {
     ///
     /// The parameter name will be prefixed with the component name.
     ///
-    /// To register a pin that LinuxCNC cannot write to, call [`register_readonly_parameter`].
+    /// To register a pin that LinuxCNC cannot write to, call [`RegisterResources::register_readonly_parameter`].
     pub fn register_parameter<P>(
         &self,
         parameter_name: &'static str,

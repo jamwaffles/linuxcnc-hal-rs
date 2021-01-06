@@ -1,13 +1,13 @@
-# Generated LinuxCNC HAL Rust bindings
+# LinuxCNC HAL interface for Rust
 
 [![CircleCI](https://circleci.com/gh/jamwaffles/linuxcnc-hal-rs.svg?style=shield)](https://circleci.com/gh/jamwaffles/linuxcnc-hal-rs)
-[![Crates.io](https://img.shields.io/crates/v/linuxcnc-hal-sys.svg)](https://crates.io/crates/linuxcnc-hal-sys)
-[![Docs.rs](https://docs.rs/linuxcnc-hal-sys/badge.svg)](https://docs.rs/linuxcnc-hal-sys)
+[![Crates.io](https://img.shields.io/crates/v/linuxcnc-hal.svg)](https://crates.io/crates/linuxcnc-hal)
+[![Docs.rs](https://docs.rs/linuxcnc-hal/badge.svg)](https://docs.rs/linuxcnc-hal)
 [![Liberapay](https://img.shields.io/badge/donate-liberapay-yellow.svg)](https://liberapay.com/jamwaffles)
 
 Please consider [becoming a sponsor](https://github.com/sponsors/jamwaffles/) so I may continue to maintain this crate in my spare time!
 
-# [Documentation](https://docs.rs/linuxcnc-hal-sys)
+# [Documentation](https://docs.rs/linuxcnc-
 
 {{readme}}
 
@@ -21,7 +21,7 @@ Licensed under either of
 
 at your option.
 
-### Contribution
+## Contribution
 
 Unless you explicitly state otherwise, any contribution intentionally submitted for inclusion in the
 work by you, as defined in the Apache-2.0 license, shall be dual licensed as above, without any

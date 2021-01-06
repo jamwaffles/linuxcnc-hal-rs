@@ -1,4 +1,4 @@
-//! This crate uses [`bindgen`] to create bindings to the LinuxCNC HAL module.
+//! This crate provides generated bindings for LinuxCNC's HAL using [`bindgen`].
 //!
 //! The high level, safe interface at [`linuxcnc-hal`] is recommended for user code.
 //!
@@ -6,8 +6,39 @@
 //!
 //! | This crate                                                | LinuxCNC version                                           |
 //! | --------------------------------------------------------- | ---------------------------------------------------------- |
+//! | Any version greater than v0.1.7                           | Provide a path to the LinuxCNC source code with `LINUXCNC_SRC` |
 //! | [v0.1.7](https://crates.io/crates/linuxcnc-hal-sys/0.1.7) | [v2.7.15](http://linuxcnc.org/2020/01/03/LinuxCNC-2.7.15/) |
 //! | [v0.1.6](https://crates.io/crates/linuxcnc-hal-sys/0.1.6) | [v2.7.15](http://linuxcnc.org/2020/01/03/LinuxCNC-2.7.15/) |
+//!
+//! # Development setup
+//!
+//! [`bindgen`](https://github.com/rust-lang/rust-bindgen) must be set up correctly. Follow the [requirements section of its docs](https://rust-lang.github.io/rust-bindgen/requirements.html).
+//!
+//! To run and debug any HAL components, the LinuxCNC simulator can be set up. There's a guide [here](https://wapl.es/cnc/2020/01/25/linuxcnc-simulator-build-linux-mint.html) for Linux Mint (and other Debian derivatives).
+//!
+//! # Project setup
+//!
+//! The `LINUXCNC_SRC` environment variable is required to build this crate. The value must be the absolute path to the root of the LinuxCNC source code.
+//!
+//! **The version of the LinuxCNC sources must match the LinuxCNC version used in the machine control.**
+//!
+//! ```bash
+//! # Clone LinuxCNC source code into linuxcnc/
+//! git clone https://github.com/LinuxCNC/linuxcnc.git
+//!
+//! # Check out a specific version tag. This may also be a commit, but must match the version in use by the machine control.
+//! cd linuxcnc && git checkout v2.8.0 && cd ..
+//!
+//! # Create your component lib
+//! cargo new --lib my_comp
+//!
+//! cd my_comp
+//!
+//! # Add LinuxCNC HAL bindings as a Cargo dependency with cargo-edit
+//! cargo add linuxcnc-hal-sys
+//!
+//! LINUXCNC_SRC=/path/to/linuxcnc/source/code cargo build
+//! ```
 //!
 //! # Examples
 //!
@@ -15,7 +46,7 @@
 //! `unsafe` block for clarity.
 //!
 //! The LinuxCNC HAL requires a certain setup procedure to operate correctly. The basic program
-//! structure should be roughly as follows
+//! structure should be roughly as follows:
 //!
 //! 1. Call [`hal_init`] to create a new HAL component
 //! 1. Register `SIGTERM` and `SIGINT` signals, likely with the [`signal_hook`] crate. LinuxCNC will

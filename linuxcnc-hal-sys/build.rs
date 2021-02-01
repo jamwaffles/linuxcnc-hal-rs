@@ -25,7 +25,7 @@ fn main() {
         .clang_arg(&format!("-I{}/src/rtapi", linuxcnc_root))
         // Tell LinuxCNC build to run in non-realtime mode
         // See line ~114 in linuxcnc-src/src/hal/hal.h
-        .clang_arg("-DULAPI")
+        .clang_arg("-DRTAPI")
         // Tell cargo to invalidate the built crate whenever any of the
         // included header files changed.
         .parse_callbacks(Box::new(bindgen::CargoCallbacks))
@@ -43,7 +43,10 @@ fn main() {
     cc::Build::new()
         .files(&[
             &format!("{}/src/hal/hal_lib.c", linuxcnc_root),
+            // Non-realtime
             &format!("{}/src/rtapi/uspace_ulapi.c", linuxcnc_root),
+            // Realtime (broken at time of writing)
+            // &format!("{}/src/rtapi/uspace_rtai.cc", linuxcnc_root),
         ])
         .define("ULAPI", None)
         .include("patch")

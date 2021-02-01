@@ -15,7 +15,9 @@ struct HalData {
 
 fn main() {
     unsafe {
-        let id = hal_init(CString::new("struct").unwrap().as_ptr().cast());
+        let name = CString::new("struct").unwrap();
+
+        let id = hal_init(name.as_ptr().cast());
 
         println!("ID {}", id);
 

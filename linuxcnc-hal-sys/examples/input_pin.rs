@@ -16,7 +16,9 @@ use std::{ffi::CString, mem, thread, time::Duration};
 
 fn main() {
     unsafe {
-        let id = hal_init(CString::new("pins").unwrap().as_ptr().cast());
+        let name = CString::new("pins").unwrap();
+
+        let id = hal_init(name.as_ptr().cast());
 
         println!("ID {}", id);
 

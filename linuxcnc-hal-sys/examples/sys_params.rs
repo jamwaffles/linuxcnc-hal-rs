@@ -13,7 +13,9 @@ use std::{ffi::CString, mem, thread, time::Duration};
 
 fn main() {
     unsafe {
-        let id = hal_init(CString::new("pins").unwrap().as_ptr().cast());
+        let name = CString::new("pins").unwrap();
+
+        let id = hal_init(name.as_ptr().cast());
 
         println!("ID {}", id);
 
@@ -26,15 +28,19 @@ fn main() {
         println!("Float storage {:?}", float_storage);
         println!("Int storage {:?}", uint_storage);
 
+        let float_name = CString::new("params.param-float").unwrap();
+
         let float = hal_param_float_new(
-            CString::new("params.param-float").unwrap().as_ptr().cast(),
+            float_name.as_ptr().cast(),
             hal_param_dir_t_HAL_RO,
             float_storage,
             id,
         );
 
+        let uint_name = CString::new("params.param-uint").unwrap();
+
         let uint = hal_param_u32_new(
-            CString::new("params.param-uint").unwrap().as_ptr().cast(),
+            uint_name.as_ptr().cast(),
             hal_param_dir_t_HAL_RO,
             uint_storage,
             id,

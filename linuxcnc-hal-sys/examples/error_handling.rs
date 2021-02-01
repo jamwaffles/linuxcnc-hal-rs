@@ -19,7 +19,8 @@ fn main() {
 
         println!("Component registered with ID {}", component_id);
 
-        let signals = Signals::new(&[signal_hook::SIGTERM, signal_hook::SIGINT]).unwrap();
+        let mut signals =
+            Signals::new(&[signal_hook::consts::SIGTERM, signal_hook::consts::SIGINT]).unwrap();
 
         let storage = hal_malloc(mem::size_of::<*mut f64>().try_into().unwrap()) as *mut *mut f64;
 
@@ -57,7 +58,9 @@ fn main() {
         }
 
         while !signals.pending().any(|signal| match signal {
-            signal_hook::SIGTERM | signal_hook::SIGINT | signal_hook::SIGKILL => true,
+            signal_hook::consts::SIGTERM
+            | signal_hook::consts::SIGINT
+            | signal_hook::consts::SIGKILL => true,
             _ => false,
         }) {
             println!("Input {:?}", **storage);

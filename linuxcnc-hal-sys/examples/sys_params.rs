@@ -17,7 +17,8 @@ fn main() {
 
         println!("ID {}", id);
 
-        let signals = Signals::new(&[signal_hook::SIGTERM, signal_hook::SIGINT]).unwrap();
+        let mut signals =
+            Signals::new(&[signal_hook::consts::SIGTERM, signal_hook::consts::SIGINT]).unwrap();
 
         let float_storage = hal_malloc(mem::size_of::<f64>().try_into().unwrap()) as *mut f64;
         let uint_storage = hal_malloc(mem::size_of::<u32>().try_into().unwrap()) as *mut u32;
@@ -51,7 +52,9 @@ fn main() {
         while !signals.pending().any(|signal| {
             matches!(
                 signal,
-                signal_hook::SIGTERM | signal_hook::SIGINT | signal_hook::SIGKILL
+                signal_hook::consts::SIGTERM
+                    | signal_hook::consts::SIGINT
+                    | signal_hook::consts::SIGKILL
             )
         }) {
             println!("Float {:?}", *float_storage);

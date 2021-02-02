@@ -6,7 +6,7 @@ use std::path::PathBuf;
 
 fn main() {
     println!("cargo:rerun-if-changed=wrapper.h");
-    println!("cargo:rerun-if-changed=patch/config.h");
+    // println!("cargo:rerun-if-changed=patch/config.h");
 
     let linuxcnc_root = env::var("LINUXCNC_SRC").expect("LINUXCNC_SRC env var must be set and pointing to the root of the LinuxCNC source Git repository");
 
@@ -23,9 +23,10 @@ fn main() {
         .clang_arg(&format!("-I{}", linuxcnc_root))
         .clang_arg(&format!("-I{}/src/hal", linuxcnc_root))
         .clang_arg(&format!("-I{}/src/rtapi", linuxcnc_root))
-        // Tell LinuxCNC build to run in non-realtime mode
+        // Tell LinuxCNC build to run in realtime mode with `-DRTAPI` or non-realtime with `-DULAPI`.
         // See line ~114 in linuxcnc-src/src/hal/hal.h
         .clang_arg("-DRTAPI")
+        // .clang_arg("-DULAPI")
         // Tell cargo to invalidate the built crate whenever any of the
         // included header files changed.
         .parse_callbacks(Box::new(bindgen::CargoCallbacks))
@@ -40,19 +41,17 @@ fn main() {
         .write_to_file(out_path.join("bindings.rs"))
         .expect("Couldn't write bindings!");
 
-    cc::Build::new()
-        .files(&[
-            &format!("{}/src/hal/hal_lib.c", linuxcnc_root),
-            // Non-realtime
-            &format!("{}/src/rtapi/uspace_ulapi.c", linuxcnc_root),
-            // Realtime (broken at time of writing)
-            // &format!("{}/src/rtapi/uspace_rtai.cc", linuxcnc_root),
-        ])
-        .define("ULAPI", None)
-        .include("patch")
-        .include(&format!("{}/src/hal", linuxcnc_root))
-        .include(&format!("{}/src/rtapi", linuxcnc_root))
-        .include(&format!("{}/src", linuxcnc_root))
-        .warnings(false)
-        .compile("linuxcnchal");
+    // // ONLY required for non-realtime builds
+    // cc::Build::new()
+    //     .files(&[
+    //         &format!("{}/src/hal/hal_lib.c", linuxcnc_root),
+    //         &format!("{}/src/rtapi/uspace_ulapi.c", linuxcnc_root),
+    //     ])
+    //     .define("ULAPI", None)
+    //     .include("patch")
+    //     .include(&format!("{}/src/hal", linuxcnc_root))
+    //     .include(&format!("{}/src/rtapi", linuxcnc_root))
+    //     .include(&format!("{}/src", linuxcnc_root))
+    //     .warnings(false)
+    //     .compile("linuxcnchal");
 }

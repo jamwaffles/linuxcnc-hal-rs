@@ -12,31 +12,6 @@ use std::{ffi::CString, mem, thread, time::Duration};
 use std::alloc::{alloc, GlobalAlloc, Layout};
 use std::ptr::null_mut;
 
-/// For debugging.
-static mut MEM_CONSUMED: usize = 0;
-
-/// Memory allocator that works inside LinuxCNC's HAL allocated memory.
-///
-/// LinuxCNC's `hal_malloc` does not free any memory until all components are closed with `hal_exit`
-/// so it's a good idea to allocate as little as possible.
-struct Hallocator;
-
-unsafe impl GlobalAlloc for Hallocator {
-    unsafe fn alloc(&self, layout: Layout) -> *mut u8 {
-        let size = layout.size();
-
-        MEM_CONSUMED += size;
-
-        hal_malloc(size as c_long) as *mut u8
-    }
-
-    // NOTE: LinuxCNC's allocator has no free!
-    unsafe fn dealloc(&self, _ptr: *mut u8, _layout: Layout) {}
-}
-
-#[global_allocator]
-static A: Hallocator = Hallocator;
-
 /// Component ID accessible from both `rtapi_app_main` and `hal_exit`.
 static mut COMP_ID: i32 = 0;
 
@@ -46,6 +21,7 @@ static mut COMP_ID: i32 = 0;
 struct TestArgs {
     foo: u32,
     bar: bool,
+    arr: [u8; 5],
 }
 
 /// Component entry point.
@@ -68,16 +44,20 @@ pub unsafe extern "C" fn rtapi_app_main() -> i32 {
 
     // Register a function that gets called in the realtime context.
     let export_result = {
-        let mut arg = hal_malloc(mem::size_of::<TestArgs>().try_into().unwrap()) as *mut TestArgs;
+        let ptr_size = mem::size_of::<TestArgs>().try_into().unwrap();
+
+        // Allocate data to be used in the realtime callback function `test_fn`. This MUST be
+        // allocated using `hal_malloc` otherwise it will be placed outside the realtime shared
+        // memory region.
+        let mut arg = hal_malloc(ptr_size) as *mut TestArgs;
+
         *arg = TestArgs {
             foo: 1234,
             bar: true,
+            arr: [10, 11, 12, 13, 14],
         };
 
-        dbg!(&arg);
-
-        // https://stackoverflow.com/questions/24191249/working-with-c-void-in-an-ffi
-        let arg_ptr: *mut c_void = &mut arg as *mut _ as *mut c_void;
+        let arg_ptr = arg as *mut c_void;
 
         // The fn name here is what is used in `addf ...` calls, etc. The actual function name
         // doesn't matter.

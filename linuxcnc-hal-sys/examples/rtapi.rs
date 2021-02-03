@@ -12,9 +12,13 @@ use std::{ffi::CString, mem, thread, time::Duration};
 use std::alloc::{alloc, GlobalAlloc, Layout};
 use std::ptr::null_mut;
 
+/// For debugging.
 static mut MEM_CONSUMED: usize = 0;
 
 /// Memory allocator that works inside LinuxCNC's HAL allocated memory.
+///
+/// LinuxCNC's `hal_malloc` does not free any memory until all components are closed with `hal_exit`
+/// so it's a good idea to allocate as little as possible.
 struct Hallocator;
 
 unsafe impl GlobalAlloc for Hallocator {
@@ -22,8 +26,6 @@ unsafe impl GlobalAlloc for Hallocator {
         let size = layout.size();
 
         MEM_CONSUMED += size;
-
-        dbg!(MEM_CONSUMED);
 
         hal_malloc(size as c_long) as *mut u8
     }
@@ -35,6 +37,7 @@ unsafe impl GlobalAlloc for Hallocator {
 #[global_allocator]
 static A: Hallocator = Hallocator;
 
+/// Component ID accessible from both `rtapi_app_main` and `hal_exit`.
 static mut COMP_ID: i32 = 0;
 
 /// Args that get passed to the function when called
@@ -46,6 +49,11 @@ struct TestArgs {
 }
 
 /// Component entry point.
+///
+/// LinuxCNC's HAL guidelines strongly suggest only allocating in here, and not in any handler
+/// functions exported by `hal_export_funct`.
+///
+/// This is called by LinuxCNC and must have the name `rtapi_app_main`.
 #[no_mangle]
 pub unsafe extern "C" fn rtapi_app_main() -> i32 {
     dbg!(rtapi_is_realtime());
@@ -99,6 +107,9 @@ pub unsafe extern "C" fn rtapi_app_main() -> i32 {
     ret
 }
 
+/// Handler function called from the realtime thread.
+///
+/// Try not to allocate in there as nothing will be freed until all components have exited.
 #[no_mangle]
 pub unsafe extern "C" fn test_fn(arg: *mut c_void, period: c_long) {
     let arg: &mut TestArgs = &mut *(arg as *mut TestArgs);
@@ -107,7 +118,9 @@ pub unsafe extern "C" fn test_fn(arg: *mut c_void, period: c_long) {
     println!("Test fn {:?}, {}", arg, period);
 }
 
-/// Cleanup
+/// Exit function.
+///
+/// This is called by LinuxCNC and must have the name `rtapi_app_exit`.
 #[no_mangle]
 pub unsafe extern "C" fn rtapi_app_exit() -> i32 {
     println!("Exiting...");

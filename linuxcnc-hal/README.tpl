@@ -7,7 +7,7 @@
 
 Please consider [becoming a sponsor](https://github.com/sponsors/jamwaffles/) so I may continue to maintain this crate in my spare time!
 
-# [Documentation](https://docs.rs/linuxcnc-
+# [Documentation](https://docs.rs/linuxcnc-hal)
 
 {{readme}}
 

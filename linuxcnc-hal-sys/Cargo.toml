@@ -28,6 +28,7 @@ crate-type = [ "cdylib" ]
 circle-ci = { repository = "jamwaffles/linuxcnc-hal-rs", branch = "master" }
 
 [dependencies]
+log = "0.4.14"
 
 [build-dependencies]
 bindgen = "0.57.0"
@@ -35,3 +36,4 @@ cc = "1.0.66"
 
 [dev-dependencies]
 signal-hook = "0.3.4"
+rtapi-logger = { path = "../rtapi-logger", version = "0.1.0" }

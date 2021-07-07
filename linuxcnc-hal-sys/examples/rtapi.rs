@@ -32,13 +32,13 @@ struct TestArgs {
 /// This is called by LinuxCNC and must have the name `rtapi_app_main`.
 #[no_mangle]
 pub unsafe extern "C" fn rtapi_app_main() -> i32 {
-    dbg!(rtapi_is_realtime());
+    rtapi_logger::init().unwrap();
 
     let name = CString::new("librtapi").unwrap();
 
     let id = hal_init(name.as_ptr().cast());
 
-    println!("Component ID {}", id);
+    log::info!("Component ID {}", id);
 
     COMP_ID = id;
 
@@ -82,7 +82,7 @@ pub unsafe extern "C" fn rtapi_app_main() -> i32 {
 
     let ret = hal_ready(id);
 
-    println!("Component ID {} is ready: {}", COMP_ID, ret);
+    log::info!("Component ID {} is ready: {}", COMP_ID, ret);
 
     ret
 }
@@ -93,9 +93,9 @@ pub unsafe extern "C" fn rtapi_app_main() -> i32 {
 #[no_mangle]
 pub unsafe extern "C" fn test_fn(arg: *mut c_void, period: c_long) {
     let arg: &mut TestArgs = &mut *(arg as *mut TestArgs);
-    let period: i64 = period;
+    let period: i64 = period.into();
 
-    println!("Test fn {:?}, {}", arg, period);
+    log::debug!("Test fn {:?}, {}", arg, period);
 }
 
 /// Exit function.
@@ -105,5 +105,9 @@ pub unsafe extern "C" fn test_fn(arg: *mut c_void, period: c_long) {
 pub unsafe extern "C" fn rtapi_app_exit() -> i32 {
     println!("Exiting...");
 
-    dbg!(hal_exit(COMP_ID))
+    let code = hal_exit(COMP_ID);
+
+    log::debug!("Exit code {}", code);
+
+    code
 }

@@ -12,15 +12,20 @@
 //!
 //! # Development setup
 //!
-//! [`bindgen`](https://github.com/rust-lang/rust-bindgen) must be set up correctly. Follow the [requirements section of its docs](https://rust-lang.github.io/rust-bindgen/requirements.html).
+//! [`bindgen`](https://github.com/rust-lang/rust-bindgen) must be set up correctly. Follow the
+//! [requirements section of its docs](https://rust-lang.github.io/rust-bindgen/requirements.html).
 //!
-//! To run and debug any HAL components, the LinuxCNC simulator can be set up. There's a guide [here](https://wapl.es/cnc/2020/01/25/linuxcnc-simulator-build-linux-mint.html) for Linux Mint (and other Debian derivatives).
+//! To run and debug any HAL components, the LinuxCNC simulator can be set up. There's a guide
+//! [here](https://wapl.es/cnc/2020/01/25/linuxcnc-simulator-build-linux-mint.html) for Linux Mint
+//! (and other Debian derivatives).
 //!
 //! # Project setup
 //!
-//! The `LINUXCNC_SRC` environment variable is required to build this crate. The value must be the absolute path to the root of the LinuxCNC source code.
+//! The `LINUXCNC_SRC` environment variable is required to build this crate. The value must be the
+//! absolute path to the root of the LinuxCNC source code.
 //!
-//! **The version of the LinuxCNC sources must match the LinuxCNC version used in the machine control.**
+//! **The version of the LinuxCNC sources must match the LinuxCNC version used in the machine
+//! control.**
 //!
 //! ```bash
 //! # Clone LinuxCNC source code into linuxcnc/
@@ -42,6 +47,23 @@
 //!
 //! # Examples
 //!
+//! ## Running the examples in the LinuxCNC simulator
+//!
+//! Ensure you have the [LinuxCNC source repository](https://github.com/linuxcnc/linuxcnc) cloned,
+//! checked out to the desired version and built with the [build
+//! instructions](http://linuxcnc.org/docs/devel/html/code/building-linuxcnc.html).
+//!
+//! Note that the LinuxCNC source is located in the same directory as `linuxcnc-hal-rs` in the
+//! example paths below.
+//!
+//! ```bash
+//! LINUXCNC_SRC=$(realpath ../linuxcnc) cargo build --examples
+//!
+//! # Define the correct path to the LinuxCNC source
+//! . ../linuxcnc/scripts/rip-environment
+//!
+//! linuxcnc ./linuxcnc-hal-sys/examples/<example>.ini
+//! ```
 //! All functions exported from this crate are `unsafe`, hence each example is wrapped in a big
 //! `unsafe` block for clarity.
 //!

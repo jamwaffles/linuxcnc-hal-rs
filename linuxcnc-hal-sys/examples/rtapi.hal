@@ -1,4 +1,4 @@
-loadrt librtapi
+loadrt ../../linuxcnc-hal-rs/target/debug/examples/librtapi
 loadrt threads name1=t period1=25000 period2=1000000
 # Function name as exported in hal_export_funct
 addf rtapi_fn t

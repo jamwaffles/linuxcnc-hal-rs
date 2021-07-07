@@ -2,13 +2,20 @@
 //!
 //! A thread with some tidbits that helped develop this example: https://forum.linuxcnc.org/24-hal-components/40339-developing-hal-component-in-c#186347
 //!
-//! Run with `halrun -I -V -f rtapi.hal`.
+//! Build with e.g. `LINUXCNC_SRC=$(realpath ../linuxcnc) cargo build --package linuxcnc-hal-sys --example rtapi`
+//!
+//! The binary must be available in the LinuxCNC source `/rtlib` folder. A kludge is to symlink it:
+//!
+//! ```bash
+//! ln -s /home/pi/Repositories/linuxcnc-hal-rs/target/debug/examples/librtapi.so /home/pi/Repositories/linuxcnc/rtlib/
+//! ```
+//!
+//! Run with `./linuxcnc/scripts/halrun -I -V -f ./linuxcnc-hal-rs/linuxcnc-hal-sys/examples/rtapi.hal`.
 
 use linuxcnc_hal_sys::*;
 use signal_hook::iterator::Signals;
 use std::{convert::TryInto, ffi::c_void, os::raw::c_long};
 use std::{ffi::CString, mem, thread, time::Duration};
-
 use std::alloc::{alloc, GlobalAlloc, Layout};
 use std::ptr::null_mut;
 
@@ -61,24 +68,29 @@ pub unsafe extern "C" fn rtapi_app_main() -> i32 {
 
         // The fn name here is what is used in `addf ...` calls, etc. The actual function name
         // doesn't matter.
-        let fn_name = CString::new("rtapi_fn").unwrap();
+        let fn_name = CString::new("librtapi.rtapi-fn").unwrap();
 
         hal_export_funct(
             fn_name.as_ptr().cast(),
             Some(test_fn),
             arg_ptr,
-            // Does not use FP
-            false as i32,
+            // If in doubt, set to true (uses FP flag)
+            true as i32,
             // Is not reentrant
             false as i32,
-            id,
+            COMP_ID,
         )
     };
 
-    if export_result < 0 {
+    if export_result != 0 {
         eprintln!("Failed to export fn {}", export_result);
         return export_result;
     }
+
+    let storage = hal_malloc(mem::size_of::<*mut f64>().try_into().unwrap()) as *mut *mut f64;
+       let pin_name = CString::new("pins.input-1").unwrap();
+        let ret = hal_pin_float_new(pin_name.as_ptr().cast(), hal_pin_dir_t_HAL_IN, storage, id);
+
 
     let ret = hal_ready(id);
 

@@ -1,5 +1,7 @@
-loadrt ../../linuxcnc-hal-rs/target/debug/examples/librtapi
+# NOTE: Providing the full path here makes things break. Include ONLY the name of the component,
+# which must show up in <linuxcnc source>/rtlib/
+loadrt librtapi
 loadrt threads name1=t period1=25000 period2=1000000
 # Function name as exported in hal_export_funct
-addf rtapi_fn t
+addf librtapi.rtapi-fn t
 start

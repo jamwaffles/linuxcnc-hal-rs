@@ -14,10 +14,10 @@
 
 use linuxcnc_hal_sys::*;
 use signal_hook::iterator::Signals;
-use std::{convert::TryInto, ffi::c_void, os::raw::c_long};
-use std::{ffi::CString, mem, thread, time::Duration};
 use std::alloc::{alloc, GlobalAlloc, Layout};
 use std::ptr::null_mut;
+use std::{convert::TryInto, ffi::c_void, os::raw::c_long};
+use std::{ffi::CString, mem, thread, time::Duration};
 
 /// Component ID accessible from both `rtapi_app_main` and `hal_exit`.
 static mut COMP_ID: i32 = 0;
@@ -88,9 +88,8 @@ pub unsafe extern "C" fn rtapi_app_main() -> i32 {
     }
 
     let storage = hal_malloc(mem::size_of::<*mut f64>().try_into().unwrap()) as *mut *mut f64;
-       let pin_name = CString::new("pins.input-1").unwrap();
-        let ret = hal_pin_float_new(pin_name.as_ptr().cast(), hal_pin_dir_t_HAL_IN, storage, id);
-
+    let pin_name = CString::new("pins.input-1").unwrap();
+    let ret = hal_pin_float_new(pin_name.as_ptr().cast(), hal_pin_dir_t_HAL_IN, storage, id);
 
     let ret = hal_ready(id);
 

@@ -1,4 +1,4 @@
-use linuxcnc_hal_sys::{rtapi_print_msg,rtapi_get_msg_level};
+use linuxcnc_hal_sys::{rtapi_get_msg_level, rtapi_print_msg};
 use log::{Level, Metadata, Record};
 use std::ffi::CString;
 
@@ -37,7 +37,6 @@ pub fn init() -> Result<(), SetLoggerError> {
     // log::set_logger(&LOGGER).map(|()| log::set_max_level(LevelFilter::Info))
     // Log everything by default
     log::set_logger(&LOGGER).map(|()| log::set_max_level(LevelFilter::Trace))
-
 }
 
 pub struct RtapiLogger;
@@ -57,7 +56,6 @@ impl log::Log for RtapiLogger {
             // FIXME: LinuxCNC seems to always use `Err` level regardless of DEBUG config value.
             // let level: RtapiLogLevel = record.level().into();
             let level = RtapiLogLevel::Err;
-
 
             if let Ok(f) = CString::new(out) {
                 unsafe { rtapi_print_msg(level as u32, f.as_ptr()) };

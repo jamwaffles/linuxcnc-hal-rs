@@ -2,7 +2,7 @@
 name = "linuxcnc-hal"
 version = "0.2.0"
 authors = ["James Waples <james@wapl.es>"]
-edition = "2018"
+edition = "2021"
 documentation = "https://docs.rs/linuxcnc-hal"
 description = "A safe, high level interface to LinuxCNC's HAL submodule"
 readme = "./README.md"

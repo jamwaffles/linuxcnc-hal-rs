@@ -6,6 +6,10 @@ A safe abstraction used to create LinuxCNC HAL components in Rust.
 
 ## [Unreleased] - ReleaseDate
 
+### Changed
+
+- **(breaking)** Migrate to Rust edition 2021
+
 ## [0.2.0] - 2021-01-06
 
 ### Added
@@ -14,8 +18,10 @@ A safe abstraction used to create LinuxCNC HAL components in Rust.
 
 ### Changed
 
-- **(breaking)** #10 The `HalComponentBuilder` is removed. Use `HalComponent::new()` directly instead.
-- **(breaking)** #10 Pins must now be grouped together in a struct that implements the `Resources`. For example:
+- **(breaking)** #10 The `HalComponentBuilder` is removed. Use `HalComponent::new()` directly
+  instead.
+- **(breaking)** #10 Pins must now be grouped together in a struct that implements the `Resources`.
+  For example:
 
   ```rust
   struct Pins {
@@ -35,7 +41,8 @@ A safe abstraction used to create LinuxCNC HAL components in Rust.
   }
   ```
 
-- **(breaking)** #8 Change how `HalPin` types work. Instead of `InputPinF64`, `OutputPinBool`, etc, the `InputPin` and `OutputPin` structs are added. Usage is like this:
+- **(breaking)** #8 Change how `HalPin` types work. Instead of `InputPinF64`, `OutputPinBool`, etc,
+  the `InputPin` and `OutputPin` structs are added. Usage is like this:
 
   ```rust
   struct Pins {
@@ -52,7 +59,9 @@ A safe abstraction used to create LinuxCNC HAL components in Rust.
 
 ### Fixed
 
-- Fixed usage of `hal_malloc()` to correctly allocate memory for pins. Many thanks to the users in [this thread](https://users.rust-lang.org/t/convert-mut-mut-f64-to-box-f64/37521) for the guidance.
+- Fixed usage of `hal_malloc()` to correctly allocate memory for pins. Many thanks to the users in
+  [this thread](https://users.rust-lang.org/t/convert-mut-mut-f64-to-box-f64/37521) for the
+  guidance.
 
 ## [0.1.2] - 2020-01-28
 
@@ -83,9 +92,13 @@ A safe abstraction used to create LinuxCNC HAL components in Rust.
 Initial release
 
 <!-- next-url -->
-[unreleased]: https://github.com/jamwaffles/linuxcnc-hal-rs/compare/linuxcnc-hal-v0.2.0...HEAD
 
-[0.2.0]: https://github.com/jamwaffles/linuxcnc-hal-rs/compare/linuxcnc-hal-v0.1.3...linuxcnc-hal-v0.2.0
-[0.1.3]: https://github.com/jamwaffles/linuxcnc-hal-rs/compare/linuxcnc-hal-v0.1.2...linuxcnc-hal-v0.1.3
-[0.1.2]: https://github.com/jamwaffles/linuxcnc-hal-rs/compare/linuxcnc-hal-v0.1.1...linuxcnc-hal-v0.1.2
-[0.1.1]: https://github.com/jamwaffles/linuxcnc-hal-rs/compare/linuxcnc-hal-v0.1.0...linuxcnc-hal-v0.1.1
+[unreleased]: https://github.com/jamwaffles/linuxcnc-hal-rs/compare/linuxcnc-hal-v0.2.0...HEAD
+[0.2.0]:
+  https://github.com/jamwaffles/linuxcnc-hal-rs/compare/linuxcnc-hal-v0.1.3...linuxcnc-hal-v0.2.0
+[0.1.3]:
+  https://github.com/jamwaffles/linuxcnc-hal-rs/compare/linuxcnc-hal-v0.1.2...linuxcnc-hal-v0.1.3
+[0.1.2]:
+  https://github.com/jamwaffles/linuxcnc-hal-rs/compare/linuxcnc-hal-v0.1.1...linuxcnc-hal-v0.1.2
+[0.1.1]:
+  https://github.com/jamwaffles/linuxcnc-hal-rs/compare/linuxcnc-hal-v0.1.0...linuxcnc-hal-v0.1.1

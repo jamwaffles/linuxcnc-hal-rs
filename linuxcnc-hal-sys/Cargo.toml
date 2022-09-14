@@ -2,7 +2,7 @@
 name = "linuxcnc-hal-sys"
 version = "0.2.0"
 authors = ["James Waples <james@wapl.es>"]
-edition = "2018"
+edition = "2021"
 documentation = "https://docs.rs/linuxcnc-hal-sys"
 description = "Generated, unsafe Rust bindings to the LinuxCNC HAL submodule"
 readme = "./README.md"
@@ -31,7 +31,7 @@ circle-ci = { repository = "jamwaffles/linuxcnc-hal-rs", branch = "master" }
 log = "0.4.14"
 
 [build-dependencies]
-bindgen = "0.57.0"
+bindgen = "0.60.1"
 cc = "1.0.66"
 
 [dev-dependencies]

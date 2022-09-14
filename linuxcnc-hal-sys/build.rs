@@ -41,6 +41,8 @@ fn main() {
         .write_to_file(out_path.join("bindings.rs"))
         .expect("Couldn't write bindings!");
 
+    // TODO: Use CARGO_FEATURE_<name> to enable this for non-rt builds. See more here:
+    // https://doc.rust-lang.org/cargo/reference/environment-variables.html#environment-variables-cargo-sets-for-build-scripts
     // // ONLY required for non-realtime builds
     // cc::Build::new()
     //     .files(&[

@@ -1,7 +1,7 @@
 use crate::{error::ComponentInitError, RegisterResources, Resources};
 use linuxcnc_hal_sys::{hal_exit, hal_init, hal_ready, EINVAL, ENOMEM, HAL_NAME_LEN};
 use signal_hook::iterator::Signals;
-use std::ffi::CString;
+use std::{cell::RefCell, ffi::CString};
 
 /// HAL component
 ///
@@ -23,7 +23,7 @@ pub struct HalComponent<R> {
     id: i32,
 
     /// Handles to Unix exit signals
-    signals: Signals,
+    signals: RefCell<Signals>,
 
     /// Handle to resources (pins, signals, etc) used in the component
     ///
@@ -53,7 +53,7 @@ where
             name,
             id,
             resources: Some(resources),
-            signals,
+            signals: RefCell::new(signals),
         };
 
         comp.ready()
@@ -65,7 +65,7 @@ where
     /// hangs during starting waiting for the component to become ready, it might be due to signal
     /// handlers not being registered.
     fn register_signals() -> Result<Signals, ComponentInitError> {
-        let signals = Signals::new(&[signal_hook::SIGTERM, signal_hook::SIGINT])
+        let signals = Signals::new(&[signal_hook::consts::SIGTERM, signal_hook::consts::SIGINT])
             .map_err(ComponentInitError::Signals)?;
 
         debug!("Signals registered");
@@ -135,10 +135,12 @@ where
 
     /// Check whether the component was signalled to shut down
     pub fn should_exit(&self) -> bool {
-        self.signals.pending().any(|signal| {
+        self.signals.borrow_mut().pending().any(|signal| {
             matches!(
                 signal,
-                signal_hook::SIGTERM | signal_hook::SIGINT | signal_hook::SIGKILL
+                signal_hook::consts::SIGTERM
+                    | signal_hook::consts::SIGINT
+                    | signal_hook::consts::SIGKILL
             )
         })
     }
@@ -158,7 +160,7 @@ impl<R> Drop for HalComponent<R> {
 
         debug!("Closing component ID {}, name {}", self.id, self.name);
 
-        self.signals.close();
+        // self.signals.close();
 
         unsafe {
             hal_exit(self.id);

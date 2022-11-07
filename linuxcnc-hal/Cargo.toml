@@ -20,7 +20,7 @@ name = "rtapi"
 crate-type = [ "cdylib" ]
 
 [dependencies]
-signal-hook = "0.1.13"
+signal-hook = "0.3.14"
 libc = "0.2.66"
 thiserror = "1.0.10"
 log = "0.4.8"
@@ -30,4 +30,4 @@ version = "^0.2.0"
 path = "../linuxcnc-hal-sys"
 
 [dev-dependencies]
-pretty_env_logger = "0.4.0"
+rtapi-logger = { path = "../rtapi-logger", version = "0.1.0" }

@@ -50,7 +50,7 @@ pub extern "C" fn rtapi_app_main() -> i32 {
 ///
 /// This is a convenience wrapper so that the `?` syntax sugar can be used.
 fn inner() -> Result<(), Box<dyn Error>> {
-    pretty_env_logger::init();
+    rtapi_logger::init().ok();
 
     // Create a new HAL component called `rust-comp`
     let comp: HalComponent<Pins> = HalComponent::new("rust-comp")?;

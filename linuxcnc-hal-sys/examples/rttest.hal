@@ -1,0 +1,9 @@
+# NOTE: `loadrt` won't load anything using an absolute path. Instead, either place `librttest.so` in
+# <linuxcnc source>/rtlib/ or symlink it e.g.:
+#
+# ln -s ~/Repositories/linuxcnc-hal-rs/target/debug/examples/librttest.so ~/Repositories/linuxcnc/rtlib
+loadrt rttest
+loadrt threads name1=t period1=25000 period2=1000000
+# Function name as exported in hal_export_funct
+addf rttest.rtapi-fn t
+start

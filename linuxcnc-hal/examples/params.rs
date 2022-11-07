@@ -38,7 +38,7 @@ impl Resources for Comp {
 }
 
 fn main() -> Result<(), Box<dyn Error>> {
-    pretty_env_logger::init();
+    rtapi_logger::init().ok();
 
     // Create a new HAL component called `rust-comp`
     let comp: HalComponent<Comp> = HalComponent::new("params")?;

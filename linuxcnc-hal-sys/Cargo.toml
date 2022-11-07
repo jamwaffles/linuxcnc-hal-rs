@@ -21,7 +21,7 @@ include = [
 
 # Realtime components must be compiled as cdylibs
 [[example]]
-name = "rtapi"
+name = "rttest"
 crate-type = [ "cdylib" ]
 
 [badges]
@@ -31,8 +31,7 @@ circle-ci = { repository = "jamwaffles/linuxcnc-hal-rs", branch = "master" }
 log = "0.4.14"
 
 [build-dependencies]
-bindgen = "0.60.1"
-cc = "1.0.66"
+bindgen = "0.61.0"
 
 [dev-dependencies]
 signal-hook = "0.3.4"

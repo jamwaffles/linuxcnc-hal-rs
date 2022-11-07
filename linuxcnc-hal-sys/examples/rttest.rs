@@ -1,16 +1,25 @@
 //! Realtime testing
 //!
-//! A thread with some tidbits that helped develop this example: https://forum.linuxcnc.org/24-hal-components/40339-developing-hal-component-in-c#186347
+//! A thread with some useful tidbits that helped develop this Rust example:
+//! https://forum.linuxcnc.org/24-hal-components/40339-developing-hal-component-in-c#186347
 //!
-//! Build with e.g. `LINUXCNC_SRC=$(realpath ../linuxcnc) cargo build --package linuxcnc-hal-sys --example rtapi`
+//! Build with e.g. `LINUXCNC_SRC=$(realpath ../linuxcnc) cargo build --package linuxcnc-hal-sys
+//! --example rttest`
 //!
 //! The binary must be available in the LinuxCNC source `/rtlib` folder. A kludge is to symlink it:
 //!
 //! ```bash
-//! ln -s /home/pi/Repositories/linuxcnc-hal-rs/target/debug/examples/librtapi.so /home/pi/Repositories/linuxcnc/rtlib/
+//! ln -s ~/Repositories/linuxcnc-hal-rs/target/debug/examples/librttest.so ~/Repositories/linuxcnc/rtlib/rttest.so
 //! ```
 //!
-//! Run with `./linuxcnc/scripts/halrun -I -V -f ./linuxcnc-hal-rs/linuxcnc-hal-sys/examples/rtapi.hal`.
+//! Run from the repository parent folder with
+//!
+//! ``bash
+//! ./linuxcnc/scripts/halrun -I -V -f ./linuxcnc-hal-rs/linuxcnc-hal-sys/examples/rttest.hal
+//! ```
+//!
+//! If linuxcnc is configured to run in place, `liblinuxcnchal.so.0` may not be found on startup.
+//! To fix, try prepending e.g. `LD_LIBRARY_PATH=~/Repositories/linuxcnc/lib`
 
 use linuxcnc_hal_sys::*;
 use signal_hook::iterator::Signals;
@@ -39,9 +48,12 @@ struct TestArgs {
 /// This is called by LinuxCNC and must have the name `rtapi_app_main`.
 #[no_mangle]
 pub unsafe extern "C" fn rtapi_app_main() -> i32 {
+    println!("HELLO FROM RUST");
     rtapi_logger::init().unwrap();
 
-    let name = CString::new("librtapi").unwrap();
+    // The name of this component MUST be the same name as the binary, or LinuxCNC won't pick it up
+    // as ready for some reason.
+    let name = CString::new("rttest").unwrap();
 
     let id = hal_init(name.as_ptr().cast());
 
@@ -56,7 +68,7 @@ pub unsafe extern "C" fn rtapi_app_main() -> i32 {
         // Allocate data to be used in the realtime callback function `test_fn`. This MUST be
         // allocated using `hal_malloc` otherwise it will be placed outside the realtime shared
         // memory region.
-        let mut arg = hal_malloc(ptr_size) as *mut TestArgs;
+        let arg = hal_malloc(ptr_size) as *mut TestArgs;
 
         *arg = TestArgs {
             foo: 1234,
@@ -66,9 +78,9 @@ pub unsafe extern "C" fn rtapi_app_main() -> i32 {
 
         let arg_ptr = arg as *mut c_void;
 
-        // The fn name here is what is used in `addf ...` calls, etc. The actual function name
-        // doesn't matter.
-        let fn_name = CString::new("librtapi.rtapi-fn").unwrap();
+        // The fn name here is what is used in `addf ...` lines in the HAL file. The actual Rust
+        // function name doesn't matter outside the component.
+        let fn_name = CString::new("rttest.rtapi-fn").unwrap();
 
         hal_export_funct(
             fn_name.as_ptr().cast(),

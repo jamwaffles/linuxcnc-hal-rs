@@ -1,2 +1,2 @@
-loadusr -W ../../target/debug/examples/params
+loadusr -W /home/pi/Repositories/linuxcnc-hal-rs/target/debug/examples/params
 setp params.rw 321

@@ -1,21 +1,16 @@
 extern crate bindgen;
 
 use std::env;
-// use std::fs;
 use std::path::PathBuf;
 
 fn main() {
     println!("cargo:rerun-if-changed=wrapper.h");
-    // println!("cargo:rerun-if-changed=patch/config.h");
+
+    // TODO: Use pkg_config to probe for global liblinuxcnchal.so.0, otherwise fall back to
+    // LINUXCNC_SRC env var.
 
     let linuxcnc_root = env::var("LINUXCNC_SRC").expect("LINUXCNC_SRC env var must be set and pointing to the root of the LinuxCNC source Git repository");
 
-    // fs::copy("patch/config.h", "linuxcnc-src/src/config.h")
-    //     .expect("Failed to copy config patch file");
-
-    // The bindgen::Builder is the main entry point
-    // to bindgen, and lets you build up options for
-    // the resulting bindings.
     let bindings = bindgen::Builder::default()
         // The input header we would like to generate
         // bindings for.
@@ -41,19 +36,38 @@ fn main() {
         .write_to_file(out_path.join("bindings.rs"))
         .expect("Couldn't write bindings!");
 
-    // TODO: Use CARGO_FEATURE_<name> to enable this for non-rt builds. See more here:
-    // https://doc.rust-lang.org/cargo/reference/environment-variables.html#environment-variables-cargo-sets-for-build-scripts
-    // // ONLY required for non-realtime builds
-    // cc::Build::new()
+    // Dynamically link LinuxCNC HAL, as per <https://github.com/rust-lang/rust-bindgen/issues/1974>
+    // and <https://doc.rust-lang.org/cargo/reference/build-scripts.html#rustc-link-lib>
+
+    // Required for non-rt stuff to link properly
+    println!("cargo:rustc-link-search=native={linuxcnc_root}/lib");
+    println!("cargo:rustc-link-lib=dylib=linuxcnchal");
+
+    // From
+    // <https://stackoverflow.com/questions/40602708/linking-rust-application-with-a-dynamic-library-not-in-the-runtime-linker-search>
+    println!("cargo:rustc-link-arg=-Wl,-rpath,{linuxcnc_root}/lib");
+
+    // println!("cargo:rustc-link-lib=dylib=rtapi");
+
+    // // TODO: Use CARGO_FEATURE_<name> to enable this for non-rt builds. See more here:
+    // // https://doc.rust-lang.org/cargo/reference/environment-variables.html#environment-variables-cargo-sets-for-build-scripts
+    // // // ONLY required for non-realtime builds
+    // let comp = cc::Build::new()
+    //     .cpp(true)
     //     .files(&[
     //         &format!("{}/src/hal/hal_lib.c", linuxcnc_root),
     //         &format!("{}/src/rtapi/uspace_ulapi.c", linuxcnc_root),
     //     ])
+    //     .flag("-std=gnu++11")
     //     .define("ULAPI", None)
-    //     .include("patch")
+    //     // .include("patch")
     //     .include(&format!("{}/src/hal", linuxcnc_root))
     //     .include(&format!("{}/src/rtapi", linuxcnc_root))
     //     .include(&format!("{}/src", linuxcnc_root))
     //     .warnings(false)
-    //     .compile("linuxcnchal");
+    //     .get_compiler();
+
+    // // panic!("{:?}", comp);
+
+    // comp.compile("linuxcnchal");
 }

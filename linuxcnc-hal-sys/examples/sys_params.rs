@@ -1,7 +1,7 @@
 //! Parameters
 //!
 //! ```
-//! loadusr -W /path/to/linuxcnc-hal-rs/target/debug/examples/params
+//! loadusr -W /path/to/linuxcnc-hal-rs/target/debug/examples/sys_params
 //! setp params.param-float 1.234
 //! setp params.param-uint 321
 //! ```
@@ -13,7 +13,9 @@ use std::{ffi::CString, mem, thread, time::Duration};
 
 fn main() {
     unsafe {
-        let name = CString::new("pins").unwrap();
+        // The name of this component MUST be the same name as the binary, or LinuxCNC won't pick it
+        // up as ready for some reason.
+        let name = CString::new("sys_params").unwrap();
 
         let id = hal_init(name.as_ptr().cast());
 
@@ -32,7 +34,7 @@ fn main() {
 
         let float = hal_param_float_new(
             float_name.as_ptr().cast(),
-            hal_param_dir_t_HAL_RO,
+            hal_param_dir_t_HAL_RW,
             float_storage,
             id,
         );
@@ -41,15 +43,13 @@ fn main() {
 
         let uint = hal_param_u32_new(
             uint_name.as_ptr().cast(),
-            hal_param_dir_t_HAL_RO,
+            hal_param_dir_t_HAL_RW,
             uint_storage,
             id,
         );
 
         println!("Pin float init {}", float);
         println!("Pin int init {}", uint);
-
-        thread::sleep(Duration::from_millis(500));
 
         let ret = hal_ready(id);
 

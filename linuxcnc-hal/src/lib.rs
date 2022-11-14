@@ -59,7 +59,7 @@
 //! ```
 //!
 //! Pins and other resources are registered using the [`Resources`] trait. This example creates a
-//! `Pins` struct which holds the two pins. [`HalComponent::new()`] handles component creation,
+//! `Pins` struct which holds the two pins. [`HalComponent::new`] handles component creation,
 //! resources (pin, signal, etc) initialisation and UNIX signal handler registration.
 //!
 //! ```rust,no_run

@@ -5,8 +5,7 @@
 [![Docs.rs](https://docs.rs/linuxcnc-hal-sys/badge.svg)](https://docs.rs/linuxcnc-hal-sys)
 [![Liberapay](https://img.shields.io/badge/donate-liberapay-yellow.svg)](https://liberapay.com/jamwaffles)
 
-Please consider [becoming a sponsor](https://github.com/sponsors/jamwaffles/) so I may continue to
-maintain this crate in my spare time!
+Please consider [becoming a sponsor](https://github.com/sponsors/jamwaffles/) so I may continue to maintain this crate in my spare time!
 
 # [Documentation](https://docs.rs/linuxcnc-hal-sys)
 
@@ -20,15 +19,16 @@ The high level, safe interface at [`linuxcnc-hal`] is recommended for user code.
 [requirements section of its docs](https://rust-lang.github.io/rust-bindgen/requirements.html).
 
 To run and debug any HAL components, the LinuxCNC simulator can be set up. There's a guide
-[here](https://wapl.es/cnc/2020/01/25/linuxcnc-simulator-build-linux-mint.html) for Linux Mint (and
-other Debian derivatives).
+[here](https://wapl.es/cnc/2020/01/25/linuxcnc-simulator-build-linux-mint.html) for Linux Mint
+(and other Debian derivatives).
 
 ## Project setup
 
 The `LINUXCNC_SRC` environment variable is required to build this crate. The value must be the
 absolute path to the root of the LinuxCNC source code.
 
-**The version of the LinuxCNC sources must match the LinuxCNC version used in the machine control.**
+**The version of the LinuxCNC sources must match the LinuxCNC version used in the machine
+control.**
 
 ```bash
 # Clone LinuxCNC source code into linuxcnc/
@@ -53,11 +53,11 @@ LINUXCNC_SRC=/path/to/linuxcnc/source/code cargo build
 ### Running the examples in the LinuxCNC simulator
 
 Ensure you have the [LinuxCNC source repository](https://github.com/linuxcnc/linuxcnc) cloned,
-checked out to the desired version and built with the
-[build instructions](http://linuxcnc.org/docs/devel/html/code/building-linuxcnc.html).
+checked out to the desired version and built with the [build
+instructions](http://linuxcnc.org/docs/devel/html/code/building-linuxcnc.html).
 
-Note that the LinuxCNC source is located in the same parent directory as `linuxcnc-hal-rs` in the
-example paths below.
+Note that the LinuxCNC source is located in the same parent directory as `linuxcnc-hal-rs` in
+the example paths below.
 
 ```bash
 LINUXCNC_SRC=$(realpath ../linuxcnc) cargo build --examples
@@ -67,19 +67,19 @@ LINUXCNC_SRC=$(realpath ../linuxcnc) cargo build --examples
 
 linuxcnc ./linuxcnc-hal-sys/examples/<example>.ini
 ```
-
-All functions exported from this crate are `unsafe`, hence each example is wrapped in a big `unsafe`
-block for clarity.
+All functions exported from this crate are `unsafe`, hence each example is wrapped in a big
+`unsafe` block for clarity.
 
 The LinuxCNC HAL requires a certain setup procedure to operate correctly. The basic program
 structure should be roughly as follows:
 
 1. Call [`hal_init`] to create a new HAL component
 1. Register `SIGTERM` and `SIGINT` signals, likely with the [`signal_hook`] crate. LinuxCNC will
-   hang if these signals are not registered.
+hang if these signals are not registered.
 1. Register pins with [`hal_pin_float_new`], [`hal_pin_u32_new`], etc
 1. Call [`hal_ready`] to signal to LinuxCNC that the component is ready
-1. Enter an infinite loop to continuously update input/output pin values and perform component logic
+1. Enter an infinite loop to continuously update input/output pin values and perform component
+logic
 
 These examples can be loaded into LinuxCNC using a HAL file similar to this:
 
@@ -219,7 +219,6 @@ unsafe {
     }
 }
 ```
-
 [`linuxcnc-hal`]: https://docs.rs/linuxcnc-hal
 [`bindgen`]: https://docs.rs/bindgen
 [`signal_hook`]: https://docs.rs/signal_hook
@@ -229,8 +228,8 @@ unsafe {
 Licensed under either of
 
 - Apache License, Version 2.0 ([LICENSE-APACHE](LICENSE-APACHE) or
-  http://www.apache.org/licenses/LICENSE-2.0)
-- MIT license ([LICENSE-MIT](LICENSE-MIT) or http://opensource.org/licenses/MIT)
+  <http://www.apache.org/licenses/LICENSE-2.0>)
+- MIT license ([LICENSE-MIT](LICENSE-MIT) or <http://opensource.org/licenses/MIT>)
 
 at your option.
 
@@ -239,3 +238,11 @@ at your option.
 Unless you explicitly state otherwise, any contribution intentionally submitted for inclusion in the
 work by you, as defined in the Apache-2.0 license, shall be dual licensed as above, without any
 additional terms or conditions.
+
+[`hal_init`]: https://docs.rs/linuxcnc-hal-sys/latest/linuxcnc_hal_sys/fn.hal_init.html
+[`hal_malloc`]: https://docs.rs/linuxcnc-hal-sys/latest/linuxcnc_hal_sys/fn.hal_malloc.html
+[`hal_ready`]: https://docs.rs/linuxcnc-hal-sys/latest/linuxcnc_hal_sys/fn.hal_ready.html
+[`hal_pin_u32_new`]: https://docs.rs/linuxcnc-hal-sys/latest/linuxcnc_hal_sys/fn.hal_pin_u32_new.html
+[`hal_pin_float_new`]: https://docs.rs/linuxcnc-hal-sys/latest/linuxcnc_hal_sys/fn.hal_pin_float_new.html
+[`EINVAL`]: https://docs.rs/linuxcnc-hal-sys/latest/linuxcnc_hal_sys/constant.EINVAL.html
+[`EPERM`]: https://docs.rs/linuxcnc-hal-sys/latest/linuxcnc_hal_sys/constant.EPERM.html

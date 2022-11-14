@@ -5,15 +5,14 @@
 [![Docs.rs](https://docs.rs/linuxcnc-hal/badge.svg)](https://docs.rs/linuxcnc-hal)
 [![Liberapay](https://img.shields.io/badge/donate-liberapay-yellow.svg)](https://liberapay.com/jamwaffles)
 
-Please consider [becoming a sponsor](https://github.com/sponsors/jamwaffles/) so I may continue to
-maintain this crate in my spare time!
+Please consider [becoming a sponsor](https://github.com/sponsors/jamwaffles/) so I may continue to maintain this crate in my spare time!
 
 # [Documentation](https://docs.rs/linuxcnc-hal)
 
 A safe, high-level interface to LinuxCNC's HAL (Hardware Abstraction Layer) module.
 
-For lower level, unsafe use, see the [`linuxcnc-hal-sys`](https://crates.io/crates/linuxcnc-hal-sys)
-crate.
+For lower level, unsafe use, see the
+[`linuxcnc-hal-sys`](https://crates.io/crates/linuxcnc-hal-sys) crate.
 
 ## Development setup
 
@@ -21,16 +20,17 @@ crate.
 [requirements section of its docs](https://rust-lang.github.io/rust-bindgen/requirements.html).
 
 To run and debug any HAL components, the LinuxCNC simulator can be set up. There's a guide
-[here](https://wapl.es/cnc/2020/01/25/linuxcnc-simulator-build-linux-mint.html) for Linux Mint (and
-other Debian derivatives).
+[here](https://wapl.es/cnc/2020/01/25/linuxcnc-simulator-build-linux-mint.html) for Linux Mint
+(and other Debian derivatives).
 
 ## Project setup
 
 This crate depends on the `linuxcnc-hal-sys` crate which requires the `LINUXCNC_SRC` environment
-variable to be set to correctly generate the C bindings. The value must be the absolute path to the
-root of the LinuxCNC source code.
+variable to be set to correctly generate the C bindings. The value must be the absolute path to
+the root of the LinuxCNC source code.
 
-**The version of the LinuxCNC sources must match the LinuxCNC version used in the machine control.**
+**The version of the LinuxCNC sources must match the LinuxCNC version used in the machine
+control.**
 
 ```bash
 # Clone LinuxCNC source code into linuxcnc/
@@ -57,9 +57,9 @@ fix, try setting the library path with e.g. `export LD_LIBRARY_PATH=~/Repositori
 
 ### Create a component with input and output
 
-This example creates a component called `"pins"` with a single input (`"input-1"`) and output pin
-(`"output-1"`). It enters an infinite loop which updates the value of `output-1` every second.
-LinuxCNC convention dictates that component and pin names should be `dash-cased`.
+This example creates a component called `"pins"` with a single input (`"input-1"`) and output
+pin (`"output-1"`). It enters an infinite loop which updates the value of `output-1` every
+second. LinuxCNC convention dictates that component and pin names should be `dash-cased`.
 
 This example can be loaded into LinuxCNC with a `.hal` file that looks similar to this:
 
@@ -69,9 +69,9 @@ net input-1 spindle.0.speed-out pins.input-1
 net output-1 pins.output-1
 ```
 
-Pins and other resources are registered using the [`Resources`] trait. This example creates a `Pins`
-struct which holds the two pins. [`HalComponent::new()`] handles component creation, resources (pin,
-signal, etc) initialisation and UNIX signal handler registration.
+Pins and other resources are registered using the [`Resources`] trait. This example creates a
+`Pins` struct which holds the two pins. [`HalComponent::new`] handles component creation,
+resources (pin, signal, etc) initialisation and UNIX signal handler registration.
 
 ```rust
 use linuxcnc_hal::{
@@ -140,8 +140,8 @@ fn main() -> Result<(), Box<dyn Error>> {
 Licensed under either of
 
 - Apache License, Version 2.0 ([LICENSE-APACHE](LICENSE-APACHE) or
-  http://www.apache.org/licenses/LICENSE-2.0)
-- MIT license ([LICENSE-MIT](LICENSE-MIT) or http://opensource.org/licenses/MIT)
+  <http://www.apache.org/licenses/LICENSE-2.0>)
+- MIT license ([LICENSE-MIT](LICENSE-MIT) or <http://opensource.org/licenses/MIT>)
 
 at your option.
 
@@ -150,3 +150,6 @@ at your option.
 Unless you explicitly state otherwise, any contribution intentionally submitted for inclusion in the
 work by you, as defined in the Apache-2.0 license, shall be dual licensed as above, without any
 additional terms or conditions.
+
+[`HalComponent::new`]: https://docs.rs/linuxcnc-hal/latest/linuxcnc_hal/struct.HalComponent.html#method.new
+[`Resources`]: https://docs.rs/linuxcnc-hal/latest/linuxcnc_hal/trait.Resources.html

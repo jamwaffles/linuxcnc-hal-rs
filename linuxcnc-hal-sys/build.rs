@@ -8,6 +8,9 @@ fn main() {
         return;
     }
 
+    println!("cargo:rerun-if-changed=wrapper.h");
+    println!("cargo:rerun-if-changed=src/generated.rs");
+
     let linuxcnc_root = env::var("LINUXCNC_SRC").expect("LINUXCNC_SRC env var must be set and pointing to the root of the LinuxCNC source Git repository");
 
     let bindings = bindgen::Builder::default()

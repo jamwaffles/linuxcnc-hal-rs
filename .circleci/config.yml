@@ -11,9 +11,9 @@ jobs:
             v1-linuxcnc-hal-rs-{{ .Environment.RUST_VERSION }}-{{ .Environment.CIRCLE_JOB }}-{{
             checksum "linuxcnc-hal-sys/Cargo.toml" }}-{{ checksum "linuxcnc-hal/Cargo.toml" }}
       - run:
-          sudo apt update && sudo apt install -qq --no-install-suggests python-pip libclang-dev
+          sudo apt update -qq && sudo apt install -qq --no-install-suggests python3-pip libclang-dev
           llvm-dev libclang-dev clang
-      - run: sudo pip3 install linkchecker
+      - run: pip3 install linkchecker
       - run: rustup component add rustfmt
       - run: rustup toolchain add nightly
       - run: rustup default ${RUST_VERSION:-stable}

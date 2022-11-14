@@ -8,7 +8,7 @@ jobs:
       - checkout
       - restore_cache:
           key:
-            v1-linuxcnc-hal-rs-{{ .Environment.RUST_VERSION }}-{{ .Environment.CIRCLE_JOB }}-{{
+            v2-linuxcnc-hal-rs-{{ .Environment.RUST_VERSION }}-{{ .Environment.CIRCLE_JOB }}-{{
             checksum "linuxcnc-hal-sys/Cargo.toml" }}-{{ checksum "linuxcnc-hal/Cargo.toml" }}
       - run:
           sudo apt update -qq && sudo apt install -qq --no-install-suggests python3-pip libclang-dev
@@ -21,11 +21,11 @@ jobs:
       - run: LINUXCNC_SRC=$(realpath ./linuxcnc) ./build.sh
       - save_cache:
           key:
-            v1-linuxcnc-hal-rs-{{ .Environment.RUST_VERSION }}-{{ .Environment.CIRCLE_JOB }}-{{
+            v2-linuxcnc-hal-rs-{{ .Environment.RUST_VERSION }}-{{ .Environment.CIRCLE_JOB }}-{{
             checksum "linuxcnc-hal-sys/Cargo.toml" }}-{{ checksum "linuxcnc-hal/Cargo.toml" }}
           paths:
             - ./target
-            - /home/ubuntu/.cargo
+            - /home/circleci/.cargo/registry
 
 build_jobs: &build_jobs
   jobs:

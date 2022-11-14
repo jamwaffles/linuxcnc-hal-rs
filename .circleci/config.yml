@@ -5,15 +5,13 @@ jobs:
       - image: cimg/rust:1.65.0
     steps:
       - checkout
-      - run: git submodule sync
-      - run: git submodule update --init
       - restore_cache:
           key:
             v1-linuxcnc-hal-rs-{{ .Environment.RUST_VERSION }}-{{ .Environment.CIRCLE_JOB }}-{{
             checksum "linuxcnc-hal-sys/Cargo.toml" }}-{{ checksum "linuxcnc-hal/Cargo.toml" }}
       - run:
-          sudo apt install -qq --no-install-suggests python-pip libclang-dev llvm-dev libclang-dev
-          clang
+          sudo apt update && sudo apt install -qq --no-install-suggests python-pip libclang-dev
+          llvm-dev libclang-dev clang
       - run: sudo pip install linkchecker
       - run: rustup component add rustfmt
       - run: rustup toolchain add nightly

@@ -41,7 +41,7 @@ pub enum ParameterPermissions {
 /// ```rust,no_run
 /// use linuxcnc_hal::{
 ///    error::PinRegisterError,
-///    hal_param::{Parameter},
+///    hal_parameter::Parameter,
 ///    prelude::*,
 ///    HalComponent, RegisterResources, Resources,
 /// };
@@ -60,7 +60,7 @@ pub enum ParameterPermissions {
 ///
 ///    fn register_resources(comp: &RegisterResources) -> Result<Self, Self::RegisterError> {
 ///        Ok(Pins {
-///            parameter: comp.register_param::<Parameter<f64>>("named-parameter")?,
+///            parameter: comp.register_parameter::<Parameter<f64>>("named-parameter")?,
 ///        })
 ///    }
 /// }

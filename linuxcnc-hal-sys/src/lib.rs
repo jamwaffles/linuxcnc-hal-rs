@@ -72,7 +72,7 @@
 //!
 //! These examples can be loaded into LinuxCNC using a HAL file similar to this:
 //!
-//! ```text
+//! ```hal
 //! loadusr -W /path/to/your/component/target/debug/comp_bin_name
 //! net input-1 spindle.0.speed-out pins.input-1
 //! ```

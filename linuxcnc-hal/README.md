@@ -63,7 +63,7 @@ second. LinuxCNC convention dictates that component and pin names should be `das
 
 This example can be loaded into LinuxCNC with a `.hal` file that looks similar to this:
 
-```
+```hal
 loadusr -W /path/to/your/component/target/debug/comp_bin_name
 net input-1 spindle.0.speed-out pins.input-1
 net output-1 pins.output-1
@@ -103,7 +103,7 @@ impl Resources for Pins {
 }
 
 fn main() -> Result<(), Box<dyn Error>> {
-    pretty_env_logger::init();
+    rtapi_logger::init();
 
     // Create a new HAL component called `rust-comp`
     let comp: HalComponent<Pins> = HalComponent::new("rust-comp")?;

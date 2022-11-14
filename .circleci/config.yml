@@ -4,8 +4,6 @@ jobs:
     resource_class: large
     docker:
       - image: cimg/rust:1.65.0
-    environment:
-      - LINUXCNC_SRC: ./linuxcnc
     steps:
       - checkout
       - restore_cache:
@@ -20,7 +18,7 @@ jobs:
       - run: rustup component add rustfmt
       - run: rustup toolchain add nightly
       - run: rustup default ${RUST_VERSION:-stable}
-      - run: ./build.sh
+      - run: LINUXCNC_SRC=$(realpath ./linuxcnc) ./build.sh
       - save_cache:
           key:
             v1-linuxcnc-hal-rs-{{ .Environment.RUST_VERSION }}-{{ .Environment.CIRCLE_JOB }}-{{

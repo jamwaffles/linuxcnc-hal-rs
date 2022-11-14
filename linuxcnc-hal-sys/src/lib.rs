@@ -2,14 +2,6 @@
 //!
 //! The high level, safe interface at [`linuxcnc-hal`] is recommended for user code.
 //!
-//! # Binding versions
-//!
-//! | This crate                                                | LinuxCNC version                                           |
-//! | --------------------------------------------------------- | ---------------------------------------------------------- |
-//! | Any version greater than v0.1.7                           | Provide a path to the LinuxCNC source code with `LINUXCNC_SRC` |
-//! | [v0.1.7](https://crates.io/crates/linuxcnc-hal-sys/0.1.7) | [v2.7.15](http://linuxcnc.org/2020/01/03/LinuxCNC-2.7.15/) |
-//! | [v0.1.6](https://crates.io/crates/linuxcnc-hal-sys/0.1.6) | [v2.7.15](http://linuxcnc.org/2020/01/03/LinuxCNC-2.7.15/) |
-//!
 //! # Development setup
 //!
 //! [`bindgen`](https://github.com/rust-lang/rust-bindgen) must be set up correctly. Follow the

@@ -21,9 +21,9 @@ crate-type = [ "cdylib" ]
 
 [dependencies]
 signal-hook = "0.3.14"
-libc = "0.2.66"
-thiserror = "1.0.10"
-log = "0.4.8"
+libc = "0.2.137"
+thiserror = "1.0.37"
+log = "0.4.17"
 
 [dependencies.linuxcnc-hal-sys]
 version = "^0.2.0"

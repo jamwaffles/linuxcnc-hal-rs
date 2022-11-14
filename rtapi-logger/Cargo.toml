@@ -8,4 +8,4 @@ authors = ["James Waples <james@wapl.es>"]
 
 [dependencies]
 linuxcnc-hal-sys = { path = "../linuxcnc-hal-sys", version = "0.2.0" }
-log = "0.4.14"
+log = "0.4.17"

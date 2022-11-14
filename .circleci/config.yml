@@ -1,6 +1,7 @@
 version: 2
 jobs:
   build:
+    resource_class: large
     docker:
       - image: cimg/rust:1.65.0
     steps:

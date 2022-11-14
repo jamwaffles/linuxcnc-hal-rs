@@ -30,7 +30,7 @@ jobs:
       - run: rustup component add rustfmt
       - run: rustup toolchain add nightly
       - run: rustup default ${RUST_VERSION:-stable}
-      - run: LINUXCNC_SRC=$(realpath ./linuxcnc) ./build.sh
+      - run: LINUXCNC_SRC=$(realpath ./linuxcnc) LD_LIBRARY_PATH=$(realpath ./linuxcnc/lib) ./build.sh
       - save_cache:
           key:
             v2-linuxcnc-hal-rs-{{ .Environment.RUST_VERSION }}-{{ .Environment.CIRCLE_JOB }}-{{

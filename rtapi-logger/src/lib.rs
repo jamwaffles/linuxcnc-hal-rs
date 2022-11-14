@@ -44,7 +44,7 @@ impl From<Level> for RtapiLogLevel {
 static LOGGER: RtapiLogger = RtapiLogger;
 
 pub fn init() -> Result<(), SetLoggerError> {
-    let rtapi_level = unsafe { rtapi_get_msg_level() };
+    let _rtapi_level = unsafe { rtapi_get_msg_level() };
 
     // log::set_logger(&LOGGER).map(|()| log::set_max_level(LevelFilter::Info))
     // Log everything by default
@@ -56,7 +56,7 @@ pub struct RtapiLogger;
 impl log::Log for RtapiLogger {
     // FIXME: This should not just return true - performance will take a hit. LinuxCNC's logging
     // system does the filtering, so that works at least.
-    fn enabled(&self, metadata: &Metadata) -> bool {
+    fn enabled(&self, _metadata: &Metadata) -> bool {
         // metadata.level() <= Level::Info
         true
     }

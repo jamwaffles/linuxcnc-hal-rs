@@ -33,10 +33,9 @@ fn main() {
     // let out_path = PathBuf::from(env::var("OUT_DIR").unwrap());
 
     let out_path = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("src");
-    panic!("Out path {:?}", out_path);
 
     bindings
-        .write_to_file(out_path.join("bindings.rs"))
+        .write_to_file(out_path.join("generated.rs"))
         .expect("Couldn't write bindings!");
 
     // Dynamically link LinuxCNC HAL, as per <https://github.com/rust-lang/rust-bindgen/issues/1974>

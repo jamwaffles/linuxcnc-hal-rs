@@ -72,7 +72,7 @@ pub enum ParameterPermissions {
 ///
 ///    let start = Instant::now();
 ///
-///         // Main control loop
+///     // Main control loop
 ///     while !comp.should_exit() {
 ///         parameter.set_value(123.45f64);
 ///         thread::sleep(Duration::from_millis(1000));

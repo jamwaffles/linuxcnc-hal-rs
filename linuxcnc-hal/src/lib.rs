@@ -130,7 +130,6 @@
 #[macro_use]
 extern crate log;
 
-mod check_readme;
 mod component;
 pub mod error;
 mod hal_parameter;

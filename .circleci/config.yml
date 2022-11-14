@@ -10,26 +10,34 @@ jobs:
           key:
             v2-linuxcnc-hal-rs-{{ .Environment.RUST_VERSION }}-{{ .Environment.CIRCLE_JOB }}-{{
             checksum "linuxcnc-hal-sys/Cargo.toml" }}-{{ checksum "linuxcnc-hal/Cargo.toml" }}
-      - run:
-          sudo apt update -qq && sudo apt install -qq --no-install-suggests python3-pip libclang-dev
-          llvm-dev libclang-dev clang
+      - run: |
+          sudo apt update -qq
+
+          # Our deps
+          sudo apt install -qq --no-install-recommends python3-pip libclang-dev llvm-dev libclang-dev clang
+
+          # LinuxCNC deps
+          sudo apt install -qq --no-install-recommends dh-python libudev-dev automake bwidget gettext libboost-python-dev libepoxy-dev libgl1-mesa-dev libglu1-mesa-dev libgtk2.0-dev libgtk-3-dev libmodbus-dev libreadline-dev libusb-1.0-0-dev libxmu-dev po4a psmisc python3-tk python3-xlib tcl8.6-dev tclx tk8.6-dev yapps2 groff intltool
       - run: pip3 install linkchecker
 
-      # Set up LinuxCNC with some hacks
+      # Set up LinuxCNC
       - run: |
-          LINUXCNC_HASH="37cc349c29"
-
-          git clone https://github.com/LinuxCNC/linuxcnc.git linuxcnc
+          git clone https://github.com/LinuxCNC/linuxcnc.git --depth 1 linuxcnc
           pushd linuxcnc
-          git checkout "${LINUXCNC_HASH}"
-          popd
 
-          cp ".circleci/liblinuxcnchal.so.0-${LINUXCNC_HASH}" ./linuxcnc/lib/liblinuxcnchal.so.0
-          ln -s $(realpath ./linuxcnc/lib/liblinuxcnchal.so.0) $(realpath ./linuxcnc/lib/liblinuxcnchal.so)
+          cd debian
+          ./configure uspace
+          cd ..
 
-      - run: rustup component add rustfmt
-      - run: rustup toolchain add nightly
-      - run: rustup default ${RUST_VERSION:-stable}
+          cd src
+          ./autogen.sh
+          ./configure --enable-non-distributable=yes --with-realtime=uspace --with-boost-python=boost_python3-py39
+          make ../bin/halcmd -j4
+
+          # Quick hack to put lib in the right place
+          cd ../lib
+          ln -s liblinuxcnchal.so.0 liblinuxcnchal.so
+
       - run: LINUXCNC_SRC=$(realpath ./linuxcnc) LD_LIBRARY_PATH=$(realpath ./linuxcnc/lib) ./build.sh
       - save_cache:
           key:

@@ -1,3 +1,13 @@
+//! `rtapi-logger` is a logging driver for the [`log`](https://docs.rs/log) ecosystem.
+//!
+//! Other loggers which don't use the RTAPI logging machinery provided by LinuxCNC are relatively
+//! slow and can unnecessarily block realtime tasks. `rtapi-logger` hooks into LinuxCNC's logging
+//! machinery to prevent these problems, whilst also allowing the use of the convenient macros
+//! provided by [`log`].
+//!
+//! Please note this crate is still somewhat experimental. For example, currently all messages are
+//! logged at the `ERR` level provided by LinuxCNC.
+
 use linuxcnc_hal_sys::{rtapi_get_msg_level, rtapi_print_msg};
 use log::{Level, Metadata, Record};
 use std::ffi::CString;
@@ -7,6 +17,8 @@ use log::{LevelFilter, SetLoggerError};
 /// Log level.
 ///
 /// Defined in the LinuxCNC source as `msg_level_t`.
+///
+/// Note that this currently does nothing; all messages are logged at `ERR` level.
 #[derive(Debug, Copy, Clone)]
 enum RtapiLogLevel {
     None = 0,

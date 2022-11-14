@@ -53,8 +53,8 @@
 //! checked out to the desired version and built with the [build
 //! instructions](http://linuxcnc.org/docs/devel/html/code/building-linuxcnc.html).
 //!
-//! Note that the LinuxCNC source is located in the same directory as `linuxcnc-hal-rs` in the
-//! example paths below.
+//! Note that the LinuxCNC source is located in the same parent directory as `linuxcnc-hal-rs` in
+//! the example paths below.
 //!
 //! ```bash
 //! LINUXCNC_SRC=$(realpath ../linuxcnc) cargo build --examples
@@ -84,6 +84,9 @@
 //! loadusr -W /path/to/your/component/target/debug/comp_bin_name
 //! net input-1 spindle.0.speed-out pins.input-1
 //! ```
+//!
+//! If linuxcnc is configured to run in place, `liblinuxcnchal.so.0` may not be found on startup.
+//! To fix, try prepending e.g. `LD_LIBRARY_PATH=~/Repositories/linuxcnc/lib`
 //!
 //! ## Create an input pin
 //!

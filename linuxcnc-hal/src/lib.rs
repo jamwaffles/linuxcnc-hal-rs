@@ -32,6 +32,9 @@
 //! LINUXCNC_SRC=/path/to/linuxcnc/source/code cargo build
 //! ```
 //!
+//! If linuxcnc is configured to run in place, `liblinuxcnchal.so.0` may not be found on startup.
+//! To fix, try prepending e.g. `LD_LIBRARY_PATH=~/Repositories/linuxcnc/lib`
+//!
 //! # Examples
 //!
 //! ## Create a component with input and output

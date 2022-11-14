@@ -3,6 +3,11 @@ name = "rtapi-logger"
 version = "0.1.0"
 edition = "2018"
 authors = ["James Waples <james@wapl.es>"]
+documentation = "https://docs.rs/rtapi-logger"
+description = "A LinuxCNC RTAPI logging adapter for the log crate ecosystem"
+readme = "./README.md"
+license = "MIT OR Apache-2.0"
+keywords = [ "cnc", "linuxcnc", "log" ]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 

@@ -6,7 +6,11 @@ Unsafe Rust bindings to LinuxCNC's HAL module.
 
 ## [Unreleased] - ReleaseDate
 
+### Changed
+
 - **(breaking)** Migrate to Rust edition 2021
+- Change build process so components are dynamically linked when loaded, instead of statically
+  linked.
 
 ## [0.2.0] - 2021-01-06
 

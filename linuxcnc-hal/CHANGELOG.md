@@ -9,6 +9,8 @@ A safe abstraction used to create LinuxCNC HAL components in Rust.
 ### Changed
 
 - **(breaking)** Migrate to Rust edition 2021
+- Change build process so components are dynamically linked when loaded, instead of statically
+  linked.
 
 ## [0.2.0] - 2021-01-06
 

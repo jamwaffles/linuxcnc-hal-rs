@@ -85,8 +85,8 @@
 //! net input-1 spindle.0.speed-out pins.input-1
 //! ```
 //!
-//! If linuxcnc is configured to run in place, `liblinuxcnchal.so.0` may not be found on startup.
-//! To fix, try prepending e.g. `LD_LIBRARY_PATH=~/Repositories/linuxcnc/lib`
+//! If LinuxCNC is configured to run in place, `liblinuxcnchal.so.0` may not be found on startup. To
+//! fix, try setting the library path with e.g. `export LD_LIBRARY_PATH=~/Repositories/linuxcnc/lib`
 //!
 //! ## Create an input pin
 //!

@@ -1,18 +1,25 @@
 //! A safe, high-level interface to LinuxCNC's HAL (Hardware Abstraction Layer) module.
 //!
-//! For lower level, unsafe use, see the [`linuxcnc-hal-sys`](https://crates.io/crates/linuxcnc-hal-sys) crate.
+//! For lower level, unsafe use, see the
+//! [`linuxcnc-hal-sys`](https://crates.io/crates/linuxcnc-hal-sys) crate.
 //!
 //! # Development setup
 //!
-//! [`bindgen`](https://github.com/rust-lang/rust-bindgen) must be set up correctly. Follow the [requirements section of its docs](https://rust-lang.github.io/rust-bindgen/requirements.html).
+//! [`bindgen`](https://github.com/rust-lang/rust-bindgen) must be set up correctly. Follow the
+//! [requirements section of its docs](https://rust-lang.github.io/rust-bindgen/requirements.html).
 //!
-//! To run and debug any HAL components, the LinuxCNC simulator can be set up. There's a guide [here](https://wapl.es/cnc/2020/01/25/linuxcnc-simulator-build-linux-mint.html) for Linux Mint (and other Debian derivatives).
+//! To run and debug any HAL components, the LinuxCNC simulator can be set up. There's a guide
+//! [here](https://wapl.es/cnc/2020/01/25/linuxcnc-simulator-build-linux-mint.html) for Linux Mint
+//! (and other Debian derivatives).
 //!
 //! # Project setup
 //!
-//! This crate depends on the `linuxcnc-hal-sys` crate which requires the `LINUXCNC_SRC` environment variable toi be set to correctly generate the C bindings. The value must be the absolute path to the root of the LinuxCNC source code.
+//! This crate depends on the `linuxcnc-hal-sys` crate which requires the `LINUXCNC_SRC` environment
+//! variable to be set to correctly generate the C bindings. The value must be the absolute path to
+//! the root of the LinuxCNC source code.
 //!
-//! **The version of the LinuxCNC sources must match the LinuxCNC version used in the machine control.**
+//! **The version of the LinuxCNC sources must match the LinuxCNC version used in the machine
+//! control.**
 //!
 //! ```bash
 //! # Clone LinuxCNC source code into linuxcnc/
@@ -32,8 +39,8 @@
 //! LINUXCNC_SRC=/path/to/linuxcnc/source/code cargo build
 //! ```
 //!
-//! If linuxcnc is configured to run in place, `liblinuxcnchal.so.0` may not be found on startup.
-//! To fix, try prepending e.g. `LD_LIBRARY_PATH=~/Repositories/linuxcnc/lib`
+//! If LinuxCNC is configured to run in place, `liblinuxcnchal.so.0` may not be found on startup. To
+//! fix, try setting the library path with e.g. `export LD_LIBRARY_PATH=~/Repositories/linuxcnc/lib`
 //!
 //! # Examples
 //!

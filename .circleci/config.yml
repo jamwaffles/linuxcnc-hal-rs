@@ -25,7 +25,7 @@ jobs:
           popd
 
           cp ".circleci/liblinuxcnchal.so.0-${LINUXCNC_HASH}" ./linuxcnc/lib/liblinuxcnchal.so.0
-          ln -s realpath(./linuxcnc/lib/liblinuxcnchal.so.0) realpath(./linuxcnc/lib/liblinuxcnchal.so)
+          ln -s ./linuxcnc/lib/liblinuxcnchal.so.0 ./linuxcnc/lib/liblinuxcnchal.so
 
       - run: rustup component add rustfmt
       - run: rustup toolchain add nightly

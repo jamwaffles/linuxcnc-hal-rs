@@ -8,3 +8,4 @@ pre-release-replacements = [
 ]
 tag-message = "Release {{crate_name}} {{version}}"
 pre-release-commit-message = "Release {{crate_name}} {{version}}"
+consolidate-commits = false

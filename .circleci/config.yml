@@ -14,7 +14,12 @@ jobs:
           sudo apt update -qq && sudo apt install -qq --no-install-suggests python3-pip libclang-dev
           llvm-dev libclang-dev clang
       - run: pip3 install linkchecker
+
+      # Set up LinuxCNC with some hacks
       - run: git clone https://github.com/LinuxCNC/linuxcnc.git linuxcnc
+      - run: cp .circleci/liblinuxcnchal.so.0-* ./linuxcnc/lib/liblinuxcnchal.so.0
+      - run: ln -s ./linuxcnc/lib/liblinuxcnchal.so.0 ./linuxcnc/lib/liblinuxcnchal.so
+
       - run: rustup component add rustfmt
       - run: rustup toolchain add nightly
       - run: rustup default ${RUST_VERSION:-stable}

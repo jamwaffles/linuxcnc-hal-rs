@@ -40,8 +40,8 @@ pub enum ParameterPermissions {
 ///
 /// ```rust,no_run
 /// use linuxcnc_hal::{
-///    error::PinRegisterError,
-///    hal_parameter::Parameter,
+///    error::ParameterRegisterError,
+///    Parameter,
 ///    prelude::*,
 ///    HalComponent, RegisterResources, Resources,
 /// };
@@ -51,24 +51,24 @@ pub enum ParameterPermissions {
 ///    time::{Duration, Instant},
 /// };
 ///
-/// struct Pins {
+/// struct MyApp {
 ///    parameter: Parameter<f64>,
 /// }
 ///
-/// impl Resources for Pins {
-///    type RegisterError = PinRegisterError;
+/// impl Resources for MyApp {
+///    type RegisterError = ParameterRegisterError;
 ///
 ///    fn register_resources(comp: &RegisterResources) -> Result<Self, Self::RegisterError> {
-///        Ok(Pins {
-///            parameter: comp.register_parameter::<Parameter<f64>>("named-parameter")?,
+///        Ok(MyApp {
+///            parameter: comp.register_parameter("named-parameter")?,
 ///        })
 ///    }
 /// }
 ///
 /// fn main() -> Result<(), Box<dyn Error>> {
-///    let comp: HalComponent<Pins> = HalComponent::new("demo-component")?;
+///    let comp: HalComponent<MyApp> = HalComponent::new("demo-component")?;
 ///
-///    let Pins { parameter } = comp.resources();
+///    let MyApp { parameter } = comp.resources();
 ///
 ///    let start = Instant::now();
 ///

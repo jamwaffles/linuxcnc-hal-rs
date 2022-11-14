@@ -17,3 +17,11 @@ realtime-friendly logger using LinuxCNC's logging machinery.
 
 Please consider [becoming a sponsor](https://github.com/sponsors/jamwaffles/) so I may continue to
 maintain these crates in my spare time!
+
+## Releasing to crates.io
+
+E.g.
+
+```bash
+LINUXCNC_SRC=$(realpath ~/Repositories/linuxcnc) LD_LIBRARY_PATH=$(realpath ~/Repositories/linuxcnc/lib) cargo release -p rtapi-logger
+```

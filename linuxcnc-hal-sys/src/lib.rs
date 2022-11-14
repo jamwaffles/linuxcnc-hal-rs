@@ -219,4 +219,5 @@
 
 mod check_readme;
 
-include!(concat!(env!("OUT_DIR"), "/bindings.rs"));
+// #[cfg(not(feature = "build-docs"))]
+// include!(concat!(env!("OUT_DIR"), "/bindings.rs"));

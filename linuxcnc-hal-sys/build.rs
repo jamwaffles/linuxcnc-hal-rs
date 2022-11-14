@@ -4,7 +4,9 @@ use std::env;
 use std::path::PathBuf;
 
 fn main() {
-    println!("cargo:rerun-if-changed=wrapper.h");
+    if std::env::var("DOCS_RS").is_ok() {
+        return;
+    }
 
     let linuxcnc_root = env::var("LINUXCNC_SRC").expect("LINUXCNC_SRC env var must be set and pointing to the root of the LinuxCNC source Git repository");
 
@@ -28,7 +30,11 @@ fn main() {
         .expect("Unable to generate bindings");
 
     // Write the bindings to the $OUT_DIR/bindings.rs file.
-    let out_path = PathBuf::from(env::var("OUT_DIR").unwrap());
+    // let out_path = PathBuf::from(env::var("OUT_DIR").unwrap());
+
+    let out_path = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("src");
+    panic!("Out path {:?}", out_path);
+
     bindings
         .write_to_file(out_path.join("bindings.rs"))
         .expect("Couldn't write bindings!");

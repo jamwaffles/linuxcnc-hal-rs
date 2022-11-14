@@ -19,9 +19,6 @@ include = [
     "README.md",
 ]
 
-[package.metadata.docs.rs]
-features = ["build-docs"]
-
 # Realtime components must be compiled as cdylibs
 [[example]]
 name = "rttest"

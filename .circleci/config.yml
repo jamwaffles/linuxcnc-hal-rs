@@ -19,13 +19,13 @@ jobs:
       - run: |
           LINUXCNC_HASH="37cc349c29"
 
-          echo ".circleci/liblinuxcnchal.so.0-${LINUXCNC_HASH}"
-
           git clone https://github.com/LinuxCNC/linuxcnc.git linuxcnc
-          cd linuxcnc
+          pushd linuxcnc
           git checkout "${LINUXCNC_HASH}"
-      - run: cp ".circleci/liblinuxcnchal.so.0-${LINUXCNC_HASH}" ./linuxcnc/lib/liblinuxcnchal.so.0
-      - run: ln -s realpath(./linuxcnc/lib/liblinuxcnchal.so.0) realpath(./linuxcnc/lib/liblinuxcnchal.so)
+          popd
+
+          cp ".circleci/liblinuxcnchal.so.0-${LINUXCNC_HASH}" ./linuxcnc/lib/liblinuxcnchal.so.0
+          ln -s realpath(./linuxcnc/lib/liblinuxcnchal.so.0) realpath(./linuxcnc/lib/liblinuxcnchal.so)
 
       - run: rustup component add rustfmt
       - run: rustup toolchain add nightly

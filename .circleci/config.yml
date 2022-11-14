@@ -19,6 +19,8 @@ jobs:
       - run: |
           LINUXCNC_HASH="37cc349c29"
 
+          echo ".circleci/liblinuxcnchal.so.0-${LINUXCNC_HASH}"
+
           git clone https://github.com/LinuxCNC/linuxcnc.git linuxcnc
           cd linuxcnc
           git checkout "${LINUXCNC_HASH}"

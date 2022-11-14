@@ -47,22 +47,8 @@ jobs:
             - ./target
             - /home/circleci/.cargo/registry
 
-build_jobs: &build_jobs
-  jobs:
-    - build
-
 workflows:
   version: 2
   build_all:
-    <<: *build_jobs
-
-  # # Build every day
-  # nightly:
-  #   <<: *build_jobs
-  #   triggers:
-  #     - schedule:
-  #         cron: '0 0 * * *'
-  #         filters:
-  #           branches:
-  #             only:
-  #               - master
+    jobs:
+      - build

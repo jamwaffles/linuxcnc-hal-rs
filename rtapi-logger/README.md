@@ -9,7 +9,7 @@ Please consider [becoming a sponsor](https://github.com/sponsors/jamwaffles/) so
 
 # [Documentation](https://docs.rs/rtapi-logger)
 
-`rtapi-logger` is a logging driver for the [`log`](https://docs.rs/log) ecosystem.
+`rtapi-logger` is a logging driver for the [`log`] ecosystem ecosystem.
 
 Other loggers which don't use the RTAPI logging machinery provided by LinuxCNC are relatively
 slow and can unnecessarily block realtime tasks. `rtapi-logger` hooks into LinuxCNC's logging
@@ -34,3 +34,5 @@ at your option.
 Unless you explicitly state otherwise, any contribution intentionally submitted for inclusion in the
 work by you, as defined in the Apache-2.0 license, shall be dual licensed as above, without any
 additional terms or conditions.
+
+[`log`]: https://docs.rs/log

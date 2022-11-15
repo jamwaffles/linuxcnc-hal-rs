@@ -1,4 +1,4 @@
-//! `rtapi-logger` is a logging driver for the [`log`](https://docs.rs/log) ecosystem.
+//! `rtapi-logger` is a logging driver for the [`log`] ecosystem ecosystem.
 //!
 //! Other loggers which don't use the RTAPI logging machinery provided by LinuxCNC are relatively
 //! slow and can unnecessarily block realtime tasks. `rtapi-logger` hooks into LinuxCNC's logging

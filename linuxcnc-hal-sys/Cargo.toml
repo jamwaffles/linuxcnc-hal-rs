@@ -15,7 +15,6 @@ include = [
     "patch/**/*",
     "Cargo.toml",
     "wrapper.h",
-    "linuxcnc-src/src",
     "README.md",
 ]
 

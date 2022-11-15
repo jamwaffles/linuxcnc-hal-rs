@@ -6,6 +6,8 @@ Unsafe Rust bindings to LinuxCNC's HAL module.
 
 ## [Unreleased] - ReleaseDate
 
+## [0.3.0] - 2022-11-15
+
 ### Changed
 
 - **(breaking)** Migrate to Rust edition 2021
@@ -39,8 +41,9 @@ Unsafe Rust bindings to LinuxCNC's HAL module.
 - Initial release with `bindgen`-generated items
 
 <!-- next-url -->
+[unreleased]: https://github.com/jamwaffles/linuxcnc-hal-rs/compare/linuxcnc-hal-sys-v0.3.0...HEAD
 
-[unreleased]: https://github.com/jamwaffles/linuxcnc-hal-rs/compare/linuxcnc-hal-sys-v0.2.0...HEAD
+[0.3.0]: https://github.com/jamwaffles/linuxcnc-hal-rs/compare/linuxcnc-hal-sys-v0.2.0...linuxcnc-hal-sys-v0.3.0
 [0.2.0]:
   https://github.com/jamwaffles/linuxcnc-hal-rs/compare/linuxcnc-hal-sys-v0.1.7...linuxcnc-hal-sys-v0.2.0
 [0.1.7]:

@@ -21,7 +21,7 @@ crate-type = [ "cdylib" ]
 
 [dependencies]
 libc = "0.2.137"
-linuxcnc-hal-sys = { path = "../linuxcnc-hal-sys", version = "0.2.0" }
+linuxcnc-hal-sys = { path = "../linuxcnc-hal-sys", version = "0.3.0" }
 log = "0.4.17"
 signal-hook = "0.3.14"
 thiserror = "1.0.37"

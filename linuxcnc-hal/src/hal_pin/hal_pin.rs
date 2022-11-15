@@ -12,7 +12,7 @@ fn is_aligned_to<T: ?Sized>(ptr: *const T, align: usize) -> bool {
 /// HAL pin trait
 ///
 /// Implemented for any HAL pin. Handles allocation of backing storage in LinuxCNC's memory space.
-pub trait HalPin: Sized + Drop {
+pub trait HalPin: Sized {
     /// The underlying storage type for the given pin
     ///
     /// This will usually be a scalar value such as `u32` or `bool`

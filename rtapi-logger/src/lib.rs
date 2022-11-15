@@ -21,6 +21,7 @@ use log::{LevelFilter, SetLoggerError};
 /// Note that this currently does nothing; all messages are logged at `ERR` level.
 #[derive(Debug, Copy, Clone)]
 enum RtapiLogLevel {
+    #[allow(unused)]
     None = 0,
     Err = 1,
     Warn = 2,

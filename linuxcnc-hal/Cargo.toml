@@ -27,4 +27,4 @@ signal-hook = "0.3.14"
 thiserror = "1.0.37"
 
 [dev-dependencies]
-rtapi-logger = { path = "../rtapi-logger", version = "0.1.0" }
+rtapi-logger = { path = "../rtapi-logger", version = "0.2.0" }

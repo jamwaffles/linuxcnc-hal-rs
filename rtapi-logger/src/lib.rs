@@ -47,9 +47,11 @@ static LOGGER: RtapiLogger = RtapiLogger;
 pub fn init() -> Result<(), SetLoggerError> {
     let _rtapi_level = unsafe { rtapi_get_msg_level() };
 
-    // log::set_logger(&LOGGER).map(|()| log::set_max_level(LevelFilter::Info))
+    println!("Log level {}", _rtapi_level);
+
+    log::set_logger(&LOGGER).map(|()| log::set_max_level(LevelFilter::Info))
     // Log everything by default
-    log::set_logger(&LOGGER).map(|()| log::set_max_level(LevelFilter::Trace))
+    // log::set_logger(&LOGGER).map(|()| log::set_max_level(LevelFilter::Trace))
 }
 
 pub struct RtapiLogger;

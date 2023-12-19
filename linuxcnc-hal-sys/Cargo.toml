@@ -30,7 +30,7 @@ circle-ci = { repository = "jamwaffles/linuxcnc-hal-rs", branch = "master" }
 log = "0.4.17"
 
 [build-dependencies]
-bindgen = "0.61.0"
+bindgen = "0.69.1"
 
 [dev-dependencies]
 signal-hook = "0.3.14"

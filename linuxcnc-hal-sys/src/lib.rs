@@ -112,7 +112,7 @@
 //!     let pin_name = CString::new("pins.input-1").unwrap();
 //!
 //!     let ret = hal_pin_float_new(
-//!         pin_name.as_ptr() as *const u8,
+//!         pin_name.as_ptr() as *const i8,
 //!         hal_pin_dir_t_HAL_IN,
 //!         storage,
 //!         id,
@@ -172,7 +172,7 @@
 //!     let pin_name = CString::new("pins.input-1").unwrap();
 //!
 //!     let ret = hal_pin_float_new(
-//!         pin_name.as_ptr() as *const u8,
+//!         pin_name.as_ptr() as *const i8,
 //!         hal_pin_dir_t_HAL_IN,
 //!         storage,
 //!         component_id,

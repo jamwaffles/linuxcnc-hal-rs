@@ -7,21 +7,15 @@ documentation = "https://docs.rs/linuxcnc-hal-sys"
 description = "Generated, unsafe Rust bindings to the LinuxCNC HAL submodule"
 readme = "./README.md"
 license = "MIT OR Apache-2.0"
-keywords = [ "cnc", "linuxcnc", "bindgen", "ffi" ]
-categories = [ "external-ffi-bindings", "science::robotics" ]
+keywords = ["cnc", "linuxcnc", "bindgen", "ffi"]
+categories = ["external-ffi-bindings", "science::robotics"]
 repository = "https://github.com/jamwaffles/linuxcnc-hal-rs"
-include = [
-    "**/*.rs",
-    "patch/**/*",
-    "Cargo.toml",
-    "wrapper.h",
-    "README.md",
-]
+include = ["**/*.rs", "patch/**/*", "Cargo.toml", "wrapper.h", "README.md"]
 
 # Realtime components must be compiled as cdylibs
 [[example]]
 name = "rttest"
-crate-type = [ "cdylib" ]
+crate-type = ["cdylib"]
 
 [badges]
 circle-ci = { repository = "jamwaffles/linuxcnc-hal-rs", branch = "master" }
@@ -34,4 +28,4 @@ bindgen = "0.69.1"
 
 [dev-dependencies]
 signal-hook = "0.3.14"
-# rtapi-logger = { path = "../rtapi-logger", version = "0.1.0" }
+rtapi-logger = { path = "../rtapi-logger", version = "0.2.0" }

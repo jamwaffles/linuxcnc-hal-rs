@@ -23,6 +23,8 @@ fn main() {
         // Tell LinuxCNC build to run in realtime mode with `-DRTAPI` or non-realtime with `-DULAPI`.
         // See line ~114 in linuxcnc-src/src/hal/hal.h
         .clang_arg("-DRTAPI")
+        // FIXME: This currently breaks the doc tests as Rust parses the broken C comment as code.
+        .blocklist_function("hal_set_lock")
         // .clang_arg("-DULAPI")
         // Tell cargo to invalidate the built crate whenever any of the
         // included header files changed.

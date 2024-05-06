@@ -99,7 +99,7 @@
 //! use std::time::Duration;
 //!
 //! unsafe {
-//!     let id = hal_init(CString::new("pins").unwrap().as_ptr() as *const u8);
+//!     let id = hal_init(CString::new("pins").unwrap().as_ptr() as *const _);
 //!
 //!     println!("ID {}", id);
 //!
@@ -112,7 +112,7 @@
 //!     let pin_name = CString::new("pins.input-1").unwrap();
 //!
 //!     let ret = hal_pin_float_new(
-//!         pin_name.as_ptr() as *const i8,
+//!         pin_name.as_ptr() as *const _,
 //!         hal_pin_dir_t_HAL_IN,
 //!         storage,
 //!         id,
@@ -149,7 +149,7 @@
 //! use std::time::Duration;
 //!
 //! unsafe {
-//!     let ret = hal_init(CString::new("pins").unwrap().as_ptr() as *const u8);
+//!     let ret = hal_init(CString::new("pins").unwrap().as_ptr() as *const _);
 //!
 //!     // Check that component was created successfully
 //!     let component_id = match ret {
@@ -172,7 +172,7 @@
 //!     let pin_name = CString::new("pins.input-1").unwrap();
 //!
 //!     let ret = hal_pin_float_new(
-//!         pin_name.as_ptr() as *const i8,
+//!         pin_name.as_ptr() as *const _,
 //!         hal_pin_dir_t_HAL_IN,
 //!         storage,
 //!         component_id,
